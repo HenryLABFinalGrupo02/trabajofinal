@@ -1,0 +1,47 @@
+[2022-11-15 16:52:53,024] {taskinstance.py:1179} INFO - Dependencies all met for <TaskInstance: DAG_Minio_S3_Wait_for_File.DownloadFileFromS3 scheduled__2022-11-13T00:00:00+00:00 [queued]>
+[2022-11-15 16:52:53,063] {taskinstance.py:1179} INFO - Dependencies all met for <TaskInstance: DAG_Minio_S3_Wait_for_File.DownloadFileFromS3 scheduled__2022-11-13T00:00:00+00:00 [queued]>
+[2022-11-15 16:52:53,064] {taskinstance.py:1376} INFO - 
+--------------------------------------------------------------------------------
+[2022-11-15 16:52:53,065] {taskinstance.py:1377} INFO - Starting attempt 1 of 6
+[2022-11-15 16:52:53,066] {taskinstance.py:1378} INFO - 
+--------------------------------------------------------------------------------
+[2022-11-15 16:52:53,117] {taskinstance.py:1397} INFO - Executing <Task(PythonOperator): DownloadFileFromS3> on 2022-11-13 00:00:00+00:00
+[2022-11-15 16:52:53,138] {standard_task_runner.py:52} INFO - Started process 1590 to run task
+[2022-11-15 16:52:53,147] {standard_task_runner.py:79} INFO - Running: ['***', 'tasks', 'run', 'DAG_Minio_S3_Wait_for_File', 'DownloadFileFromS3', 'scheduled__2022-11-13T00:00:00+00:00', '--job-id', '21', '--raw', '--subdir', 'DAGS_FOLDER/sensor.py', '--cfg-path', '/tmp/tmp293y7kw4', '--error-file', '/tmp/tmpivkwhzpf']
+[2022-11-15 16:52:53,151] {standard_task_runner.py:80} INFO - Job 21: Subtask DownloadFileFromS3
+[2022-11-15 16:52:53,367] {task_command.py:371} INFO - Running <TaskInstance: DAG_Minio_S3_Wait_for_File.DownloadFileFromS3 scheduled__2022-11-13T00:00:00+00:00 [running]> on host 73a41ac08797
+[2022-11-15 16:52:53,660] {taskinstance.py:1591} INFO - Exporting the following env vars:
+AIRFLOW_CTX_DAG_OWNER=Maico Bernal
+AIRFLOW_CTX_DAG_ID=DAG_Minio_S3_Wait_for_File
+AIRFLOW_CTX_TASK_ID=DownloadFileFromS3
+AIRFLOW_CTX_EXECUTION_DATE=2022-11-13T00:00:00+00:00
+AIRFLOW_CTX_TRY_NUMBER=1
+AIRFLOW_CTX_DAG_RUN_ID=scheduled__2022-11-13T00:00:00+00:00
+[2022-11-15 16:52:53,686] {base.py:68} INFO - Using connection ID 'minio_conn' for task execution.
+[2022-11-15 16:52:53,692] {base_aws.py:210} INFO - Credentials retrieved from extra_config
+[2022-11-15 16:52:54,065] {s3.py:857} INFO - Downloading source S3 file from Bucket data with path precios234.csv
+[2022-11-15 16:52:54,078] {base.py:68} INFO - Using connection ID 'minio_conn' for task execution.
+[2022-11-15 16:52:54,082] {base_aws.py:210} INFO - Credentials retrieved from extra_config
+[2022-11-15 16:52:54,478] {taskinstance.py:1909} ERROR - Task failed with exception
+Traceback (most recent call last):
+  File "/home/airflow/.local/lib/python3.7/site-packages/airflow/operators/python.py", line 171, in execute
+    return_value = self.execute_callable()
+  File "/home/airflow/.local/lib/python3.7/site-packages/airflow/operators/python.py", line 189, in execute_callable
+    return self.python_callable(*self.op_args, **self.op_kwargs)
+  File "/opt/airflow/dags/sensor.py", line 49, in DownloadAndRenameFile
+    file_name = hook.download_file(key=key, bucket_name=bucket_name, local_path=path)
+  File "/home/airflow/.local/lib/python3.7/site-packages/airflow/providers/amazon/aws/hooks/s3.py", line 63, in wrapper
+    return func(*bound_args.args, **bound_args.kwargs)
+  File "/home/airflow/.local/lib/python3.7/site-packages/airflow/providers/amazon/aws/hooks/s3.py", line 91, in wrapper
+    return func(*bound_args.args, **bound_args.kwargs)
+  File "/home/airflow/.local/lib/python3.7/site-packages/airflow/providers/amazon/aws/hooks/s3.py", line 869, in download_file
+    with NamedTemporaryFile(dir=local_path, prefix='airflow_tmp_', delete=False) as local_tmp_file:
+  File "/usr/local/lib/python3.7/tempfile.py", line 547, in NamedTemporaryFile
+    (fd, name) = _mkstemp_inner(dir, prefix, suffix, flags, output_type)
+  File "/usr/local/lib/python3.7/tempfile.py", line 258, in _mkstemp_inner
+    fd = _os.open(file, flags, 0o600)
+FileNotFoundError: [Errno 2] No such file or directory: '/opt/airflow/data/to_transform/airflow_tmp_tjsm70tg'
+[2022-11-15 16:52:54,504] {taskinstance.py:1420} INFO - Marking task as UP_FOR_RETRY. dag_id=DAG_Minio_S3_Wait_for_File, task_id=DownloadFileFromS3, execution_date=20221113T000000, start_date=20221115T165253, end_date=20221115T165254
+[2022-11-15 16:52:54,545] {standard_task_runner.py:97} ERROR - Failed to execute job 21 for task DownloadFileFromS3 ([Errno 2] No such file or directory: '/opt/airflow/data/to_transform/airflow_tmp_tjsm70tg'; 1590)
+[2022-11-15 16:52:54,565] {local_task_job.py:156} INFO - Task exited with return code 1
+[2022-11-15 16:52:54,703] {local_task_job.py:273} INFO - 0 downstream tasks scheduled from follow-on schedule check

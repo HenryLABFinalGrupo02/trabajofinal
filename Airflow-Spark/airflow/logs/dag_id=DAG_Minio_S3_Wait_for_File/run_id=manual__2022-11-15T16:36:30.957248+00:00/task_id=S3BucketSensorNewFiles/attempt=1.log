@@ -1,0 +1,49 @@
+[2022-11-15 16:36:38,858] {taskinstance.py:1179} INFO - Dependencies all met for <TaskInstance: DAG_Minio_S3_Wait_for_File.S3BucketSensorNewFiles manual__2022-11-15T16:36:30.957248+00:00 [queued]>
+[2022-11-15 16:36:38,890] {taskinstance.py:1179} INFO - Dependencies all met for <TaskInstance: DAG_Minio_S3_Wait_for_File.S3BucketSensorNewFiles manual__2022-11-15T16:36:30.957248+00:00 [queued]>
+[2022-11-15 16:36:38,892] {taskinstance.py:1376} INFO - 
+--------------------------------------------------------------------------------
+[2022-11-15 16:36:38,893] {taskinstance.py:1377} INFO - Starting attempt 1 of 6
+[2022-11-15 16:36:38,894] {taskinstance.py:1378} INFO - 
+--------------------------------------------------------------------------------
+[2022-11-15 16:36:38,952] {taskinstance.py:1397} INFO - Executing <Task(S3KeySensor): S3BucketSensorNewFiles> on 2022-11-15 16:36:30.957248+00:00
+[2022-11-15 16:36:38,974] {standard_task_runner.py:52} INFO - Started process 599 to run task
+[2022-11-15 16:36:38,991] {standard_task_runner.py:79} INFO - Running: ['***', 'tasks', 'run', 'DAG_Minio_S3_Wait_for_File', 'S3BucketSensorNewFiles', 'manual__2022-11-15T16:36:30.957248+00:00', '--job-id', '10', '--raw', '--subdir', 'DAGS_FOLDER/sensor.py', '--cfg-path', '/tmp/tmp9oadjsbu', '--error-file', '/tmp/tmpe_u9ctmk']
+[2022-11-15 16:36:38,997] {standard_task_runner.py:80} INFO - Job 10: Subtask S3BucketSensorNewFiles
+[2022-11-15 16:36:39,285] {task_command.py:371} INFO - Running <TaskInstance: DAG_Minio_S3_Wait_for_File.S3BucketSensorNewFiles manual__2022-11-15T16:36:30.957248+00:00 [running]> on host 73a41ac08797
+[2022-11-15 16:36:39,642] {taskinstance.py:1591} INFO - Exporting the following env vars:
+AIRFLOW_CTX_DAG_OWNER=Maico Bernal
+AIRFLOW_CTX_DAG_ID=DAG_Minio_S3_Wait_for_File
+AIRFLOW_CTX_TASK_ID=S3BucketSensorNewFiles
+AIRFLOW_CTX_EXECUTION_DATE=2022-11-15T16:36:30.957248+00:00
+AIRFLOW_CTX_TRY_NUMBER=1
+AIRFLOW_CTX_DAG_RUN_ID=manual__2022-11-15T16:36:30.957248+00:00
+[2022-11-15 16:36:39,660] {s3.py:104} INFO - Poking for key : s3://data/precio*
+[2022-11-15 16:36:39,712] {base.py:68} INFO - Using connection ID 'minio_conn' for task execution.
+[2022-11-15 16:36:39,735] {base_aws.py:210} INFO - Credentials retrieved from extra_config
+[2022-11-15 16:36:40,764] {taskinstance.py:1909} ERROR - Task failed with exception
+Traceback (most recent call last):
+  File "/home/airflow/.local/lib/python3.7/site-packages/airflow/sensors/base.py", line 277, in execute
+    poke_return = self.poke(context)
+  File "/home/airflow/.local/lib/python3.7/site-packages/airflow/providers/amazon/aws/sensors/s3.py", line 133, in poke
+    return all(self._check_key(key) for key in self.bucket_key)
+  File "/home/airflow/.local/lib/python3.7/site-packages/airflow/providers/amazon/aws/sensors/s3.py", line 133, in <genexpr>
+    return all(self._check_key(key) for key in self.bucket_key)
+  File "/home/airflow/.local/lib/python3.7/site-packages/airflow/providers/amazon/aws/sensors/s3.py", line 115, in _check_key
+    files = self.get_hook().get_file_metadata(prefix, bucket_name)
+  File "/home/airflow/.local/lib/python3.7/site-packages/airflow/providers/amazon/aws/hooks/s3.py", line 63, in wrapper
+    return func(*bound_args.args, **bound_args.kwargs)
+  File "/home/airflow/.local/lib/python3.7/site-packages/airflow/providers/amazon/aws/hooks/s3.py", line 403, in get_file_metadata
+    for page in response:
+  File "/home/airflow/.local/lib/python3.7/site-packages/botocore/paginate.py", line 269, in __iter__
+    response = self._make_request(current_kwargs)
+  File "/home/airflow/.local/lib/python3.7/site-packages/botocore/paginate.py", line 357, in _make_request
+    return self._method(**current_kwargs)
+  File "/home/airflow/.local/lib/python3.7/site-packages/botocore/client.py", line 508, in _api_call
+    return self._make_api_call(operation_name, kwargs)
+  File "/home/airflow/.local/lib/python3.7/site-packages/botocore/client.py", line 915, in _make_api_call
+    raise error_class(parsed_response, operation_name)
+botocore.exceptions.ClientError: An error occurred (InvalidAccessKeyId) when calling the ListObjectsV2 operation: The Access Key Id you provided does not exist in our records.
+[2022-11-15 16:36:40,818] {taskinstance.py:1420} INFO - Marking task as UP_FOR_RETRY. dag_id=DAG_Minio_S3_Wait_for_File, task_id=S3BucketSensorNewFiles, execution_date=20221115T163630, start_date=20221115T163638, end_date=20221115T163640
+[2022-11-15 16:36:40,927] {standard_task_runner.py:97} ERROR - Failed to execute job 10 for task S3BucketSensorNewFiles (An error occurred (InvalidAccessKeyId) when calling the ListObjectsV2 operation: The Access Key Id you provided does not exist in our records.; 599)
+[2022-11-15 16:36:40,998] {local_task_job.py:156} INFO - Task exited with return code 1
+[2022-11-15 16:36:41,221] {local_task_job.py:273} INFO - 0 downstream tasks scheduled from follow-on schedule check

@@ -1,0 +1,932 @@
+[2022-11-15 15:58:50,244] {processor.py:153} INFO - Started process (PID=127) to work on /opt/airflow/dags/Spark.py
+[2022-11-15 15:58:50,248] {processor.py:641} INFO - Processing file /opt/airflow/dags/Spark.py for tasks to queue
+[2022-11-15 15:58:50,254] {logging_mixin.py:115} INFO - [2022-11-15 15:58:50,252] {dagbag.py:508} INFO - Filling up the DagBag from /opt/airflow/dags/Spark.py
+[2022-11-15 15:58:59,885] {logging_mixin.py:115} INFO - [2022-11-15 15:58:59,862] {dagbag.py:321} ERROR - Failed to import: /opt/airflow/dags/Spark.py
+Traceback (most recent call last):
+  File "/home/airflow/.local/lib/python3.7/site-packages/airflow/models/dagbag.py", line 318, in parse
+    loader.exec_module(new_module)
+  File "<frozen importlib._bootstrap_external>", line 728, in exec_module
+  File "<frozen importlib._bootstrap>", line 219, in _call_with_frames_removed
+  File "/opt/airflow/dags/Spark.py", line 18, in <module>
+    import findspark
+ModuleNotFoundError: No module named 'findspark'
+[2022-11-15 15:58:59,894] {processor.py:653} WARNING - No viable dags retrieved from /opt/airflow/dags/Spark.py
+[2022-11-15 15:59:00,019] {processor.py:161} INFO - Processing /opt/airflow/dags/Spark.py took 9.817 seconds
+[2022-11-15 15:59:30,979] {processor.py:153} INFO - Started process (PID=170) to work on /opt/airflow/dags/Spark.py
+[2022-11-15 15:59:30,992] {processor.py:641} INFO - Processing file /opt/airflow/dags/Spark.py for tasks to queue
+[2022-11-15 15:59:31,006] {logging_mixin.py:115} INFO - [2022-11-15 15:59:31,004] {dagbag.py:508} INFO - Filling up the DagBag from /opt/airflow/dags/Spark.py
+[2022-11-15 15:59:36,098] {logging_mixin.py:115} INFO - [2022-11-15 15:59:36,077] {dagbag.py:321} ERROR - Failed to import: /opt/airflow/dags/Spark.py
+Traceback (most recent call last):
+  File "/home/airflow/.local/lib/python3.7/site-packages/airflow/models/dagbag.py", line 318, in parse
+    loader.exec_module(new_module)
+  File "<frozen importlib._bootstrap_external>", line 728, in exec_module
+  File "<frozen importlib._bootstrap>", line 219, in _call_with_frames_removed
+  File "/opt/airflow/dags/Spark.py", line 18, in <module>
+    import findspark
+ModuleNotFoundError: No module named 'findspark'
+[2022-11-15 15:59:36,116] {processor.py:653} WARNING - No viable dags retrieved from /opt/airflow/dags/Spark.py
+[2022-11-15 15:59:36,250] {processor.py:161} INFO - Processing /opt/airflow/dags/Spark.py took 5.340 seconds
+[2022-11-15 16:00:06,722] {processor.py:153} INFO - Started process (PID=209) to work on /opt/airflow/dags/Spark.py
+[2022-11-15 16:00:06,729] {processor.py:641} INFO - Processing file /opt/airflow/dags/Spark.py for tasks to queue
+[2022-11-15 16:00:06,732] {logging_mixin.py:115} INFO - [2022-11-15 16:00:06,732] {dagbag.py:508} INFO - Filling up the DagBag from /opt/airflow/dags/Spark.py
+[2022-11-15 16:00:09,353] {logging_mixin.py:115} INFO - [2022-11-15 16:00:09,348] {dagbag.py:321} ERROR - Failed to import: /opt/airflow/dags/Spark.py
+Traceback (most recent call last):
+  File "/home/airflow/.local/lib/python3.7/site-packages/airflow/models/dagbag.py", line 318, in parse
+    loader.exec_module(new_module)
+  File "<frozen importlib._bootstrap_external>", line 728, in exec_module
+  File "<frozen importlib._bootstrap>", line 219, in _call_with_frames_removed
+  File "/opt/airflow/dags/Spark.py", line 18, in <module>
+    import findspark
+ModuleNotFoundError: No module named 'findspark'
+[2022-11-15 16:00:09,356] {processor.py:653} WARNING - No viable dags retrieved from /opt/airflow/dags/Spark.py
+[2022-11-15 16:00:09,391] {processor.py:161} INFO - Processing /opt/airflow/dags/Spark.py took 2.680 seconds
+[2022-11-15 16:00:39,555] {processor.py:153} INFO - Started process (PID=269) to work on /opt/airflow/dags/Spark.py
+[2022-11-15 16:00:39,557] {processor.py:641} INFO - Processing file /opt/airflow/dags/Spark.py for tasks to queue
+[2022-11-15 16:00:39,560] {logging_mixin.py:115} INFO - [2022-11-15 16:00:39,559] {dagbag.py:508} INFO - Filling up the DagBag from /opt/airflow/dags/Spark.py
+[2022-11-15 16:00:41,770] {logging_mixin.py:115} INFO - [2022-11-15 16:00:41,765] {dagbag.py:321} ERROR - Failed to import: /opt/airflow/dags/Spark.py
+Traceback (most recent call last):
+  File "/home/airflow/.local/lib/python3.7/site-packages/airflow/models/dagbag.py", line 318, in parse
+    loader.exec_module(new_module)
+  File "<frozen importlib._bootstrap_external>", line 728, in exec_module
+  File "<frozen importlib._bootstrap>", line 219, in _call_with_frames_removed
+  File "/opt/airflow/dags/Spark.py", line 18, in <module>
+    import findspark
+ModuleNotFoundError: No module named 'findspark'
+[2022-11-15 16:00:41,773] {processor.py:653} WARNING - No viable dags retrieved from /opt/airflow/dags/Spark.py
+[2022-11-15 16:00:41,805] {processor.py:161} INFO - Processing /opt/airflow/dags/Spark.py took 2.258 seconds
+[2022-11-15 16:01:12,074] {processor.py:153} INFO - Started process (PID=308) to work on /opt/airflow/dags/Spark.py
+[2022-11-15 16:01:12,077] {processor.py:641} INFO - Processing file /opt/airflow/dags/Spark.py for tasks to queue
+[2022-11-15 16:01:12,080] {logging_mixin.py:115} INFO - [2022-11-15 16:01:12,079] {dagbag.py:508} INFO - Filling up the DagBag from /opt/airflow/dags/Spark.py
+[2022-11-15 16:01:14,395] {logging_mixin.py:115} INFO - [2022-11-15 16:01:14,385] {dagbag.py:321} ERROR - Failed to import: /opt/airflow/dags/Spark.py
+Traceback (most recent call last):
+  File "/home/airflow/.local/lib/python3.7/site-packages/airflow/models/dagbag.py", line 318, in parse
+    loader.exec_module(new_module)
+  File "<frozen importlib._bootstrap_external>", line 728, in exec_module
+  File "<frozen importlib._bootstrap>", line 219, in _call_with_frames_removed
+  File "/opt/airflow/dags/Spark.py", line 18, in <module>
+    import findspark
+ModuleNotFoundError: No module named 'findspark'
+[2022-11-15 16:01:14,398] {processor.py:653} WARNING - No viable dags retrieved from /opt/airflow/dags/Spark.py
+[2022-11-15 16:01:14,453] {processor.py:161} INFO - Processing /opt/airflow/dags/Spark.py took 2.389 seconds
+[2022-11-15 16:01:44,779] {processor.py:153} INFO - Started process (PID=346) to work on /opt/airflow/dags/Spark.py
+[2022-11-15 16:01:44,783] {processor.py:641} INFO - Processing file /opt/airflow/dags/Spark.py for tasks to queue
+[2022-11-15 16:01:44,787] {logging_mixin.py:115} INFO - [2022-11-15 16:01:44,786] {dagbag.py:508} INFO - Filling up the DagBag from /opt/airflow/dags/Spark.py
+[2022-11-15 16:01:47,627] {logging_mixin.py:115} INFO - [2022-11-15 16:01:47,613] {dagbag.py:321} ERROR - Failed to import: /opt/airflow/dags/Spark.py
+Traceback (most recent call last):
+  File "/home/airflow/.local/lib/python3.7/site-packages/airflow/models/dagbag.py", line 318, in parse
+    loader.exec_module(new_module)
+  File "<frozen importlib._bootstrap_external>", line 728, in exec_module
+  File "<frozen importlib._bootstrap>", line 219, in _call_with_frames_removed
+  File "/opt/airflow/dags/Spark.py", line 18, in <module>
+    import findspark
+ModuleNotFoundError: No module named 'findspark'
+[2022-11-15 16:01:47,630] {processor.py:653} WARNING - No viable dags retrieved from /opt/airflow/dags/Spark.py
+[2022-11-15 16:01:47,678] {processor.py:161} INFO - Processing /opt/airflow/dags/Spark.py took 2.911 seconds
+[2022-11-15 16:02:18,023] {processor.py:153} INFO - Started process (PID=401) to work on /opt/airflow/dags/Spark.py
+[2022-11-15 16:02:18,026] {processor.py:641} INFO - Processing file /opt/airflow/dags/Spark.py for tasks to queue
+[2022-11-15 16:02:18,028] {logging_mixin.py:115} INFO - [2022-11-15 16:02:18,028] {dagbag.py:508} INFO - Filling up the DagBag from /opt/airflow/dags/Spark.py
+[2022-11-15 16:02:20,592] {logging_mixin.py:115} INFO - [2022-11-15 16:02:20,585] {dagbag.py:321} ERROR - Failed to import: /opt/airflow/dags/Spark.py
+Traceback (most recent call last):
+  File "/home/airflow/.local/lib/python3.7/site-packages/airflow/models/dagbag.py", line 318, in parse
+    loader.exec_module(new_module)
+  File "<frozen importlib._bootstrap_external>", line 728, in exec_module
+  File "<frozen importlib._bootstrap>", line 219, in _call_with_frames_removed
+  File "/opt/airflow/dags/Spark.py", line 18, in <module>
+    import findspark
+ModuleNotFoundError: No module named 'findspark'
+[2022-11-15 16:02:20,596] {processor.py:653} WARNING - No viable dags retrieved from /opt/airflow/dags/Spark.py
+[2022-11-15 16:02:20,644] {processor.py:161} INFO - Processing /opt/airflow/dags/Spark.py took 2.641 seconds
+[2022-11-15 16:02:50,942] {processor.py:153} INFO - Started process (PID=442) to work on /opt/airflow/dags/Spark.py
+[2022-11-15 16:02:50,944] {processor.py:641} INFO - Processing file /opt/airflow/dags/Spark.py for tasks to queue
+[2022-11-15 16:02:50,947] {logging_mixin.py:115} INFO - [2022-11-15 16:02:50,946] {dagbag.py:508} INFO - Filling up the DagBag from /opt/airflow/dags/Spark.py
+[2022-11-15 16:02:53,010] {logging_mixin.py:115} INFO - [2022-11-15 16:02:53,005] {dagbag.py:321} ERROR - Failed to import: /opt/airflow/dags/Spark.py
+Traceback (most recent call last):
+  File "/home/airflow/.local/lib/python3.7/site-packages/airflow/models/dagbag.py", line 318, in parse
+    loader.exec_module(new_module)
+  File "<frozen importlib._bootstrap_external>", line 728, in exec_module
+  File "<frozen importlib._bootstrap>", line 219, in _call_with_frames_removed
+  File "/opt/airflow/dags/Spark.py", line 18, in <module>
+    import findspark
+ModuleNotFoundError: No module named 'findspark'
+[2022-11-15 16:02:53,012] {processor.py:653} WARNING - No viable dags retrieved from /opt/airflow/dags/Spark.py
+[2022-11-15 16:02:53,051] {processor.py:161} INFO - Processing /opt/airflow/dags/Spark.py took 2.122 seconds
+[2022-11-15 16:03:23,259] {processor.py:153} INFO - Started process (PID=481) to work on /opt/airflow/dags/Spark.py
+[2022-11-15 16:03:23,262] {processor.py:641} INFO - Processing file /opt/airflow/dags/Spark.py for tasks to queue
+[2022-11-15 16:03:23,264] {logging_mixin.py:115} INFO - [2022-11-15 16:03:23,264] {dagbag.py:508} INFO - Filling up the DagBag from /opt/airflow/dags/Spark.py
+[2022-11-15 16:03:25,558] {logging_mixin.py:115} INFO - [2022-11-15 16:03:25,552] {dagbag.py:321} ERROR - Failed to import: /opt/airflow/dags/Spark.py
+Traceback (most recent call last):
+  File "/home/airflow/.local/lib/python3.7/site-packages/airflow/models/dagbag.py", line 318, in parse
+    loader.exec_module(new_module)
+  File "<frozen importlib._bootstrap_external>", line 728, in exec_module
+  File "<frozen importlib._bootstrap>", line 219, in _call_with_frames_removed
+  File "/opt/airflow/dags/Spark.py", line 18, in <module>
+    import findspark
+ModuleNotFoundError: No module named 'findspark'
+[2022-11-15 16:03:25,560] {processor.py:653} WARNING - No viable dags retrieved from /opt/airflow/dags/Spark.py
+[2022-11-15 16:03:25,591] {processor.py:161} INFO - Processing /opt/airflow/dags/Spark.py took 2.344 seconds
+[2022-11-15 16:03:55,891] {processor.py:153} INFO - Started process (PID=538) to work on /opt/airflow/dags/Spark.py
+[2022-11-15 16:03:55,893] {processor.py:641} INFO - Processing file /opt/airflow/dags/Spark.py for tasks to queue
+[2022-11-15 16:03:55,897] {logging_mixin.py:115} INFO - [2022-11-15 16:03:55,897] {dagbag.py:508} INFO - Filling up the DagBag from /opt/airflow/dags/Spark.py
+[2022-11-15 16:03:58,524] {logging_mixin.py:115} INFO - [2022-11-15 16:03:58,518] {dagbag.py:321} ERROR - Failed to import: /opt/airflow/dags/Spark.py
+Traceback (most recent call last):
+  File "/home/airflow/.local/lib/python3.7/site-packages/airflow/models/dagbag.py", line 318, in parse
+    loader.exec_module(new_module)
+  File "<frozen importlib._bootstrap_external>", line 728, in exec_module
+  File "<frozen importlib._bootstrap>", line 219, in _call_with_frames_removed
+  File "/opt/airflow/dags/Spark.py", line 18, in <module>
+    import findspark
+ModuleNotFoundError: No module named 'findspark'
+[2022-11-15 16:03:58,526] {processor.py:653} WARNING - No viable dags retrieved from /opt/airflow/dags/Spark.py
+[2022-11-15 16:03:58,561] {processor.py:161} INFO - Processing /opt/airflow/dags/Spark.py took 2.677 seconds
+[2022-11-15 16:04:28,966] {processor.py:153} INFO - Started process (PID=579) to work on /opt/airflow/dags/Spark.py
+[2022-11-15 16:04:28,969] {processor.py:641} INFO - Processing file /opt/airflow/dags/Spark.py for tasks to queue
+[2022-11-15 16:04:28,973] {logging_mixin.py:115} INFO - [2022-11-15 16:04:28,972] {dagbag.py:508} INFO - Filling up the DagBag from /opt/airflow/dags/Spark.py
+[2022-11-15 16:04:31,713] {logging_mixin.py:115} INFO - [2022-11-15 16:04:31,702] {dagbag.py:321} ERROR - Failed to import: /opt/airflow/dags/Spark.py
+Traceback (most recent call last):
+  File "/home/airflow/.local/lib/python3.7/site-packages/airflow/models/dagbag.py", line 318, in parse
+    loader.exec_module(new_module)
+  File "<frozen importlib._bootstrap_external>", line 728, in exec_module
+  File "<frozen importlib._bootstrap>", line 219, in _call_with_frames_removed
+  File "/opt/airflow/dags/Spark.py", line 18, in <module>
+    import findspark
+ModuleNotFoundError: No module named 'findspark'
+[2022-11-15 16:04:31,716] {processor.py:653} WARNING - No viable dags retrieved from /opt/airflow/dags/Spark.py
+[2022-11-15 16:04:31,766] {processor.py:161} INFO - Processing /opt/airflow/dags/Spark.py took 2.814 seconds
+[2022-11-15 16:05:02,303] {processor.py:153} INFO - Started process (PID=620) to work on /opt/airflow/dags/Spark.py
+[2022-11-15 16:05:02,306] {processor.py:641} INFO - Processing file /opt/airflow/dags/Spark.py for tasks to queue
+[2022-11-15 16:05:02,309] {logging_mixin.py:115} INFO - [2022-11-15 16:05:02,309] {dagbag.py:508} INFO - Filling up the DagBag from /opt/airflow/dags/Spark.py
+[2022-11-15 16:05:06,900] {logging_mixin.py:115} INFO - [2022-11-15 16:05:06,885] {dagbag.py:321} ERROR - Failed to import: /opt/airflow/dags/Spark.py
+Traceback (most recent call last):
+  File "/home/airflow/.local/lib/python3.7/site-packages/airflow/models/dagbag.py", line 318, in parse
+    loader.exec_module(new_module)
+  File "<frozen importlib._bootstrap_external>", line 728, in exec_module
+  File "<frozen importlib._bootstrap>", line 219, in _call_with_frames_removed
+  File "/opt/airflow/dags/Spark.py", line 18, in <module>
+    import findspark
+ModuleNotFoundError: No module named 'findspark'
+[2022-11-15 16:05:06,905] {processor.py:653} WARNING - No viable dags retrieved from /opt/airflow/dags/Spark.py
+[2022-11-15 16:05:06,973] {processor.py:161} INFO - Processing /opt/airflow/dags/Spark.py took 4.679 seconds
+[2022-11-15 16:05:37,361] {processor.py:153} INFO - Started process (PID=676) to work on /opt/airflow/dags/Spark.py
+[2022-11-15 16:05:37,365] {processor.py:641} INFO - Processing file /opt/airflow/dags/Spark.py for tasks to queue
+[2022-11-15 16:05:37,369] {logging_mixin.py:115} INFO - [2022-11-15 16:05:37,369] {dagbag.py:508} INFO - Filling up the DagBag from /opt/airflow/dags/Spark.py
+[2022-11-15 16:05:39,873] {logging_mixin.py:115} INFO - [2022-11-15 16:05:39,867] {dagbag.py:321} ERROR - Failed to import: /opt/airflow/dags/Spark.py
+Traceback (most recent call last):
+  File "/home/airflow/.local/lib/python3.7/site-packages/airflow/models/dagbag.py", line 318, in parse
+    loader.exec_module(new_module)
+  File "<frozen importlib._bootstrap_external>", line 728, in exec_module
+  File "<frozen importlib._bootstrap>", line 219, in _call_with_frames_removed
+  File "/opt/airflow/dags/Spark.py", line 18, in <module>
+    import findspark
+ModuleNotFoundError: No module named 'findspark'
+[2022-11-15 16:05:39,875] {processor.py:653} WARNING - No viable dags retrieved from /opt/airflow/dags/Spark.py
+[2022-11-15 16:05:39,910] {processor.py:161} INFO - Processing /opt/airflow/dags/Spark.py took 2.561 seconds
+[2022-11-15 16:06:10,637] {processor.py:153} INFO - Started process (PID=722) to work on /opt/airflow/dags/Spark.py
+[2022-11-15 16:06:10,640] {processor.py:641} INFO - Processing file /opt/airflow/dags/Spark.py for tasks to queue
+[2022-11-15 16:06:10,642] {logging_mixin.py:115} INFO - [2022-11-15 16:06:10,642] {dagbag.py:508} INFO - Filling up the DagBag from /opt/airflow/dags/Spark.py
+[2022-11-15 16:06:13,321] {logging_mixin.py:115} INFO - [2022-11-15 16:06:13,309] {dagbag.py:321} ERROR - Failed to import: /opt/airflow/dags/Spark.py
+Traceback (most recent call last):
+  File "/home/airflow/.local/lib/python3.7/site-packages/airflow/models/dagbag.py", line 318, in parse
+    loader.exec_module(new_module)
+  File "<frozen importlib._bootstrap_external>", line 728, in exec_module
+  File "<frozen importlib._bootstrap>", line 219, in _call_with_frames_removed
+  File "/opt/airflow/dags/Spark.py", line 18, in <module>
+    import findspark
+ModuleNotFoundError: No module named 'findspark'
+[2022-11-15 16:06:13,324] {processor.py:653} WARNING - No viable dags retrieved from /opt/airflow/dags/Spark.py
+[2022-11-15 16:06:13,406] {processor.py:161} INFO - Processing /opt/airflow/dags/Spark.py took 2.777 seconds
+[2022-11-15 16:06:43,703] {processor.py:153} INFO - Started process (PID=760) to work on /opt/airflow/dags/Spark.py
+[2022-11-15 16:06:43,706] {processor.py:641} INFO - Processing file /opt/airflow/dags/Spark.py for tasks to queue
+[2022-11-15 16:06:43,708] {logging_mixin.py:115} INFO - [2022-11-15 16:06:43,708] {dagbag.py:508} INFO - Filling up the DagBag from /opt/airflow/dags/Spark.py
+[2022-11-15 16:06:46,221] {logging_mixin.py:115} INFO - [2022-11-15 16:06:46,213] {dagbag.py:321} ERROR - Failed to import: /opt/airflow/dags/Spark.py
+Traceback (most recent call last):
+  File "/home/airflow/.local/lib/python3.7/site-packages/airflow/models/dagbag.py", line 318, in parse
+    loader.exec_module(new_module)
+  File "<frozen importlib._bootstrap_external>", line 728, in exec_module
+  File "<frozen importlib._bootstrap>", line 219, in _call_with_frames_removed
+  File "/opt/airflow/dags/Spark.py", line 18, in <module>
+    import findspark
+ModuleNotFoundError: No module named 'findspark'
+[2022-11-15 16:06:46,223] {processor.py:653} WARNING - No viable dags retrieved from /opt/airflow/dags/Spark.py
+[2022-11-15 16:06:46,280] {processor.py:161} INFO - Processing /opt/airflow/dags/Spark.py took 2.585 seconds
+[2022-11-15 16:07:16,588] {processor.py:153} INFO - Started process (PID=815) to work on /opt/airflow/dags/Spark.py
+[2022-11-15 16:07:16,591] {processor.py:641} INFO - Processing file /opt/airflow/dags/Spark.py for tasks to queue
+[2022-11-15 16:07:16,593] {logging_mixin.py:115} INFO - [2022-11-15 16:07:16,593] {dagbag.py:508} INFO - Filling up the DagBag from /opt/airflow/dags/Spark.py
+[2022-11-15 16:07:19,403] {logging_mixin.py:115} INFO - [2022-11-15 16:07:19,397] {dagbag.py:321} ERROR - Failed to import: /opt/airflow/dags/Spark.py
+Traceback (most recent call last):
+  File "/home/airflow/.local/lib/python3.7/site-packages/airflow/models/dagbag.py", line 318, in parse
+    loader.exec_module(new_module)
+  File "<frozen importlib._bootstrap_external>", line 728, in exec_module
+  File "<frozen importlib._bootstrap>", line 219, in _call_with_frames_removed
+  File "/opt/airflow/dags/Spark.py", line 18, in <module>
+    import findspark
+ModuleNotFoundError: No module named 'findspark'
+[2022-11-15 16:07:19,406] {processor.py:653} WARNING - No viable dags retrieved from /opt/airflow/dags/Spark.py
+[2022-11-15 16:07:19,457] {processor.py:161} INFO - Processing /opt/airflow/dags/Spark.py took 2.881 seconds
+[2022-11-15 16:07:49,794] {processor.py:153} INFO - Started process (PID=856) to work on /opt/airflow/dags/Spark.py
+[2022-11-15 16:07:49,800] {processor.py:641} INFO - Processing file /opt/airflow/dags/Spark.py for tasks to queue
+[2022-11-15 16:07:49,803] {logging_mixin.py:115} INFO - [2022-11-15 16:07:49,802] {dagbag.py:508} INFO - Filling up the DagBag from /opt/airflow/dags/Spark.py
+[2022-11-15 16:07:52,510] {logging_mixin.py:115} INFO - [2022-11-15 16:07:52,505] {dagbag.py:321} ERROR - Failed to import: /opt/airflow/dags/Spark.py
+Traceback (most recent call last):
+  File "/home/airflow/.local/lib/python3.7/site-packages/airflow/models/dagbag.py", line 318, in parse
+    loader.exec_module(new_module)
+  File "<frozen importlib._bootstrap_external>", line 728, in exec_module
+  File "<frozen importlib._bootstrap>", line 219, in _call_with_frames_removed
+  File "/opt/airflow/dags/Spark.py", line 18, in <module>
+    import findspark
+ModuleNotFoundError: No module named 'findspark'
+[2022-11-15 16:07:52,513] {processor.py:653} WARNING - No viable dags retrieved from /opt/airflow/dags/Spark.py
+[2022-11-15 16:07:52,559] {processor.py:161} INFO - Processing /opt/airflow/dags/Spark.py took 2.783 seconds
+[2022-11-15 16:08:23,066] {processor.py:153} INFO - Started process (PID=903) to work on /opt/airflow/dags/Spark.py
+[2022-11-15 16:08:23,079] {processor.py:641} INFO - Processing file /opt/airflow/dags/Spark.py for tasks to queue
+[2022-11-15 16:08:23,089] {logging_mixin.py:115} INFO - [2022-11-15 16:08:23,088] {dagbag.py:508} INFO - Filling up the DagBag from /opt/airflow/dags/Spark.py
+[2022-11-15 16:08:30,607] {logging_mixin.py:115} INFO - [2022-11-15 16:08:30,570] {dagbag.py:321} ERROR - Failed to import: /opt/airflow/dags/Spark.py
+Traceback (most recent call last):
+  File "/home/airflow/.local/lib/python3.7/site-packages/airflow/models/dagbag.py", line 318, in parse
+    loader.exec_module(new_module)
+  File "<frozen importlib._bootstrap_external>", line 728, in exec_module
+  File "<frozen importlib._bootstrap>", line 219, in _call_with_frames_removed
+  File "/opt/airflow/dags/Spark.py", line 18, in <module>
+    import findspark
+ModuleNotFoundError: No module named 'findspark'
+[2022-11-15 16:08:30,615] {processor.py:653} WARNING - No viable dags retrieved from /opt/airflow/dags/Spark.py
+[2022-11-15 16:08:30,809] {processor.py:161} INFO - Processing /opt/airflow/dags/Spark.py took 7.763 seconds
+[2022-11-15 16:09:01,472] {processor.py:153} INFO - Started process (PID=949) to work on /opt/airflow/dags/Spark.py
+[2022-11-15 16:09:01,475] {processor.py:641} INFO - Processing file /opt/airflow/dags/Spark.py for tasks to queue
+[2022-11-15 16:09:01,477] {logging_mixin.py:115} INFO - [2022-11-15 16:09:01,477] {dagbag.py:508} INFO - Filling up the DagBag from /opt/airflow/dags/Spark.py
+[2022-11-15 16:09:03,316] {logging_mixin.py:115} INFO - [2022-11-15 16:09:03,311] {dagbag.py:321} ERROR - Failed to import: /opt/airflow/dags/Spark.py
+Traceback (most recent call last):
+  File "/home/airflow/.local/lib/python3.7/site-packages/airflow/models/dagbag.py", line 318, in parse
+    loader.exec_module(new_module)
+  File "<frozen importlib._bootstrap_external>", line 728, in exec_module
+  File "<frozen importlib._bootstrap>", line 219, in _call_with_frames_removed
+  File "/opt/airflow/dags/Spark.py", line 18, in <module>
+    import findspark
+ModuleNotFoundError: No module named 'findspark'
+[2022-11-15 16:09:03,318] {processor.py:653} WARNING - No viable dags retrieved from /opt/airflow/dags/Spark.py
+[2022-11-15 16:09:03,359] {processor.py:161} INFO - Processing /opt/airflow/dags/Spark.py took 2.094 seconds
+[2022-11-15 16:09:33,766] {processor.py:153} INFO - Started process (PID=987) to work on /opt/airflow/dags/Spark.py
+[2022-11-15 16:09:33,769] {processor.py:641} INFO - Processing file /opt/airflow/dags/Spark.py for tasks to queue
+[2022-11-15 16:09:33,772] {logging_mixin.py:115} INFO - [2022-11-15 16:09:33,771] {dagbag.py:508} INFO - Filling up the DagBag from /opt/airflow/dags/Spark.py
+[2022-11-15 16:09:35,808] {logging_mixin.py:115} INFO - [2022-11-15 16:09:35,802] {dagbag.py:321} ERROR - Failed to import: /opt/airflow/dags/Spark.py
+Traceback (most recent call last):
+  File "/home/airflow/.local/lib/python3.7/site-packages/airflow/models/dagbag.py", line 318, in parse
+    loader.exec_module(new_module)
+  File "<frozen importlib._bootstrap_external>", line 728, in exec_module
+  File "<frozen importlib._bootstrap>", line 219, in _call_with_frames_removed
+  File "/opt/airflow/dags/Spark.py", line 18, in <module>
+    import findspark
+ModuleNotFoundError: No module named 'findspark'
+[2022-11-15 16:09:35,811] {processor.py:653} WARNING - No viable dags retrieved from /opt/airflow/dags/Spark.py
+[2022-11-15 16:09:35,847] {processor.py:161} INFO - Processing /opt/airflow/dags/Spark.py took 2.249 seconds
+[2022-11-15 16:10:06,303] {processor.py:153} INFO - Started process (PID=1025) to work on /opt/airflow/dags/Spark.py
+[2022-11-15 16:10:06,305] {processor.py:641} INFO - Processing file /opt/airflow/dags/Spark.py for tasks to queue
+[2022-11-15 16:10:06,307] {logging_mixin.py:115} INFO - [2022-11-15 16:10:06,307] {dagbag.py:508} INFO - Filling up the DagBag from /opt/airflow/dags/Spark.py
+[2022-11-15 16:10:08,593] {logging_mixin.py:115} INFO - [2022-11-15 16:10:08,579] {dagbag.py:321} ERROR - Failed to import: /opt/airflow/dags/Spark.py
+Traceback (most recent call last):
+  File "/home/airflow/.local/lib/python3.7/site-packages/airflow/models/dagbag.py", line 318, in parse
+    loader.exec_module(new_module)
+  File "<frozen importlib._bootstrap_external>", line 728, in exec_module
+  File "<frozen importlib._bootstrap>", line 219, in _call_with_frames_removed
+  File "/opt/airflow/dags/Spark.py", line 18, in <module>
+    import findspark
+ModuleNotFoundError: No module named 'findspark'
+[2022-11-15 16:10:08,595] {processor.py:653} WARNING - No viable dags retrieved from /opt/airflow/dags/Spark.py
+[2022-11-15 16:10:08,645] {processor.py:161} INFO - Processing /opt/airflow/dags/Spark.py took 2.546 seconds
+[2022-11-15 16:10:39,074] {processor.py:153} INFO - Started process (PID=1079) to work on /opt/airflow/dags/Spark.py
+[2022-11-15 16:10:39,077] {processor.py:641} INFO - Processing file /opt/airflow/dags/Spark.py for tasks to queue
+[2022-11-15 16:10:39,079] {logging_mixin.py:115} INFO - [2022-11-15 16:10:39,078] {dagbag.py:508} INFO - Filling up the DagBag from /opt/airflow/dags/Spark.py
+[2022-11-15 16:10:40,796] {logging_mixin.py:115} INFO - [2022-11-15 16:10:40,791] {dagbag.py:321} ERROR - Failed to import: /opt/airflow/dags/Spark.py
+Traceback (most recent call last):
+  File "/home/airflow/.local/lib/python3.7/site-packages/airflow/models/dagbag.py", line 318, in parse
+    loader.exec_module(new_module)
+  File "<frozen importlib._bootstrap_external>", line 728, in exec_module
+  File "<frozen importlib._bootstrap>", line 219, in _call_with_frames_removed
+  File "/opt/airflow/dags/Spark.py", line 18, in <module>
+    import findspark
+ModuleNotFoundError: No module named 'findspark'
+[2022-11-15 16:10:40,798] {processor.py:653} WARNING - No viable dags retrieved from /opt/airflow/dags/Spark.py
+[2022-11-15 16:10:40,829] {processor.py:161} INFO - Processing /opt/airflow/dags/Spark.py took 1.940 seconds
+[2022-11-15 16:11:11,191] {processor.py:153} INFO - Started process (PID=1117) to work on /opt/airflow/dags/Spark.py
+[2022-11-15 16:11:11,194] {processor.py:641} INFO - Processing file /opt/airflow/dags/Spark.py for tasks to queue
+[2022-11-15 16:11:11,196] {logging_mixin.py:115} INFO - [2022-11-15 16:11:11,196] {dagbag.py:508} INFO - Filling up the DagBag from /opt/airflow/dags/Spark.py
+[2022-11-15 16:11:14,269] {logging_mixin.py:115} INFO - [2022-11-15 16:11:14,255] {dagbag.py:321} ERROR - Failed to import: /opt/airflow/dags/Spark.py
+Traceback (most recent call last):
+  File "/home/airflow/.local/lib/python3.7/site-packages/airflow/models/dagbag.py", line 318, in parse
+    loader.exec_module(new_module)
+  File "<frozen importlib._bootstrap_external>", line 728, in exec_module
+  File "<frozen importlib._bootstrap>", line 219, in _call_with_frames_removed
+  File "/opt/airflow/dags/Spark.py", line 18, in <module>
+    import findspark
+ModuleNotFoundError: No module named 'findspark'
+[2022-11-15 16:11:14,272] {processor.py:653} WARNING - No viable dags retrieved from /opt/airflow/dags/Spark.py
+[2022-11-15 16:11:14,327] {processor.py:161} INFO - Processing /opt/airflow/dags/Spark.py took 3.411 seconds
+[2022-11-15 16:11:44,935] {processor.py:153} INFO - Started process (PID=1156) to work on /opt/airflow/dags/Spark.py
+[2022-11-15 16:11:44,937] {processor.py:641} INFO - Processing file /opt/airflow/dags/Spark.py for tasks to queue
+[2022-11-15 16:11:44,939] {logging_mixin.py:115} INFO - [2022-11-15 16:11:44,939] {dagbag.py:508} INFO - Filling up the DagBag from /opt/airflow/dags/Spark.py
+[2022-11-15 16:11:47,630] {logging_mixin.py:115} INFO - [2022-11-15 16:11:47,611] {dagbag.py:321} ERROR - Failed to import: /opt/airflow/dags/Spark.py
+Traceback (most recent call last):
+  File "/home/airflow/.local/lib/python3.7/site-packages/airflow/models/dagbag.py", line 318, in parse
+    loader.exec_module(new_module)
+  File "<frozen importlib._bootstrap_external>", line 728, in exec_module
+  File "<frozen importlib._bootstrap>", line 219, in _call_with_frames_removed
+  File "/opt/airflow/dags/Spark.py", line 18, in <module>
+    import findspark
+ModuleNotFoundError: No module named 'findspark'
+[2022-11-15 16:11:47,635] {processor.py:653} WARNING - No viable dags retrieved from /opt/airflow/dags/Spark.py
+[2022-11-15 16:11:47,702] {processor.py:161} INFO - Processing /opt/airflow/dags/Spark.py took 2.950 seconds
+[2022-11-15 16:12:18,341] {processor.py:153} INFO - Started process (PID=1210) to work on /opt/airflow/dags/Spark.py
+[2022-11-15 16:12:18,344] {processor.py:641} INFO - Processing file /opt/airflow/dags/Spark.py for tasks to queue
+[2022-11-15 16:12:18,346] {logging_mixin.py:115} INFO - [2022-11-15 16:12:18,346] {dagbag.py:508} INFO - Filling up the DagBag from /opt/airflow/dags/Spark.py
+[2022-11-15 16:12:20,553] {logging_mixin.py:115} INFO - [2022-11-15 16:12:20,547] {dagbag.py:321} ERROR - Failed to import: /opt/airflow/dags/Spark.py
+Traceback (most recent call last):
+  File "/home/airflow/.local/lib/python3.7/site-packages/airflow/models/dagbag.py", line 318, in parse
+    loader.exec_module(new_module)
+  File "<frozen importlib._bootstrap_external>", line 728, in exec_module
+  File "<frozen importlib._bootstrap>", line 219, in _call_with_frames_removed
+  File "/opt/airflow/dags/Spark.py", line 18, in <module>
+    import findspark
+ModuleNotFoundError: No module named 'findspark'
+[2022-11-15 16:12:20,555] {processor.py:653} WARNING - No viable dags retrieved from /opt/airflow/dags/Spark.py
+[2022-11-15 16:12:20,593] {processor.py:161} INFO - Processing /opt/airflow/dags/Spark.py took 2.585 seconds
+[2022-11-15 16:12:51,646] {processor.py:153} INFO - Started process (PID=1276) to work on /opt/airflow/dags/Spark.py
+[2022-11-15 16:12:51,648] {processor.py:641} INFO - Processing file /opt/airflow/dags/Spark.py for tasks to queue
+[2022-11-15 16:12:51,650] {logging_mixin.py:115} INFO - [2022-11-15 16:12:51,650] {dagbag.py:508} INFO - Filling up the DagBag from /opt/airflow/dags/Spark.py
+[2022-11-15 16:12:53,542] {logging_mixin.py:115} INFO - [2022-11-15 16:12:53,537] {dagbag.py:321} ERROR - Failed to import: /opt/airflow/dags/Spark.py
+Traceback (most recent call last):
+  File "/home/airflow/.local/lib/python3.7/site-packages/airflow/models/dagbag.py", line 318, in parse
+    loader.exec_module(new_module)
+  File "<frozen importlib._bootstrap_external>", line 728, in exec_module
+  File "<frozen importlib._bootstrap>", line 219, in _call_with_frames_removed
+  File "/opt/airflow/dags/Spark.py", line 18, in <module>
+    import findspark
+ModuleNotFoundError: No module named 'findspark'
+[2022-11-15 16:12:53,544] {processor.py:653} WARNING - No viable dags retrieved from /opt/airflow/dags/Spark.py
+[2022-11-15 16:12:53,580] {processor.py:161} INFO - Processing /opt/airflow/dags/Spark.py took 2.170 seconds
+[2022-11-15 16:13:24,021] {processor.py:153} INFO - Started process (PID=1314) to work on /opt/airflow/dags/Spark.py
+[2022-11-15 16:13:24,025] {processor.py:641} INFO - Processing file /opt/airflow/dags/Spark.py for tasks to queue
+[2022-11-15 16:13:24,027] {logging_mixin.py:115} INFO - [2022-11-15 16:13:24,026] {dagbag.py:508} INFO - Filling up the DagBag from /opt/airflow/dags/Spark.py
+[2022-11-15 16:13:26,302] {logging_mixin.py:115} INFO - [2022-11-15 16:13:26,287] {dagbag.py:321} ERROR - Failed to import: /opt/airflow/dags/Spark.py
+Traceback (most recent call last):
+  File "/home/airflow/.local/lib/python3.7/site-packages/airflow/models/dagbag.py", line 318, in parse
+    loader.exec_module(new_module)
+  File "<frozen importlib._bootstrap_external>", line 728, in exec_module
+  File "<frozen importlib._bootstrap>", line 219, in _call_with_frames_removed
+  File "/opt/airflow/dags/Spark.py", line 18, in <module>
+    import findspark
+ModuleNotFoundError: No module named 'findspark'
+[2022-11-15 16:13:26,305] {processor.py:653} WARNING - No viable dags retrieved from /opt/airflow/dags/Spark.py
+[2022-11-15 16:13:26,358] {processor.py:161} INFO - Processing /opt/airflow/dags/Spark.py took 2.646 seconds
+[2022-11-15 16:13:57,115] {processor.py:153} INFO - Started process (PID=1368) to work on /opt/airflow/dags/Spark.py
+[2022-11-15 16:13:57,118] {processor.py:641} INFO - Processing file /opt/airflow/dags/Spark.py for tasks to queue
+[2022-11-15 16:13:57,121] {logging_mixin.py:115} INFO - [2022-11-15 16:13:57,121] {dagbag.py:508} INFO - Filling up the DagBag from /opt/airflow/dags/Spark.py
+[2022-11-15 16:13:59,350] {logging_mixin.py:115} INFO - [2022-11-15 16:13:59,343] {dagbag.py:321} ERROR - Failed to import: /opt/airflow/dags/Spark.py
+Traceback (most recent call last):
+  File "/home/airflow/.local/lib/python3.7/site-packages/airflow/models/dagbag.py", line 318, in parse
+    loader.exec_module(new_module)
+  File "<frozen importlib._bootstrap_external>", line 728, in exec_module
+  File "<frozen importlib._bootstrap>", line 219, in _call_with_frames_removed
+  File "/opt/airflow/dags/Spark.py", line 18, in <module>
+    import findspark
+ModuleNotFoundError: No module named 'findspark'
+[2022-11-15 16:13:59,353] {processor.py:653} WARNING - No viable dags retrieved from /opt/airflow/dags/Spark.py
+[2022-11-15 16:13:59,396] {processor.py:161} INFO - Processing /opt/airflow/dags/Spark.py took 2.294 seconds
+[2022-11-15 16:14:29,643] {processor.py:153} INFO - Started process (PID=1405) to work on /opt/airflow/dags/Spark.py
+[2022-11-15 16:14:29,645] {processor.py:641} INFO - Processing file /opt/airflow/dags/Spark.py for tasks to queue
+[2022-11-15 16:14:29,647] {logging_mixin.py:115} INFO - [2022-11-15 16:14:29,647] {dagbag.py:508} INFO - Filling up the DagBag from /opt/airflow/dags/Spark.py
+[2022-11-15 16:14:32,458] {logging_mixin.py:115} INFO - [2022-11-15 16:14:32,445] {dagbag.py:321} ERROR - Failed to import: /opt/airflow/dags/Spark.py
+Traceback (most recent call last):
+  File "/home/airflow/.local/lib/python3.7/site-packages/airflow/models/dagbag.py", line 318, in parse
+    loader.exec_module(new_module)
+  File "<frozen importlib._bootstrap_external>", line 728, in exec_module
+  File "<frozen importlib._bootstrap>", line 219, in _call_with_frames_removed
+  File "/opt/airflow/dags/Spark.py", line 18, in <module>
+    import findspark
+ModuleNotFoundError: No module named 'findspark'
+[2022-11-15 16:14:32,461] {processor.py:653} WARNING - No viable dags retrieved from /opt/airflow/dags/Spark.py
+[2022-11-15 16:14:32,519] {processor.py:161} INFO - Processing /opt/airflow/dags/Spark.py took 2.886 seconds
+[2022-11-15 16:15:02,836] {processor.py:153} INFO - Started process (PID=1441) to work on /opt/airflow/dags/Spark.py
+[2022-11-15 16:15:02,839] {processor.py:641} INFO - Processing file /opt/airflow/dags/Spark.py for tasks to queue
+[2022-11-15 16:15:02,842] {logging_mixin.py:115} INFO - [2022-11-15 16:15:02,842] {dagbag.py:508} INFO - Filling up the DagBag from /opt/airflow/dags/Spark.py
+[2022-11-15 16:15:05,085] {logging_mixin.py:115} INFO - [2022-11-15 16:15:05,077] {dagbag.py:321} ERROR - Failed to import: /opt/airflow/dags/Spark.py
+Traceback (most recent call last):
+  File "/home/airflow/.local/lib/python3.7/site-packages/airflow/models/dagbag.py", line 318, in parse
+    loader.exec_module(new_module)
+  File "<frozen importlib._bootstrap_external>", line 728, in exec_module
+  File "<frozen importlib._bootstrap>", line 219, in _call_with_frames_removed
+  File "/opt/airflow/dags/Spark.py", line 18, in <module>
+    import findspark
+ModuleNotFoundError: No module named 'findspark'
+[2022-11-15 16:15:05,091] {processor.py:653} WARNING - No viable dags retrieved from /opt/airflow/dags/Spark.py
+[2022-11-15 16:15:05,131] {processor.py:161} INFO - Processing /opt/airflow/dags/Spark.py took 2.307 seconds
+[2022-11-15 16:15:35,528] {processor.py:153} INFO - Started process (PID=1479) to work on /opt/airflow/dags/Spark.py
+[2022-11-15 16:15:35,530] {processor.py:641} INFO - Processing file /opt/airflow/dags/Spark.py for tasks to queue
+[2022-11-15 16:15:35,533] {logging_mixin.py:115} INFO - [2022-11-15 16:15:35,532] {dagbag.py:508} INFO - Filling up the DagBag from /opt/airflow/dags/Spark.py
+[2022-11-15 16:15:37,796] {logging_mixin.py:115} INFO - [2022-11-15 16:15:37,788] {dagbag.py:321} ERROR - Failed to import: /opt/airflow/dags/Spark.py
+Traceback (most recent call last):
+  File "/home/airflow/.local/lib/python3.7/site-packages/airflow/models/dagbag.py", line 318, in parse
+    loader.exec_module(new_module)
+  File "<frozen importlib._bootstrap_external>", line 728, in exec_module
+  File "<frozen importlib._bootstrap>", line 219, in _call_with_frames_removed
+  File "/opt/airflow/dags/Spark.py", line 18, in <module>
+    import findspark
+ModuleNotFoundError: No module named 'findspark'
+[2022-11-15 16:15:37,800] {processor.py:653} WARNING - No viable dags retrieved from /opt/airflow/dags/Spark.py
+[2022-11-15 16:15:37,851] {processor.py:161} INFO - Processing /opt/airflow/dags/Spark.py took 2.334 seconds
+[2022-11-15 16:16:08,007] {processor.py:153} INFO - Started process (PID=1533) to work on /opt/airflow/dags/Spark.py
+[2022-11-15 16:16:08,021] {processor.py:641} INFO - Processing file /opt/airflow/dags/Spark.py for tasks to queue
+[2022-11-15 16:16:08,025] {logging_mixin.py:115} INFO - [2022-11-15 16:16:08,025] {dagbag.py:508} INFO - Filling up the DagBag from /opt/airflow/dags/Spark.py
+[2022-11-15 16:16:11,427] {logging_mixin.py:115} INFO - [2022-11-15 16:16:11,412] {dagbag.py:321} ERROR - Failed to import: /opt/airflow/dags/Spark.py
+Traceback (most recent call last):
+  File "/home/airflow/.local/lib/python3.7/site-packages/airflow/models/dagbag.py", line 318, in parse
+    loader.exec_module(new_module)
+  File "<frozen importlib._bootstrap_external>", line 728, in exec_module
+  File "<frozen importlib._bootstrap>", line 219, in _call_with_frames_removed
+  File "/opt/airflow/dags/Spark.py", line 18, in <module>
+    import findspark
+ModuleNotFoundError: No module named 'findspark'
+[2022-11-15 16:16:11,430] {processor.py:653} WARNING - No viable dags retrieved from /opt/airflow/dags/Spark.py
+[2022-11-15 16:16:11,474] {processor.py:161} INFO - Processing /opt/airflow/dags/Spark.py took 3.491 seconds
+[2022-11-15 16:16:42,199] {processor.py:153} INFO - Started process (PID=1571) to work on /opt/airflow/dags/Spark.py
+[2022-11-15 16:16:42,202] {processor.py:641} INFO - Processing file /opt/airflow/dags/Spark.py for tasks to queue
+[2022-11-15 16:16:42,204] {logging_mixin.py:115} INFO - [2022-11-15 16:16:42,204] {dagbag.py:508} INFO - Filling up the DagBag from /opt/airflow/dags/Spark.py
+[2022-11-15 16:16:44,628] {logging_mixin.py:115} INFO - [2022-11-15 16:16:44,619] {dagbag.py:321} ERROR - Failed to import: /opt/airflow/dags/Spark.py
+Traceback (most recent call last):
+  File "/home/airflow/.local/lib/python3.7/site-packages/airflow/models/dagbag.py", line 318, in parse
+    loader.exec_module(new_module)
+  File "<frozen importlib._bootstrap_external>", line 728, in exec_module
+  File "<frozen importlib._bootstrap>", line 219, in _call_with_frames_removed
+  File "/opt/airflow/dags/Spark.py", line 18, in <module>
+    import findspark
+ModuleNotFoundError: No module named 'findspark'
+[2022-11-15 16:16:44,630] {processor.py:653} WARNING - No viable dags retrieved from /opt/airflow/dags/Spark.py
+[2022-11-15 16:16:44,675] {processor.py:161} INFO - Processing /opt/airflow/dags/Spark.py took 2.486 seconds
+[2022-11-15 16:17:14,871] {processor.py:153} INFO - Started process (PID=1609) to work on /opt/airflow/dags/Spark.py
+[2022-11-15 16:17:14,873] {processor.py:641} INFO - Processing file /opt/airflow/dags/Spark.py for tasks to queue
+[2022-11-15 16:17:14,875] {logging_mixin.py:115} INFO - [2022-11-15 16:17:14,875] {dagbag.py:508} INFO - Filling up the DagBag from /opt/airflow/dags/Spark.py
+[2022-11-15 16:17:17,050] {logging_mixin.py:115} INFO - [2022-11-15 16:17:17,045] {dagbag.py:321} ERROR - Failed to import: /opt/airflow/dags/Spark.py
+Traceback (most recent call last):
+  File "/home/airflow/.local/lib/python3.7/site-packages/airflow/models/dagbag.py", line 318, in parse
+    loader.exec_module(new_module)
+  File "<frozen importlib._bootstrap_external>", line 728, in exec_module
+  File "<frozen importlib._bootstrap>", line 219, in _call_with_frames_removed
+  File "/opt/airflow/dags/Spark.py", line 18, in <module>
+    import findspark
+ModuleNotFoundError: No module named 'findspark'
+[2022-11-15 16:17:17,053] {processor.py:653} WARNING - No viable dags retrieved from /opt/airflow/dags/Spark.py
+[2022-11-15 16:17:17,095] {processor.py:161} INFO - Processing /opt/airflow/dags/Spark.py took 2.241 seconds
+[2022-11-15 16:17:47,162] {processor.py:153} INFO - Started process (PID=1663) to work on /opt/airflow/dags/Spark.py
+[2022-11-15 16:17:47,164] {processor.py:641} INFO - Processing file /opt/airflow/dags/Spark.py for tasks to queue
+[2022-11-15 16:17:47,166] {logging_mixin.py:115} INFO - [2022-11-15 16:17:47,165] {dagbag.py:508} INFO - Filling up the DagBag from /opt/airflow/dags/Spark.py
+[2022-11-15 16:17:49,570] {logging_mixin.py:115} INFO - [2022-11-15 16:17:49,561] {dagbag.py:321} ERROR - Failed to import: /opt/airflow/dags/Spark.py
+Traceback (most recent call last):
+  File "/home/airflow/.local/lib/python3.7/site-packages/airflow/models/dagbag.py", line 318, in parse
+    loader.exec_module(new_module)
+  File "<frozen importlib._bootstrap_external>", line 728, in exec_module
+  File "<frozen importlib._bootstrap>", line 219, in _call_with_frames_removed
+  File "/opt/airflow/dags/Spark.py", line 18, in <module>
+    import findspark
+ModuleNotFoundError: No module named 'findspark'
+[2022-11-15 16:17:49,574] {processor.py:653} WARNING - No viable dags retrieved from /opt/airflow/dags/Spark.py
+[2022-11-15 16:17:49,619] {processor.py:161} INFO - Processing /opt/airflow/dags/Spark.py took 2.465 seconds
+[2022-11-15 16:18:20,423] {processor.py:153} INFO - Started process (PID=1701) to work on /opt/airflow/dags/Spark.py
+[2022-11-15 16:18:20,426] {processor.py:641} INFO - Processing file /opt/airflow/dags/Spark.py for tasks to queue
+[2022-11-15 16:18:20,429] {logging_mixin.py:115} INFO - [2022-11-15 16:18:20,428] {dagbag.py:508} INFO - Filling up the DagBag from /opt/airflow/dags/Spark.py
+[2022-11-15 16:18:22,792] {logging_mixin.py:115} INFO - [2022-11-15 16:18:22,784] {dagbag.py:321} ERROR - Failed to import: /opt/airflow/dags/Spark.py
+Traceback (most recent call last):
+  File "/home/airflow/.local/lib/python3.7/site-packages/airflow/models/dagbag.py", line 318, in parse
+    loader.exec_module(new_module)
+  File "<frozen importlib._bootstrap_external>", line 728, in exec_module
+  File "<frozen importlib._bootstrap>", line 219, in _call_with_frames_removed
+  File "/opt/airflow/dags/Spark.py", line 18, in <module>
+    import findspark
+ModuleNotFoundError: No module named 'findspark'
+[2022-11-15 16:18:22,797] {processor.py:653} WARNING - No viable dags retrieved from /opt/airflow/dags/Spark.py
+[2022-11-15 16:18:22,840] {processor.py:161} INFO - Processing /opt/airflow/dags/Spark.py took 2.431 seconds
+[2022-11-15 16:18:53,180] {processor.py:153} INFO - Started process (PID=1740) to work on /opt/airflow/dags/Spark.py
+[2022-11-15 16:18:53,183] {processor.py:641} INFO - Processing file /opt/airflow/dags/Spark.py for tasks to queue
+[2022-11-15 16:18:53,187] {logging_mixin.py:115} INFO - [2022-11-15 16:18:53,186] {dagbag.py:508} INFO - Filling up the DagBag from /opt/airflow/dags/Spark.py
+[2022-11-15 16:18:55,583] {logging_mixin.py:115} INFO - [2022-11-15 16:18:55,577] {dagbag.py:321} ERROR - Failed to import: /opt/airflow/dags/Spark.py
+Traceback (most recent call last):
+  File "/home/airflow/.local/lib/python3.7/site-packages/airflow/models/dagbag.py", line 318, in parse
+    loader.exec_module(new_module)
+  File "<frozen importlib._bootstrap_external>", line 728, in exec_module
+  File "<frozen importlib._bootstrap>", line 219, in _call_with_frames_removed
+  File "/opt/airflow/dags/Spark.py", line 18, in <module>
+    import findspark
+ModuleNotFoundError: No module named 'findspark'
+[2022-11-15 16:18:55,585] {processor.py:653} WARNING - No viable dags retrieved from /opt/airflow/dags/Spark.py
+[2022-11-15 16:18:55,646] {processor.py:161} INFO - Processing /opt/airflow/dags/Spark.py took 2.473 seconds
+[2022-11-15 16:19:25,996] {processor.py:153} INFO - Started process (PID=1788) to work on /opt/airflow/dags/Spark.py
+[2022-11-15 16:19:26,000] {processor.py:641} INFO - Processing file /opt/airflow/dags/Spark.py for tasks to queue
+[2022-11-15 16:19:26,006] {logging_mixin.py:115} INFO - [2022-11-15 16:19:26,006] {dagbag.py:508} INFO - Filling up the DagBag from /opt/airflow/dags/Spark.py
+[2022-11-15 16:19:28,664] {logging_mixin.py:115} INFO - [2022-11-15 16:19:28,658] {dagbag.py:321} ERROR - Failed to import: /opt/airflow/dags/Spark.py
+Traceback (most recent call last):
+  File "/home/airflow/.local/lib/python3.7/site-packages/airflow/models/dagbag.py", line 318, in parse
+    loader.exec_module(new_module)
+  File "<frozen importlib._bootstrap_external>", line 728, in exec_module
+  File "<frozen importlib._bootstrap>", line 219, in _call_with_frames_removed
+  File "/opt/airflow/dags/Spark.py", line 18, in <module>
+    import findspark
+ModuleNotFoundError: No module named 'findspark'
+[2022-11-15 16:19:28,667] {processor.py:653} WARNING - No viable dags retrieved from /opt/airflow/dags/Spark.py
+[2022-11-15 16:19:28,723] {processor.py:161} INFO - Processing /opt/airflow/dags/Spark.py took 2.737 seconds
+[2022-11-15 16:19:59,011] {processor.py:153} INFO - Started process (PID=1831) to work on /opt/airflow/dags/Spark.py
+[2022-11-15 16:19:59,014] {processor.py:641} INFO - Processing file /opt/airflow/dags/Spark.py for tasks to queue
+[2022-11-15 16:19:59,016] {logging_mixin.py:115} INFO - [2022-11-15 16:19:59,016] {dagbag.py:508} INFO - Filling up the DagBag from /opt/airflow/dags/Spark.py
+[2022-11-15 16:20:01,641] {logging_mixin.py:115} INFO - [2022-11-15 16:20:01,628] {dagbag.py:321} ERROR - Failed to import: /opt/airflow/dags/Spark.py
+Traceback (most recent call last):
+  File "/home/airflow/.local/lib/python3.7/site-packages/airflow/models/dagbag.py", line 318, in parse
+    loader.exec_module(new_module)
+  File "<frozen importlib._bootstrap_external>", line 728, in exec_module
+  File "<frozen importlib._bootstrap>", line 219, in _call_with_frames_removed
+  File "/opt/airflow/dags/Spark.py", line 18, in <module>
+    import findspark
+ModuleNotFoundError: No module named 'findspark'
+[2022-11-15 16:20:01,646] {processor.py:653} WARNING - No viable dags retrieved from /opt/airflow/dags/Spark.py
+[2022-11-15 16:20:01,719] {processor.py:161} INFO - Processing /opt/airflow/dags/Spark.py took 2.717 seconds
+[2022-11-15 16:20:32,038] {processor.py:153} INFO - Started process (PID=1869) to work on /opt/airflow/dags/Spark.py
+[2022-11-15 16:20:32,041] {processor.py:641} INFO - Processing file /opt/airflow/dags/Spark.py for tasks to queue
+[2022-11-15 16:20:32,044] {logging_mixin.py:115} INFO - [2022-11-15 16:20:32,043] {dagbag.py:508} INFO - Filling up the DagBag from /opt/airflow/dags/Spark.py
+[2022-11-15 16:20:34,777] {logging_mixin.py:115} INFO - [2022-11-15 16:20:34,691] {dagbag.py:321} ERROR - Failed to import: /opt/airflow/dags/Spark.py
+Traceback (most recent call last):
+  File "/home/airflow/.local/lib/python3.7/site-packages/airflow/models/dagbag.py", line 318, in parse
+    loader.exec_module(new_module)
+  File "<frozen importlib._bootstrap_external>", line 728, in exec_module
+  File "<frozen importlib._bootstrap>", line 219, in _call_with_frames_removed
+  File "/opt/airflow/dags/Spark.py", line 18, in <module>
+    import findspark
+ModuleNotFoundError: No module named 'findspark'
+[2022-11-15 16:20:34,792] {processor.py:653} WARNING - No viable dags retrieved from /opt/airflow/dags/Spark.py
+[2022-11-15 16:20:34,873] {processor.py:161} INFO - Processing /opt/airflow/dags/Spark.py took 2.842 seconds
+[2022-11-15 16:21:05,446] {processor.py:153} INFO - Started process (PID=1921) to work on /opt/airflow/dags/Spark.py
+[2022-11-15 16:21:05,448] {processor.py:641} INFO - Processing file /opt/airflow/dags/Spark.py for tasks to queue
+[2022-11-15 16:21:05,451] {logging_mixin.py:115} INFO - [2022-11-15 16:21:05,450] {dagbag.py:508} INFO - Filling up the DagBag from /opt/airflow/dags/Spark.py
+[2022-11-15 16:21:07,645] {logging_mixin.py:115} INFO - [2022-11-15 16:21:07,639] {dagbag.py:321} ERROR - Failed to import: /opt/airflow/dags/Spark.py
+Traceback (most recent call last):
+  File "/home/airflow/.local/lib/python3.7/site-packages/airflow/models/dagbag.py", line 318, in parse
+    loader.exec_module(new_module)
+  File "<frozen importlib._bootstrap_external>", line 728, in exec_module
+  File "<frozen importlib._bootstrap>", line 219, in _call_with_frames_removed
+  File "/opt/airflow/dags/Spark.py", line 18, in <module>
+    import findspark
+ModuleNotFoundError: No module named 'findspark'
+[2022-11-15 16:21:07,652] {processor.py:653} WARNING - No viable dags retrieved from /opt/airflow/dags/Spark.py
+[2022-11-15 16:21:07,694] {processor.py:161} INFO - Processing /opt/airflow/dags/Spark.py took 2.257 seconds
+[2022-11-15 16:27:07,905] {processor.py:153} INFO - Started process (PID=130) to work on /opt/airflow/dags/Spark.py
+[2022-11-15 16:27:07,908] {processor.py:641} INFO - Processing file /opt/airflow/dags/Spark.py for tasks to queue
+[2022-11-15 16:27:07,913] {logging_mixin.py:115} INFO - [2022-11-15 16:27:07,912] {dagbag.py:508} INFO - Filling up the DagBag from /opt/airflow/dags/Spark.py
+[2022-11-15 16:27:17,456] {logging_mixin.py:115} INFO - [2022-11-15 16:27:17,454] {process_utils.py:240} INFO - Waiting up to 5 seconds for processes to exit...
+[2022-11-15 16:28:48,463] {processor.py:153} INFO - Started process (PID=113) to work on /opt/airflow/dags/Spark.py
+[2022-11-15 16:28:48,486] {processor.py:641} INFO - Processing file /opt/airflow/dags/Spark.py for tasks to queue
+[2022-11-15 16:28:48,488] {logging_mixin.py:115} INFO - [2022-11-15 16:28:48,488] {dagbag.py:508} INFO - Filling up the DagBag from /opt/airflow/dags/Spark.py
+[2022-11-15 16:29:12,297] {processor.py:651} INFO - DAG(s) dict_keys(['Prueba12523']) retrieved from /opt/airflow/dags/Spark.py
+[2022-11-15 16:29:13,129] {logging_mixin.py:115} INFO - [2022-11-15 16:29:13,101] {dag.py:2420} INFO - Sync 1 DAGs
+[2022-11-15 16:29:13,516] {logging_mixin.py:115} INFO - [2022-11-15 16:29:13,515] {dag.py:2972} INFO - Setting next_dagrun for Prueba12523 to 2022-08-25T00:00:00+00:00, run_after=2022-08-25T00:00:00+00:00
+[2022-11-15 16:29:13,713] {processor.py:161} INFO - Processing /opt/airflow/dags/Spark.py took 25.271 seconds
+[2022-11-15 16:29:44,638] {processor.py:153} INFO - Started process (PID=165) to work on /opt/airflow/dags/Spark.py
+[2022-11-15 16:29:44,641] {processor.py:641} INFO - Processing file /opt/airflow/dags/Spark.py for tasks to queue
+[2022-11-15 16:29:44,645] {logging_mixin.py:115} INFO - [2022-11-15 16:29:44,645] {dagbag.py:508} INFO - Filling up the DagBag from /opt/airflow/dags/Spark.py
+[2022-11-15 16:29:49,344] {processor.py:651} INFO - DAG(s) dict_keys(['Prueba12523']) retrieved from /opt/airflow/dags/Spark.py
+[2022-11-15 16:29:49,479] {logging_mixin.py:115} INFO - [2022-11-15 16:29:49,477] {dag.py:2420} INFO - Sync 1 DAGs
+[2022-11-15 16:29:49,607] {logging_mixin.py:115} INFO - [2022-11-15 16:29:49,605] {dag.py:2972} INFO - Setting next_dagrun for Prueba12523 to 2022-08-25T00:00:00+00:00, run_after=2022-08-25T00:00:00+00:00
+[2022-11-15 16:29:49,635] {processor.py:161} INFO - Processing /opt/airflow/dags/Spark.py took 5.013 seconds
+[2022-11-15 16:30:19,970] {processor.py:153} INFO - Started process (PID=203) to work on /opt/airflow/dags/Spark.py
+[2022-11-15 16:30:19,972] {processor.py:641} INFO - Processing file /opt/airflow/dags/Spark.py for tasks to queue
+[2022-11-15 16:30:19,974] {logging_mixin.py:115} INFO - [2022-11-15 16:30:19,974] {dagbag.py:508} INFO - Filling up the DagBag from /opt/airflow/dags/Spark.py
+[2022-11-15 16:30:23,044] {processor.py:651} INFO - DAG(s) dict_keys(['Prueba12523']) retrieved from /opt/airflow/dags/Spark.py
+[2022-11-15 16:30:23,217] {logging_mixin.py:115} INFO - [2022-11-15 16:30:23,214] {dag.py:2420} INFO - Sync 1 DAGs
+[2022-11-15 16:30:23,339] {logging_mixin.py:115} INFO - [2022-11-15 16:30:23,338] {dag.py:2972} INFO - Setting next_dagrun for Prueba12523 to 2022-08-25T00:00:00+00:00, run_after=2022-08-25T00:00:00+00:00
+[2022-11-15 16:30:23,377] {processor.py:161} INFO - Processing /opt/airflow/dags/Spark.py took 3.416 seconds
+[2022-11-15 16:30:54,267] {processor.py:153} INFO - Started process (PID=251) to work on /opt/airflow/dags/Spark.py
+[2022-11-15 16:30:54,273] {processor.py:641} INFO - Processing file /opt/airflow/dags/Spark.py for tasks to queue
+[2022-11-15 16:30:54,291] {logging_mixin.py:115} INFO - [2022-11-15 16:30:54,291] {dagbag.py:508} INFO - Filling up the DagBag from /opt/airflow/dags/Spark.py
+[2022-11-15 16:31:24,429] {logging_mixin.py:115} INFO - [2022-11-15 16:31:24,416] {timeout.py:67} ERROR - Process timed out, PID: 251
+[2022-11-15 16:31:24,443] {logging_mixin.py:115} WARNING - Exception ignored in: <function Group.__del__ at 0x403353bb00>
+[2022-11-15 16:31:24,453] {logging_mixin.py:115} WARNING - Traceback (most recent call last):
+[2022-11-15 16:31:24,456] {logging_mixin.py:115} WARNING -   File "/home/airflow/.local/lib/python3.7/site-packages/regex/_regex_core.py", line 3038, in __del__
+[2022-11-15 16:31:24,529] {logging_mixin.py:115} WARNING -     def __del__(self):
+[2022-11-15 16:31:24,536] {logging_mixin.py:115} WARNING -   File "/home/airflow/.local/lib/python3.7/site-packages/airflow/utils/timeout.py", line 68, in handle_timeout
+[2022-11-15 16:31:24,561] {logging_mixin.py:115} WARNING -     raise AirflowTaskTimeout(self.error_message)
+[2022-11-15 16:31:24,575] {logging_mixin.py:115} WARNING - airflow.exceptions.AirflowTaskTimeout: DagBag import timeout for /opt/airflow/dags/Spark.py after 30.0s.
+Please take a look at these docs to improve your DAG import time:
+* https://airflow.apache.org/docs/apache-airflow/2.3.3/best-practices.html#top-level-python-code
+* https://airflow.apache.org/docs/apache-airflow/2.3.3/best-practices.html#reducing-dag-complexity, PID: 251
+[2022-11-15 16:31:27,519] {processor.py:651} INFO - DAG(s) dict_keys(['Prueba12523']) retrieved from /opt/airflow/dags/Spark.py
+[2022-11-15 16:31:27,794] {logging_mixin.py:115} INFO - [2022-11-15 16:31:27,791] {dag.py:2420} INFO - Sync 1 DAGs
+[2022-11-15 16:31:27,989] {logging_mixin.py:115} INFO - [2022-11-15 16:31:27,989] {dag.py:2972} INFO - Setting next_dagrun for Prueba12523 to 2022-08-25T00:00:00+00:00, run_after=2022-08-25T00:00:00+00:00
+[2022-11-15 16:31:28,067] {processor.py:161} INFO - Processing /opt/airflow/dags/Spark.py took 33.848 seconds
+[2022-11-15 16:31:58,839] {processor.py:153} INFO - Started process (PID=314) to work on /opt/airflow/dags/Spark.py
+[2022-11-15 16:31:58,842] {processor.py:641} INFO - Processing file /opt/airflow/dags/Spark.py for tasks to queue
+[2022-11-15 16:31:58,844] {logging_mixin.py:115} INFO - [2022-11-15 16:31:58,844] {dagbag.py:508} INFO - Filling up the DagBag from /opt/airflow/dags/Spark.py
+[2022-11-15 16:32:02,159] {processor.py:651} INFO - DAG(s) dict_keys(['Prueba12523']) retrieved from /opt/airflow/dags/Spark.py
+[2022-11-15 16:32:02,249] {logging_mixin.py:115} INFO - [2022-11-15 16:32:02,248] {dag.py:2420} INFO - Sync 1 DAGs
+[2022-11-15 16:32:02,344] {logging_mixin.py:115} INFO - [2022-11-15 16:32:02,342] {dag.py:2972} INFO - Setting next_dagrun for Prueba12523 to 2022-08-25T00:00:00+00:00, run_after=2022-08-25T00:00:00+00:00
+[2022-11-15 16:32:02,377] {processor.py:161} INFO - Processing /opt/airflow/dags/Spark.py took 3.549 seconds
+[2022-11-15 16:32:32,774] {processor.py:153} INFO - Started process (PID=353) to work on /opt/airflow/dags/Spark.py
+[2022-11-15 16:32:32,778] {processor.py:641} INFO - Processing file /opt/airflow/dags/Spark.py for tasks to queue
+[2022-11-15 16:32:32,784] {logging_mixin.py:115} INFO - [2022-11-15 16:32:32,782] {dagbag.py:508} INFO - Filling up the DagBag from /opt/airflow/dags/Spark.py
+[2022-11-15 16:32:37,679] {processor.py:651} INFO - DAG(s) dict_keys(['Prueba12523']) retrieved from /opt/airflow/dags/Spark.py
+[2022-11-15 16:32:37,758] {logging_mixin.py:115} INFO - [2022-11-15 16:32:37,756] {dag.py:2420} INFO - Sync 1 DAGs
+[2022-11-15 16:32:37,854] {logging_mixin.py:115} INFO - [2022-11-15 16:32:37,853] {dag.py:2972} INFO - Setting next_dagrun for Prueba12523 to 2022-08-25T00:00:00+00:00, run_after=2022-08-25T00:00:00+00:00
+[2022-11-15 16:32:37,910] {processor.py:161} INFO - Processing /opt/airflow/dags/Spark.py took 5.161 seconds
+[2022-11-15 16:33:08,367] {processor.py:153} INFO - Started process (PID=407) to work on /opt/airflow/dags/Spark.py
+[2022-11-15 16:33:08,374] {processor.py:641} INFO - Processing file /opt/airflow/dags/Spark.py for tasks to queue
+[2022-11-15 16:33:08,378] {logging_mixin.py:115} INFO - [2022-11-15 16:33:08,377] {dagbag.py:508} INFO - Filling up the DagBag from /opt/airflow/dags/Spark.py
+[2022-11-15 16:33:15,560] {processor.py:651} INFO - DAG(s) dict_keys(['Prueba12523']) retrieved from /opt/airflow/dags/Spark.py
+[2022-11-15 16:33:15,723] {logging_mixin.py:115} INFO - [2022-11-15 16:33:15,720] {dag.py:2420} INFO - Sync 1 DAGs
+[2022-11-15 16:33:16,074] {logging_mixin.py:115} INFO - [2022-11-15 16:33:16,060] {dag.py:2972} INFO - Setting next_dagrun for Prueba12523 to 2022-08-25T00:00:00+00:00, run_after=2022-08-25T00:00:00+00:00
+[2022-11-15 16:33:16,233] {processor.py:161} INFO - Processing /opt/airflow/dags/Spark.py took 7.885 seconds
+[2022-11-15 16:33:46,801] {processor.py:153} INFO - Started process (PID=428) to work on /opt/airflow/dags/Spark.py
+[2022-11-15 16:33:46,803] {processor.py:641} INFO - Processing file /opt/airflow/dags/Spark.py for tasks to queue
+[2022-11-15 16:33:46,806] {logging_mixin.py:115} INFO - [2022-11-15 16:33:46,805] {dagbag.py:508} INFO - Filling up the DagBag from /opt/airflow/dags/Spark.py
+[2022-11-15 16:33:50,781] {processor.py:651} INFO - DAG(s) dict_keys(['Prueba12523']) retrieved from /opt/airflow/dags/Spark.py
+[2022-11-15 16:33:50,870] {logging_mixin.py:115} INFO - [2022-11-15 16:33:50,869] {dag.py:2420} INFO - Sync 1 DAGs
+[2022-11-15 16:33:50,953] {logging_mixin.py:115} INFO - [2022-11-15 16:33:50,952] {dag.py:2972} INFO - Setting next_dagrun for Prueba12523 to 2022-08-25T00:00:00+00:00, run_after=2022-08-25T00:00:00+00:00
+[2022-11-15 16:33:50,988] {processor.py:161} INFO - Processing /opt/airflow/dags/Spark.py took 4.201 seconds
+[2022-11-15 16:34:21,201] {processor.py:153} INFO - Started process (PID=482) to work on /opt/airflow/dags/Spark.py
+[2022-11-15 16:34:21,205] {processor.py:641} INFO - Processing file /opt/airflow/dags/Spark.py for tasks to queue
+[2022-11-15 16:34:21,212] {logging_mixin.py:115} INFO - [2022-11-15 16:34:21,212] {dagbag.py:508} INFO - Filling up the DagBag from /opt/airflow/dags/Spark.py
+[2022-11-15 16:34:25,607] {processor.py:651} INFO - DAG(s) dict_keys(['Prueba12523']) retrieved from /opt/airflow/dags/Spark.py
+[2022-11-15 16:34:25,710] {logging_mixin.py:115} INFO - [2022-11-15 16:34:25,708] {dag.py:2420} INFO - Sync 1 DAGs
+[2022-11-15 16:34:25,788] {logging_mixin.py:115} INFO - [2022-11-15 16:34:25,787] {dag.py:2972} INFO - Setting next_dagrun for Prueba12523 to 2022-08-25T00:00:00+00:00, run_after=2022-08-25T00:00:00+00:00
+[2022-11-15 16:34:25,848] {processor.py:161} INFO - Processing /opt/airflow/dags/Spark.py took 4.665 seconds
+[2022-11-15 16:34:56,169] {processor.py:153} INFO - Started process (PID=519) to work on /opt/airflow/dags/Spark.py
+[2022-11-15 16:34:56,173] {processor.py:641} INFO - Processing file /opt/airflow/dags/Spark.py for tasks to queue
+[2022-11-15 16:34:56,175] {logging_mixin.py:115} INFO - [2022-11-15 16:34:56,175] {dagbag.py:508} INFO - Filling up the DagBag from /opt/airflow/dags/Spark.py
+[2022-11-15 16:34:59,158] {processor.py:651} INFO - DAG(s) dict_keys(['Prueba12523']) retrieved from /opt/airflow/dags/Spark.py
+[2022-11-15 16:34:59,232] {logging_mixin.py:115} INFO - [2022-11-15 16:34:59,231] {dag.py:2420} INFO - Sync 1 DAGs
+[2022-11-15 16:34:59,319] {logging_mixin.py:115} INFO - [2022-11-15 16:34:59,318] {dag.py:2972} INFO - Setting next_dagrun for Prueba12523 to 2022-08-25T00:00:00+00:00, run_after=2022-08-25T00:00:00+00:00
+[2022-11-15 16:34:59,349] {processor.py:161} INFO - Processing /opt/airflow/dags/Spark.py took 3.197 seconds
+[2022-11-15 16:35:29,633] {processor.py:153} INFO - Started process (PID=557) to work on /opt/airflow/dags/Spark.py
+[2022-11-15 16:35:29,635] {processor.py:641} INFO - Processing file /opt/airflow/dags/Spark.py for tasks to queue
+[2022-11-15 16:35:29,638] {logging_mixin.py:115} INFO - [2022-11-15 16:35:29,637] {dagbag.py:508} INFO - Filling up the DagBag from /opt/airflow/dags/Spark.py
+[2022-11-15 16:35:32,564] {processor.py:651} INFO - DAG(s) dict_keys(['Prueba12523']) retrieved from /opt/airflow/dags/Spark.py
+[2022-11-15 16:35:32,632] {logging_mixin.py:115} INFO - [2022-11-15 16:35:32,631] {dag.py:2420} INFO - Sync 1 DAGs
+[2022-11-15 16:35:32,707] {logging_mixin.py:115} INFO - [2022-11-15 16:35:32,707] {dag.py:2972} INFO - Setting next_dagrun for Prueba12523 to 2022-08-25T00:00:00+00:00, run_after=2022-08-25T00:00:00+00:00
+[2022-11-15 16:35:32,736] {processor.py:161} INFO - Processing /opt/airflow/dags/Spark.py took 3.115 seconds
+[2022-11-15 16:36:02,986] {processor.py:153} INFO - Started process (PID=611) to work on /opt/airflow/dags/Spark.py
+[2022-11-15 16:36:02,988] {processor.py:641} INFO - Processing file /opt/airflow/dags/Spark.py for tasks to queue
+[2022-11-15 16:36:02,990] {logging_mixin.py:115} INFO - [2022-11-15 16:36:02,990] {dagbag.py:508} INFO - Filling up the DagBag from /opt/airflow/dags/Spark.py
+[2022-11-15 16:36:05,485] {processor.py:651} INFO - DAG(s) dict_keys(['Prueba12523']) retrieved from /opt/airflow/dags/Spark.py
+[2022-11-15 16:36:05,535] {logging_mixin.py:115} INFO - [2022-11-15 16:36:05,534] {dag.py:2420} INFO - Sync 1 DAGs
+[2022-11-15 16:36:05,605] {logging_mixin.py:115} INFO - [2022-11-15 16:36:05,604] {dag.py:2972} INFO - Setting next_dagrun for Prueba12523 to 2022-08-25T00:00:00+00:00, run_after=2022-08-25T00:00:00+00:00
+[2022-11-15 16:36:05,630] {processor.py:161} INFO - Processing /opt/airflow/dags/Spark.py took 2.653 seconds
+[2022-11-15 16:36:36,024] {processor.py:153} INFO - Started process (PID=649) to work on /opt/airflow/dags/Spark.py
+[2022-11-15 16:36:36,028] {processor.py:641} INFO - Processing file /opt/airflow/dags/Spark.py for tasks to queue
+[2022-11-15 16:36:36,035] {logging_mixin.py:115} INFO - [2022-11-15 16:36:36,034] {dagbag.py:508} INFO - Filling up the DagBag from /opt/airflow/dags/Spark.py
+[2022-11-15 16:36:41,306] {processor.py:651} INFO - DAG(s) dict_keys(['Prueba12523']) retrieved from /opt/airflow/dags/Spark.py
+[2022-11-15 16:36:41,450] {logging_mixin.py:115} INFO - [2022-11-15 16:36:41,442] {dag.py:2420} INFO - Sync 1 DAGs
+[2022-11-15 16:36:41,591] {logging_mixin.py:115} INFO - [2022-11-15 16:36:41,590] {dag.py:2972} INFO - Setting next_dagrun for Prueba12523 to 2022-08-25T00:00:00+00:00, run_after=2022-08-25T00:00:00+00:00
+[2022-11-15 16:36:41,625] {processor.py:161} INFO - Processing /opt/airflow/dags/Spark.py took 5.612 seconds
+[2022-11-15 16:37:12,705] {processor.py:153} INFO - Started process (PID=686) to work on /opt/airflow/dags/Spark.py
+[2022-11-15 16:37:12,708] {processor.py:641} INFO - Processing file /opt/airflow/dags/Spark.py for tasks to queue
+[2022-11-15 16:37:12,711] {logging_mixin.py:115} INFO - [2022-11-15 16:37:12,710] {dagbag.py:508} INFO - Filling up the DagBag from /opt/airflow/dags/Spark.py
+[2022-11-15 16:37:16,162] {processor.py:651} INFO - DAG(s) dict_keys(['Prueba12523']) retrieved from /opt/airflow/dags/Spark.py
+[2022-11-15 16:37:16,224] {logging_mixin.py:115} INFO - [2022-11-15 16:37:16,223] {dag.py:2420} INFO - Sync 1 DAGs
+[2022-11-15 16:37:16,298] {logging_mixin.py:115} INFO - [2022-11-15 16:37:16,297] {dag.py:2972} INFO - Setting next_dagrun for Prueba12523 to 2022-08-25T00:00:00+00:00, run_after=2022-08-25T00:00:00+00:00
+[2022-11-15 16:37:16,325] {processor.py:161} INFO - Processing /opt/airflow/dags/Spark.py took 3.631 seconds
+[2022-11-15 16:37:46,521] {processor.py:153} INFO - Started process (PID=740) to work on /opt/airflow/dags/Spark.py
+[2022-11-15 16:37:46,523] {processor.py:641} INFO - Processing file /opt/airflow/dags/Spark.py for tasks to queue
+[2022-11-15 16:37:46,526] {logging_mixin.py:115} INFO - [2022-11-15 16:37:46,526] {dagbag.py:508} INFO - Filling up the DagBag from /opt/airflow/dags/Spark.py
+[2022-11-15 16:37:49,290] {processor.py:651} INFO - DAG(s) dict_keys(['Prueba12523']) retrieved from /opt/airflow/dags/Spark.py
+[2022-11-15 16:37:49,355] {logging_mixin.py:115} INFO - [2022-11-15 16:37:49,353] {dag.py:2420} INFO - Sync 1 DAGs
+[2022-11-15 16:37:49,430] {logging_mixin.py:115} INFO - [2022-11-15 16:37:49,430] {dag.py:2972} INFO - Setting next_dagrun for Prueba12523 to 2022-08-25T00:00:00+00:00, run_after=2022-08-25T00:00:00+00:00
+[2022-11-15 16:37:49,461] {processor.py:161} INFO - Processing /opt/airflow/dags/Spark.py took 2.956 seconds
+[2022-11-15 16:38:19,757] {processor.py:153} INFO - Started process (PID=778) to work on /opt/airflow/dags/Spark.py
+[2022-11-15 16:38:19,759] {processor.py:641} INFO - Processing file /opt/airflow/dags/Spark.py for tasks to queue
+[2022-11-15 16:38:19,761] {logging_mixin.py:115} INFO - [2022-11-15 16:38:19,761] {dagbag.py:508} INFO - Filling up the DagBag from /opt/airflow/dags/Spark.py
+[2022-11-15 16:38:22,991] {processor.py:651} INFO - DAG(s) dict_keys(['Prueba12523']) retrieved from /opt/airflow/dags/Spark.py
+[2022-11-15 16:38:23,118] {logging_mixin.py:115} INFO - [2022-11-15 16:38:23,117] {dag.py:2420} INFO - Sync 1 DAGs
+[2022-11-15 16:38:23,262] {logging_mixin.py:115} INFO - [2022-11-15 16:38:23,261] {dag.py:2972} INFO - Setting next_dagrun for Prueba12523 to 2022-08-25T00:00:00+00:00, run_after=2022-08-25T00:00:00+00:00
+[2022-11-15 16:38:23,514] {processor.py:161} INFO - Processing /opt/airflow/dags/Spark.py took 3.773 seconds
+[2022-11-15 16:38:54,190] {processor.py:153} INFO - Started process (PID=815) to work on /opt/airflow/dags/Spark.py
+[2022-11-15 16:38:54,197] {processor.py:641} INFO - Processing file /opt/airflow/dags/Spark.py for tasks to queue
+[2022-11-15 16:38:54,202] {logging_mixin.py:115} INFO - [2022-11-15 16:38:54,202] {dagbag.py:508} INFO - Filling up the DagBag from /opt/airflow/dags/Spark.py
+[2022-11-15 16:38:57,729] {processor.py:651} INFO - DAG(s) dict_keys(['Prueba12523']) retrieved from /opt/airflow/dags/Spark.py
+[2022-11-15 16:38:57,810] {logging_mixin.py:115} INFO - [2022-11-15 16:38:57,808] {dag.py:2420} INFO - Sync 1 DAGs
+[2022-11-15 16:38:57,895] {logging_mixin.py:115} INFO - [2022-11-15 16:38:57,894] {dag.py:2972} INFO - Setting next_dagrun for Prueba12523 to 2022-08-25T00:00:00+00:00, run_after=2022-08-25T00:00:00+00:00
+[2022-11-15 16:38:57,930] {processor.py:161} INFO - Processing /opt/airflow/dags/Spark.py took 3.785 seconds
+[2022-11-15 16:39:28,299] {processor.py:153} INFO - Started process (PID=869) to work on /opt/airflow/dags/Spark.py
+[2022-11-15 16:39:28,301] {processor.py:641} INFO - Processing file /opt/airflow/dags/Spark.py for tasks to queue
+[2022-11-15 16:39:28,304] {logging_mixin.py:115} INFO - [2022-11-15 16:39:28,304] {dagbag.py:508} INFO - Filling up the DagBag from /opt/airflow/dags/Spark.py
+[2022-11-15 16:39:31,985] {processor.py:651} INFO - DAG(s) dict_keys(['Prueba12523']) retrieved from /opt/airflow/dags/Spark.py
+[2022-11-15 16:39:32,060] {logging_mixin.py:115} INFO - [2022-11-15 16:39:32,059] {dag.py:2420} INFO - Sync 1 DAGs
+[2022-11-15 16:39:32,142] {logging_mixin.py:115} INFO - [2022-11-15 16:39:32,141] {dag.py:2972} INFO - Setting next_dagrun for Prueba12523 to 2022-08-25T00:00:00+00:00, run_after=2022-08-25T00:00:00+00:00
+[2022-11-15 16:39:32,174] {processor.py:161} INFO - Processing /opt/airflow/dags/Spark.py took 3.887 seconds
+[2022-11-15 16:40:02,626] {processor.py:153} INFO - Started process (PID=908) to work on /opt/airflow/dags/Spark.py
+[2022-11-15 16:40:02,629] {processor.py:641} INFO - Processing file /opt/airflow/dags/Spark.py for tasks to queue
+[2022-11-15 16:40:02,631] {logging_mixin.py:115} INFO - [2022-11-15 16:40:02,631] {dagbag.py:508} INFO - Filling up the DagBag from /opt/airflow/dags/Spark.py
+[2022-11-15 16:40:05,851] {processor.py:651} INFO - DAG(s) dict_keys(['Prueba12523']) retrieved from /opt/airflow/dags/Spark.py
+[2022-11-15 16:40:05,942] {logging_mixin.py:115} INFO - [2022-11-15 16:40:05,941] {dag.py:2420} INFO - Sync 1 DAGs
+[2022-11-15 16:40:06,023] {logging_mixin.py:115} INFO - [2022-11-15 16:40:06,022] {dag.py:2972} INFO - Setting next_dagrun for Prueba12523 to 2022-08-25T00:00:00+00:00, run_after=2022-08-25T00:00:00+00:00
+[2022-11-15 16:40:06,051] {processor.py:161} INFO - Processing /opt/airflow/dags/Spark.py took 3.439 seconds
+[2022-11-15 16:40:36,290] {processor.py:153} INFO - Started process (PID=946) to work on /opt/airflow/dags/Spark.py
+[2022-11-15 16:40:36,292] {processor.py:641} INFO - Processing file /opt/airflow/dags/Spark.py for tasks to queue
+[2022-11-15 16:40:36,294] {logging_mixin.py:115} INFO - [2022-11-15 16:40:36,294] {dagbag.py:508} INFO - Filling up the DagBag from /opt/airflow/dags/Spark.py
+[2022-11-15 16:40:39,600] {processor.py:651} INFO - DAG(s) dict_keys(['Prueba12523']) retrieved from /opt/airflow/dags/Spark.py
+[2022-11-15 16:40:39,657] {logging_mixin.py:115} INFO - [2022-11-15 16:40:39,656] {dag.py:2420} INFO - Sync 1 DAGs
+[2022-11-15 16:40:39,735] {logging_mixin.py:115} INFO - [2022-11-15 16:40:39,734] {dag.py:2972} INFO - Setting next_dagrun for Prueba12523 to 2022-08-25T00:00:00+00:00, run_after=2022-08-25T00:00:00+00:00
+[2022-11-15 16:40:39,759] {processor.py:161} INFO - Processing /opt/airflow/dags/Spark.py took 3.479 seconds
+[2022-11-15 16:41:10,748] {processor.py:153} INFO - Started process (PID=984) to work on /opt/airflow/dags/Spark.py
+[2022-11-15 16:41:10,750] {processor.py:641} INFO - Processing file /opt/airflow/dags/Spark.py for tasks to queue
+[2022-11-15 16:41:10,753] {logging_mixin.py:115} INFO - [2022-11-15 16:41:10,752] {dagbag.py:508} INFO - Filling up the DagBag from /opt/airflow/dags/Spark.py
+[2022-11-15 16:41:13,735] {processor.py:651} INFO - DAG(s) dict_keys(['Prueba12523']) retrieved from /opt/airflow/dags/Spark.py
+[2022-11-15 16:41:13,792] {logging_mixin.py:115} INFO - [2022-11-15 16:41:13,791] {dag.py:2420} INFO - Sync 1 DAGs
+[2022-11-15 16:41:13,857] {logging_mixin.py:115} INFO - [2022-11-15 16:41:13,856] {dag.py:2972} INFO - Setting next_dagrun for Prueba12523 to 2022-08-25T00:00:00+00:00, run_after=2022-08-25T00:00:00+00:00
+[2022-11-15 16:41:13,888] {processor.py:161} INFO - Processing /opt/airflow/dags/Spark.py took 3.152 seconds
+[2022-11-15 16:41:46,873] {processor.py:153} INFO - Started process (PID=1035) to work on /opt/airflow/dags/Spark.py
+[2022-11-15 16:41:46,948] {processor.py:641} INFO - Processing file /opt/airflow/dags/Spark.py for tasks to queue
+[2022-11-15 16:41:47,042] {logging_mixin.py:115} INFO - [2022-11-15 16:41:47,022] {dagbag.py:508} INFO - Filling up the DagBag from /opt/airflow/dags/Spark.py
+[2022-11-15 16:42:19,301] {logging_mixin.py:115} INFO - [2022-11-15 16:42:19,104] {timeout.py:67} ERROR - Process timed out, PID: 1035
+[2022-11-15 16:42:22,568] {logging_mixin.py:115} INFO - [2022-11-15 16:42:20,127] {dagbag.py:321} ERROR - Failed to import: /opt/airflow/dags/Spark.py
+Traceback (most recent call last):
+  File "/home/airflow/.local/lib/python3.7/site-packages/airflow/models/dagbag.py", line 318, in parse
+    loader.exec_module(new_module)
+  File "<frozen importlib._bootstrap_external>", line 728, in exec_module
+  File "<frozen importlib._bootstrap>", line 219, in _call_with_frames_removed
+  File "/opt/airflow/dags/Spark.py", line 1, in <module>
+    import pandas as pd
+  File "/home/airflow/.local/lib/python3.7/site-packages/pandas/__init__.py", line 22, in <module>
+    from pandas.compat import (
+  File "/home/airflow/.local/lib/python3.7/site-packages/pandas/compat/__init__.py", line 15, in <module>
+    from pandas.compat.numpy import (
+  File "/home/airflow/.local/lib/python3.7/site-packages/pandas/compat/numpy/__init__.py", line 7, in <module>
+    from pandas.util.version import Version
+  File "/home/airflow/.local/lib/python3.7/site-packages/pandas/util/__init__.py", line 1, in <module>
+    from pandas.util._decorators import (  # noqa
+  File "/home/airflow/.local/lib/python3.7/site-packages/pandas/util/_decorators.py", line 14, in <module>
+    from pandas._libs.properties import cache_readonly  # noqa
+  File "/home/airflow/.local/lib/python3.7/site-packages/pandas/_libs/__init__.py", line 13, in <module>
+    from pandas._libs.interval import Interval
+  File "pandas/_libs/interval.pyx", line 1, in init pandas._libs.interval
+  File "pandas/_libs/hashtable.pyx", line 1, in init pandas._libs.hashtable
+  File "pandas/_libs/missing.pyx", line 1, in init pandas._libs.missing
+  File "/home/airflow/.local/lib/python3.7/site-packages/pandas/_libs/tslibs/__init__.py", line 49, in <module>
+    from pandas._libs.tslibs.period import (
+  File "pandas/_libs/tslibs/period.pyx", line 1, in init pandas._libs.tslibs.period
+  File "<frozen importlib._bootstrap>", line 194, in _lock_unlock_module
+  File "/home/airflow/.local/lib/python3.7/site-packages/airflow/utils/timeout.py", line 68, in handle_timeout
+    raise AirflowTaskTimeout(self.error_message)
+airflow.exceptions.AirflowTaskTimeout: DagBag import timeout for /opt/airflow/dags/Spark.py after 30.0s.
+Please take a look at these docs to improve your DAG import time:
+* https://airflow.apache.org/docs/apache-airflow/2.3.3/best-practices.html#top-level-python-code
+* https://airflow.apache.org/docs/apache-airflow/2.3.3/best-practices.html#reducing-dag-complexity, PID: 1035
+[2022-11-15 16:42:22,844] {processor.py:653} WARNING - No viable dags retrieved from /opt/airflow/dags/Spark.py
+[2022-11-15 16:42:26,253] {processor.py:161} INFO - Processing /opt/airflow/dags/Spark.py took 39.331 seconds
+[2022-11-15 16:42:58,046] {processor.py:153} INFO - Started process (PID=1099) to work on /opt/airflow/dags/Spark.py
+[2022-11-15 16:42:58,065] {processor.py:641} INFO - Processing file /opt/airflow/dags/Spark.py for tasks to queue
+[2022-11-15 16:42:58,087] {logging_mixin.py:115} INFO - [2022-11-15 16:42:58,086] {dagbag.py:508} INFO - Filling up the DagBag from /opt/airflow/dags/Spark.py
+[2022-11-15 16:43:28,217] {logging_mixin.py:115} INFO - [2022-11-15 16:43:28,158] {timeout.py:67} ERROR - Process timed out, PID: 1099
+[2022-11-15 16:43:28,488] {logging_mixin.py:115} INFO - [2022-11-15 16:43:28,242] {dagbag.py:321} ERROR - Failed to import: /opt/airflow/dags/Spark.py
+Traceback (most recent call last):
+  File "/home/airflow/.local/lib/python3.7/site-packages/airflow/models/dagbag.py", line 318, in parse
+    loader.exec_module(new_module)
+  File "<frozen importlib._bootstrap_external>", line 728, in exec_module
+  File "<frozen importlib._bootstrap>", line 219, in _call_with_frames_removed
+  File "/opt/airflow/dags/Spark.py", line 1, in <module>
+    import pandas as pd
+  File "/home/airflow/.local/lib/python3.7/site-packages/pandas/__init__.py", line 50, in <module>
+    from pandas.core.api import (
+  File "/home/airflow/.local/lib/python3.7/site-packages/pandas/core/api.py", line 48, in <module>
+    from pandas.core.groupby import (
+  File "/home/airflow/.local/lib/python3.7/site-packages/pandas/core/groupby/__init__.py", line 1, in <module>
+    from pandas.core.groupby.generic import (
+  File "/home/airflow/.local/lib/python3.7/site-packages/pandas/core/groupby/generic.py", line 73, in <module>
+    from pandas.core.frame import DataFrame
+  File "/home/airflow/.local/lib/python3.7/site-packages/pandas/core/frame.py", line 129, in <module>
+    from pandas.core import (
+  File "/home/airflow/.local/lib/python3.7/site-packages/pandas/core/generic.py", line 144, in <module>
+    from pandas.core.window import (
+  File "<frozen importlib._bootstrap>", line 983, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 967, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 677, in _load_unlocked
+  File "<frozen importlib._bootstrap_external>", line 724, in exec_module
+  File "<frozen importlib._bootstrap_external>", line 818, in get_code
+  File "<frozen importlib._bootstrap_external>", line 916, in get_data
+  File "/home/airflow/.local/lib/python3.7/site-packages/airflow/utils/timeout.py", line 68, in handle_timeout
+    raise AirflowTaskTimeout(self.error_message)
+airflow.exceptions.AirflowTaskTimeout: DagBag import timeout for /opt/airflow/dags/Spark.py after 30.0s.
+Please take a look at these docs to improve your DAG import time:
+* https://airflow.apache.org/docs/apache-airflow/2.3.3/best-practices.html#top-level-python-code
+* https://airflow.apache.org/docs/apache-airflow/2.3.3/best-practices.html#reducing-dag-complexity, PID: 1099
+[2022-11-15 16:43:28,560] {processor.py:653} WARNING - No viable dags retrieved from /opt/airflow/dags/Spark.py
+[2022-11-15 16:43:28,912] {processor.py:161} INFO - Processing /opt/airflow/dags/Spark.py took 30.991 seconds
+[2022-11-15 16:44:00,644] {processor.py:153} INFO - Started process (PID=1152) to work on /opt/airflow/dags/Spark.py
+[2022-11-15 16:44:00,655] {processor.py:641} INFO - Processing file /opt/airflow/dags/Spark.py for tasks to queue
+[2022-11-15 16:44:00,693] {logging_mixin.py:115} INFO - [2022-11-15 16:44:00,692] {dagbag.py:508} INFO - Filling up the DagBag from /opt/airflow/dags/Spark.py
+[2022-11-15 16:44:24,637] {processor.py:651} INFO - DAG(s) dict_keys(['Prueba12523']) retrieved from /opt/airflow/dags/Spark.py
+[2022-11-15 16:44:25,312] {logging_mixin.py:115} INFO - [2022-11-15 16:44:25,287] {dag.py:2420} INFO - Sync 1 DAGs
+[2022-11-15 16:44:25,931] {logging_mixin.py:115} INFO - [2022-11-15 16:44:25,925] {dag.py:2972} INFO - Setting next_dagrun for Prueba12523 to 2022-08-25T00:00:00+00:00, run_after=2022-08-25T00:00:00+00:00
+[2022-11-15 16:44:26,106] {processor.py:161} INFO - Processing /opt/airflow/dags/Spark.py took 25.555 seconds
+[2022-11-15 16:44:56,916] {processor.py:153} INFO - Started process (PID=1211) to work on /opt/airflow/dags/Spark.py
+[2022-11-15 16:44:56,918] {processor.py:641} INFO - Processing file /opt/airflow/dags/Spark.py for tasks to queue
+[2022-11-15 16:44:56,920] {logging_mixin.py:115} INFO - [2022-11-15 16:44:56,920] {dagbag.py:508} INFO - Filling up the DagBag from /opt/airflow/dags/Spark.py
+[2022-11-15 16:44:59,649] {processor.py:651} INFO - DAG(s) dict_keys(['Prueba12523']) retrieved from /opt/airflow/dags/Spark.py
+[2022-11-15 16:44:59,711] {logging_mixin.py:115} INFO - [2022-11-15 16:44:59,709] {dag.py:2420} INFO - Sync 1 DAGs
+[2022-11-15 16:44:59,781] {logging_mixin.py:115} INFO - [2022-11-15 16:44:59,781] {dag.py:2972} INFO - Setting next_dagrun for Prueba12523 to 2022-08-25T00:00:00+00:00, run_after=2022-08-25T00:00:00+00:00
+[2022-11-15 16:44:59,812] {processor.py:161} INFO - Processing /opt/airflow/dags/Spark.py took 2.905 seconds
+[2022-11-15 16:45:30,452] {processor.py:153} INFO - Started process (PID=1249) to work on /opt/airflow/dags/Spark.py
+[2022-11-15 16:45:30,455] {processor.py:641} INFO - Processing file /opt/airflow/dags/Spark.py for tasks to queue
+[2022-11-15 16:45:30,458] {logging_mixin.py:115} INFO - [2022-11-15 16:45:30,458] {dagbag.py:508} INFO - Filling up the DagBag from /opt/airflow/dags/Spark.py
+[2022-11-15 16:45:37,526] {processor.py:651} INFO - DAG(s) dict_keys(['Prueba12523']) retrieved from /opt/airflow/dags/Spark.py
+[2022-11-15 16:45:37,782] {logging_mixin.py:115} INFO - [2022-11-15 16:45:37,780] {dag.py:2420} INFO - Sync 1 DAGs
+[2022-11-15 16:45:38,468] {logging_mixin.py:115} INFO - [2022-11-15 16:45:38,460] {dag.py:2972} INFO - Setting next_dagrun for Prueba12523 to 2022-08-25T00:00:00+00:00, run_after=2022-08-25T00:00:00+00:00
+[2022-11-15 16:45:38,981] {processor.py:161} INFO - Processing /opt/airflow/dags/Spark.py took 8.554 seconds
+[2022-11-15 16:46:10,132] {processor.py:153} INFO - Started process (PID=1287) to work on /opt/airflow/dags/Spark.py
+[2022-11-15 16:46:10,135] {processor.py:641} INFO - Processing file /opt/airflow/dags/Spark.py for tasks to queue
+[2022-11-15 16:46:10,137] {logging_mixin.py:115} INFO - [2022-11-15 16:46:10,136] {dagbag.py:508} INFO - Filling up the DagBag from /opt/airflow/dags/Spark.py
+[2022-11-15 16:46:13,125] {processor.py:651} INFO - DAG(s) dict_keys(['Prueba12523']) retrieved from /opt/airflow/dags/Spark.py
+[2022-11-15 16:46:13,253] {logging_mixin.py:115} INFO - [2022-11-15 16:46:13,246] {dag.py:2420} INFO - Sync 1 DAGs
+[2022-11-15 16:46:13,404] {logging_mixin.py:115} INFO - [2022-11-15 16:46:13,404] {dag.py:2972} INFO - Setting next_dagrun for Prueba12523 to 2022-08-25T00:00:00+00:00, run_after=2022-08-25T00:00:00+00:00
+[2022-11-15 16:46:13,435] {processor.py:161} INFO - Processing /opt/airflow/dags/Spark.py took 3.314 seconds
+[2022-11-15 16:46:44,512] {processor.py:153} INFO - Started process (PID=1341) to work on /opt/airflow/dags/Spark.py
+[2022-11-15 16:46:44,515] {processor.py:641} INFO - Processing file /opt/airflow/dags/Spark.py for tasks to queue
+[2022-11-15 16:46:44,520] {logging_mixin.py:115} INFO - [2022-11-15 16:46:44,519] {dagbag.py:508} INFO - Filling up the DagBag from /opt/airflow/dags/Spark.py
+[2022-11-15 16:46:50,710] {processor.py:651} INFO - DAG(s) dict_keys(['Prueba12523']) retrieved from /opt/airflow/dags/Spark.py
+[2022-11-15 16:46:50,853] {logging_mixin.py:115} INFO - [2022-11-15 16:46:50,850] {dag.py:2420} INFO - Sync 1 DAGs
+[2022-11-15 16:46:50,948] {logging_mixin.py:115} INFO - [2022-11-15 16:46:50,947] {dag.py:2972} INFO - Setting next_dagrun for Prueba12523 to 2022-08-25T00:00:00+00:00, run_after=2022-08-25T00:00:00+00:00
+[2022-11-15 16:46:50,989] {processor.py:161} INFO - Processing /opt/airflow/dags/Spark.py took 6.505 seconds
+[2022-11-15 16:47:21,947] {processor.py:153} INFO - Started process (PID=1379) to work on /opt/airflow/dags/Spark.py
+[2022-11-15 16:47:21,950] {processor.py:641} INFO - Processing file /opt/airflow/dags/Spark.py for tasks to queue
+[2022-11-15 16:47:21,952] {logging_mixin.py:115} INFO - [2022-11-15 16:47:21,952] {dagbag.py:508} INFO - Filling up the DagBag from /opt/airflow/dags/Spark.py
+[2022-11-15 16:47:24,989] {processor.py:651} INFO - DAG(s) dict_keys(['Prueba12523']) retrieved from /opt/airflow/dags/Spark.py
+[2022-11-15 16:47:25,049] {logging_mixin.py:115} INFO - [2022-11-15 16:47:25,048] {dag.py:2420} INFO - Sync 1 DAGs
+[2022-11-15 16:47:25,125] {logging_mixin.py:115} INFO - [2022-11-15 16:47:25,124] {dag.py:2972} INFO - Setting next_dagrun for Prueba12523 to 2022-08-25T00:00:00+00:00, run_after=2022-08-25T00:00:00+00:00
+[2022-11-15 16:47:25,154] {processor.py:161} INFO - Processing /opt/airflow/dags/Spark.py took 3.217 seconds
+[2022-11-15 16:47:55,382] {processor.py:153} INFO - Started process (PID=1418) to work on /opt/airflow/dags/Spark.py
+[2022-11-15 16:47:55,385] {processor.py:641} INFO - Processing file /opt/airflow/dags/Spark.py for tasks to queue
+[2022-11-15 16:47:55,387] {logging_mixin.py:115} INFO - [2022-11-15 16:47:55,386] {dagbag.py:508} INFO - Filling up the DagBag from /opt/airflow/dags/Spark.py
+[2022-11-15 16:47:58,386] {processor.py:651} INFO - DAG(s) dict_keys(['Prueba12523']) retrieved from /opt/airflow/dags/Spark.py
+[2022-11-15 16:47:58,463] {logging_mixin.py:115} INFO - [2022-11-15 16:47:58,462] {dag.py:2420} INFO - Sync 1 DAGs
+[2022-11-15 16:47:58,538] {logging_mixin.py:115} INFO - [2022-11-15 16:47:58,538] {dag.py:2972} INFO - Setting next_dagrun for Prueba12523 to 2022-08-25T00:00:00+00:00, run_after=2022-08-25T00:00:00+00:00
+[2022-11-15 16:47:58,575] {processor.py:161} INFO - Processing /opt/airflow/dags/Spark.py took 3.211 seconds
+[2022-11-15 16:48:28,815] {processor.py:153} INFO - Started process (PID=1472) to work on /opt/airflow/dags/Spark.py
+[2022-11-15 16:48:28,818] {processor.py:641} INFO - Processing file /opt/airflow/dags/Spark.py for tasks to queue
+[2022-11-15 16:48:28,820] {logging_mixin.py:115} INFO - [2022-11-15 16:48:28,820] {dagbag.py:508} INFO - Filling up the DagBag from /opt/airflow/dags/Spark.py
+[2022-11-15 16:48:31,504] {processor.py:651} INFO - DAG(s) dict_keys(['Prueba12523']) retrieved from /opt/airflow/dags/Spark.py
+[2022-11-15 16:48:31,561] {logging_mixin.py:115} INFO - [2022-11-15 16:48:31,560] {dag.py:2420} INFO - Sync 1 DAGs
+[2022-11-15 16:48:31,636] {logging_mixin.py:115} INFO - [2022-11-15 16:48:31,635] {dag.py:2972} INFO - Setting next_dagrun for Prueba12523 to 2022-08-25T00:00:00+00:00, run_after=2022-08-25T00:00:00+00:00
+[2022-11-15 16:48:31,673] {processor.py:161} INFO - Processing /opt/airflow/dags/Spark.py took 2.877 seconds
+[2022-11-15 16:49:01,745] {processor.py:153} INFO - Started process (PID=1511) to work on /opt/airflow/dags/Spark.py
+[2022-11-15 16:49:01,748] {processor.py:641} INFO - Processing file /opt/airflow/dags/Spark.py for tasks to queue
+[2022-11-15 16:49:01,751] {logging_mixin.py:115} INFO - [2022-11-15 16:49:01,750] {dagbag.py:508} INFO - Filling up the DagBag from /opt/airflow/dags/Spark.py
+[2022-11-15 16:49:04,792] {processor.py:651} INFO - DAG(s) dict_keys(['Prueba12523']) retrieved from /opt/airflow/dags/Spark.py
+[2022-11-15 16:49:04,853] {logging_mixin.py:115} INFO - [2022-11-15 16:49:04,851] {dag.py:2420} INFO - Sync 1 DAGs
+[2022-11-15 16:49:04,926] {logging_mixin.py:115} INFO - [2022-11-15 16:49:04,925] {dag.py:2972} INFO - Setting next_dagrun for Prueba12523 to 2022-08-25T00:00:00+00:00, run_after=2022-08-25T00:00:00+00:00
+[2022-11-15 16:49:04,952] {processor.py:161} INFO - Processing /opt/airflow/dags/Spark.py took 3.217 seconds
+[2022-11-15 16:49:35,227] {processor.py:153} INFO - Started process (PID=1565) to work on /opt/airflow/dags/Spark.py
+[2022-11-15 16:49:35,231] {processor.py:641} INFO - Processing file /opt/airflow/dags/Spark.py for tasks to queue
+[2022-11-15 16:49:35,235] {logging_mixin.py:115} INFO - [2022-11-15 16:49:35,234] {dagbag.py:508} INFO - Filling up the DagBag from /opt/airflow/dags/Spark.py
+[2022-11-15 16:49:38,856] {processor.py:651} INFO - DAG(s) dict_keys(['Prueba12523']) retrieved from /opt/airflow/dags/Spark.py
+[2022-11-15 16:49:38,942] {logging_mixin.py:115} INFO - [2022-11-15 16:49:38,940] {dag.py:2420} INFO - Sync 1 DAGs
+[2022-11-15 16:49:39,023] {logging_mixin.py:115} INFO - [2022-11-15 16:49:39,023] {dag.py:2972} INFO - Setting next_dagrun for Prueba12523 to 2022-08-25T00:00:00+00:00, run_after=2022-08-25T00:00:00+00:00
+[2022-11-15 16:49:39,064] {processor.py:161} INFO - Processing /opt/airflow/dags/Spark.py took 3.852 seconds
+[2022-11-15 16:50:09,516] {processor.py:153} INFO - Started process (PID=1603) to work on /opt/airflow/dags/Spark.py
+[2022-11-15 16:50:09,518] {processor.py:641} INFO - Processing file /opt/airflow/dags/Spark.py for tasks to queue
+[2022-11-15 16:50:09,521] {logging_mixin.py:115} INFO - [2022-11-15 16:50:09,520] {dagbag.py:508} INFO - Filling up the DagBag from /opt/airflow/dags/Spark.py
+[2022-11-15 16:50:12,310] {processor.py:651} INFO - DAG(s) dict_keys(['Prueba12523']) retrieved from /opt/airflow/dags/Spark.py
+[2022-11-15 16:50:12,367] {logging_mixin.py:115} INFO - [2022-11-15 16:50:12,366] {dag.py:2420} INFO - Sync 1 DAGs
+[2022-11-15 16:50:12,434] {logging_mixin.py:115} INFO - [2022-11-15 16:50:12,434] {dag.py:2972} INFO - Setting next_dagrun for Prueba12523 to 2022-08-25T00:00:00+00:00, run_after=2022-08-25T00:00:00+00:00
+[2022-11-15 16:50:12,462] {processor.py:161} INFO - Processing /opt/airflow/dags/Spark.py took 2.956 seconds
+[2022-11-15 16:50:42,762] {processor.py:153} INFO - Started process (PID=1641) to work on /opt/airflow/dags/Spark.py
+[2022-11-15 16:50:42,764] {processor.py:641} INFO - Processing file /opt/airflow/dags/Spark.py for tasks to queue
+[2022-11-15 16:50:42,766] {logging_mixin.py:115} INFO - [2022-11-15 16:50:42,766] {dagbag.py:508} INFO - Filling up the DagBag from /opt/airflow/dags/Spark.py
+[2022-11-15 16:50:45,524] {processor.py:651} INFO - DAG(s) dict_keys(['Prueba12523']) retrieved from /opt/airflow/dags/Spark.py
+[2022-11-15 16:50:45,640] {logging_mixin.py:115} INFO - [2022-11-15 16:50:45,639] {dag.py:2420} INFO - Sync 1 DAGs
+[2022-11-15 16:50:45,720] {logging_mixin.py:115} INFO - [2022-11-15 16:50:45,719] {dag.py:2972} INFO - Setting next_dagrun for Prueba12523 to 2022-08-25T00:00:00+00:00, run_after=2022-08-25T00:00:00+00:00
+[2022-11-15 16:50:45,764] {processor.py:161} INFO - Processing /opt/airflow/dags/Spark.py took 3.014 seconds
+[2022-11-15 16:51:16,123] {processor.py:153} INFO - Started process (PID=1695) to work on /opt/airflow/dags/Spark.py
+[2022-11-15 16:51:16,125] {processor.py:641} INFO - Processing file /opt/airflow/dags/Spark.py for tasks to queue
+[2022-11-15 16:51:16,128] {logging_mixin.py:115} INFO - [2022-11-15 16:51:16,127] {dagbag.py:508} INFO - Filling up the DagBag from /opt/airflow/dags/Spark.py
+[2022-11-15 16:51:19,009] {processor.py:651} INFO - DAG(s) dict_keys(['Prueba12523']) retrieved from /opt/airflow/dags/Spark.py
+[2022-11-15 16:51:19,068] {logging_mixin.py:115} INFO - [2022-11-15 16:51:19,066] {dag.py:2420} INFO - Sync 1 DAGs
+[2022-11-15 16:51:19,156] {logging_mixin.py:115} INFO - [2022-11-15 16:51:19,156] {dag.py:2972} INFO - Setting next_dagrun for Prueba12523 to 2022-08-25T00:00:00+00:00, run_after=2022-08-25T00:00:00+00:00
+[2022-11-15 16:51:19,193] {processor.py:161} INFO - Processing /opt/airflow/dags/Spark.py took 3.082 seconds
+[2022-11-15 16:51:49,468] {processor.py:153} INFO - Started process (PID=1733) to work on /opt/airflow/dags/Spark.py
+[2022-11-15 16:51:49,470] {processor.py:641} INFO - Processing file /opt/airflow/dags/Spark.py for tasks to queue
+[2022-11-15 16:51:49,472] {logging_mixin.py:115} INFO - [2022-11-15 16:51:49,472] {dagbag.py:508} INFO - Filling up the DagBag from /opt/airflow/dags/Spark.py
+[2022-11-15 16:51:53,477] {processor.py:651} INFO - DAG(s) dict_keys(['Prueba12523']) retrieved from /opt/airflow/dags/Spark.py
+[2022-11-15 16:51:53,703] {logging_mixin.py:115} INFO - [2022-11-15 16:51:53,688] {dag.py:2420} INFO - Sync 1 DAGs
+[2022-11-15 16:51:53,951] {logging_mixin.py:115} INFO - [2022-11-15 16:51:53,950] {dag.py:2972} INFO - Setting next_dagrun for Prueba12523 to 2022-08-25T00:00:00+00:00, run_after=2022-08-25T00:00:00+00:00
+[2022-11-15 16:51:54,009] {processor.py:161} INFO - Processing /opt/airflow/dags/Spark.py took 4.552 seconds
+[2022-11-15 16:52:24,879] {processor.py:153} INFO - Started process (PID=1770) to work on /opt/airflow/dags/Spark.py
+[2022-11-15 16:52:24,888] {processor.py:641} INFO - Processing file /opt/airflow/dags/Spark.py for tasks to queue
+[2022-11-15 16:52:24,895] {logging_mixin.py:115} INFO - [2022-11-15 16:52:24,895] {dagbag.py:508} INFO - Filling up the DagBag from /opt/airflow/dags/Spark.py
+[2022-11-15 16:52:30,450] {processor.py:651} INFO - DAG(s) dict_keys(['Prueba12523']) retrieved from /opt/airflow/dags/Spark.py
+[2022-11-15 16:52:30,606] {logging_mixin.py:115} INFO - [2022-11-15 16:52:30,601] {dag.py:2420} INFO - Sync 1 DAGs
+[2022-11-15 16:52:30,763] {logging_mixin.py:115} INFO - [2022-11-15 16:52:30,762] {dag.py:2972} INFO - Setting next_dagrun for Prueba12523 to 2022-08-25T00:00:00+00:00, run_after=2022-08-25T00:00:00+00:00
+[2022-11-15 16:52:30,872] {processor.py:161} INFO - Processing /opt/airflow/dags/Spark.py took 6.019 seconds
+[2022-11-15 16:53:01,481] {processor.py:153} INFO - Started process (PID=1824) to work on /opt/airflow/dags/Spark.py
+[2022-11-15 16:53:01,492] {processor.py:641} INFO - Processing file /opt/airflow/dags/Spark.py for tasks to queue
+[2022-11-15 16:53:01,496] {logging_mixin.py:115} INFO - [2022-11-15 16:53:01,496] {dagbag.py:508} INFO - Filling up the DagBag from /opt/airflow/dags/Spark.py
+[2022-11-15 16:53:08,702] {processor.py:651} INFO - DAG(s) dict_keys(['Prueba12523']) retrieved from /opt/airflow/dags/Spark.py
+[2022-11-15 16:53:08,767] {logging_mixin.py:115} INFO - [2022-11-15 16:53:08,766] {dag.py:2420} INFO - Sync 1 DAGs
+[2022-11-15 16:53:08,856] {logging_mixin.py:115} INFO - [2022-11-15 16:53:08,855] {dag.py:2972} INFO - Setting next_dagrun for Prueba12523 to 2022-08-25T00:00:00+00:00, run_after=2022-08-25T00:00:00+00:00
+[2022-11-15 16:53:08,888] {processor.py:161} INFO - Processing /opt/airflow/dags/Spark.py took 7.418 seconds
+[2022-11-15 16:53:39,485] {processor.py:153} INFO - Started process (PID=1871) to work on /opt/airflow/dags/Spark.py
+[2022-11-15 16:53:39,488] {processor.py:641} INFO - Processing file /opt/airflow/dags/Spark.py for tasks to queue
+[2022-11-15 16:53:39,493] {logging_mixin.py:115} INFO - [2022-11-15 16:53:39,493] {dagbag.py:508} INFO - Filling up the DagBag from /opt/airflow/dags/Spark.py
+[2022-11-15 16:53:46,396] {processor.py:651} INFO - DAG(s) dict_keys(['Prueba12523']) retrieved from /opt/airflow/dags/Spark.py
+[2022-11-15 16:53:46,491] {logging_mixin.py:115} INFO - [2022-11-15 16:53:46,488] {dag.py:2420} INFO - Sync 1 DAGs
+[2022-11-15 16:53:46,586] {logging_mixin.py:115} INFO - [2022-11-15 16:53:46,585] {dag.py:2972} INFO - Setting next_dagrun for Prueba12523 to 2022-08-25T00:00:00+00:00, run_after=2022-08-25T00:00:00+00:00
+[2022-11-15 16:53:46,635] {processor.py:161} INFO - Processing /opt/airflow/dags/Spark.py took 7.158 seconds

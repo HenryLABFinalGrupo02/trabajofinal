@@ -1,0 +1,11 @@
+pandas
+numpy
+koalas
+pyarrow
+sqlalchemy
+pymysql
+Flask
+gunicorn
+openpyxl
+findspark
+pyspark

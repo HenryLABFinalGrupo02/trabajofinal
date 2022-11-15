@@ -15,6 +15,10 @@ RUN sudo pip install py4j
 RUN echo "export SPARK_HOME=/opt/spark" >> ~/.profile
 RUN echo "export PATH=$PATH:/opt/spark/bin:/opt/spark/sbin" >> ~/.profile
 RUN echo "export PYSPARK_PYTHON=/usr/bin/python3" >> ~/.profile
-RUN sudo pip install pyspark
-RUN sudo pip install findspark
+
+USER airflow
+COPY requirements.txt /requirements.txt
+RUN pip install --user --upgrade pip
+RUN pip install --no-cache-dir --user -r /requirements.txt
+
 USER 1001
