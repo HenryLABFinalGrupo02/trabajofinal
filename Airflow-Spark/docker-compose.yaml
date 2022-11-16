@@ -89,6 +89,14 @@ services:
       interval: 5s
       retries: 5
     restart: always
+  cassandra:
+    image: cassandra:4.0
+    ports:
+      - 9042:9042
+    volumes:
+      - ./cassandra:/var/lib/cassandra
+    environment:
+      - CASSANDRA_CLUSTER_NAME=cloudinfra
 
   redis:
     image: redis:latest
