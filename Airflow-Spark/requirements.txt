@@ -9,3 +9,6 @@ gunicorn
 openpyxl
 findspark
 pyspark
+Jupyter
+ipython
+ipykernel
