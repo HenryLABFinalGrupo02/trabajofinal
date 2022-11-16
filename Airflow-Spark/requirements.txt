@@ -12,3 +12,5 @@ pyspark
 Jupyter
 ipython
 ipykernel
+seaborn
+matplotlib
