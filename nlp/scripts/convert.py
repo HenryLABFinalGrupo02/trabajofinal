@@ -9,6 +9,21 @@ from spacy.tokens import DocBin
 
 
 def convert(lang: str, input_path: Path, output_path: Path):
+    """
+    > It takes a JSONL file, loads it into a DocBin, and saves it to disk
+
+    Arguments: 
+    --------------------------------    
+    :param lang: The language of the text
+    :param input_path: The path to the JSONL file you want to convert
+    :param output_path: The path to the output file
+
+    Types: 
+    --------------------------------
+    :type lang: str
+    :type input_path: Path
+    :type output_path: Path
+    """
     nlp = spacy.blank(lang)
     db = DocBin()
     for line in srsly.read_jsonl(input_path):
