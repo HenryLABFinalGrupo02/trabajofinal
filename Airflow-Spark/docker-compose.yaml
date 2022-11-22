@@ -93,6 +93,7 @@ services:
     image: cassandra:4.0
     ports:
       - 9042:9042
+    #network_mode: host
     volumes:
       - ./cassandra:/var/lib/cassandra
     environment:
@@ -112,6 +113,7 @@ services:
   airflow-webserver:
     <<: *airflow-common
     command: webserver
+    #network_mode: host
     ports:
       - 8080:8080
     healthcheck:
@@ -142,6 +144,7 @@ services:
   airflow-worker:
     <<: *airflow-common
     command: celery worker
+    #network_mode: host
     healthcheck:
       test:
         - "CMD-SHELL"
