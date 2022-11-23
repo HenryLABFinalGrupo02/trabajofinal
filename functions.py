@@ -15,7 +15,9 @@ findspark.init()
 from pyspark import SparkContext, SparkConf
 from pyspark.sql import SQLContext, SparkSession
 import pyspark.pandas as ps
+import databricks.koalas as ks
 
+from transform_funcs import *
 
 ####################################
 ######## SPARK RUNNING ##########
@@ -24,12 +26,12 @@ os.environ["JAVA_HOME"] = "/usr/lib/jvm/java-8-openjdk-amd64"
 os.environ["SPARK_HOME"] = "/content/spark-3.1.3-bin-hadoop2.7"
 
 spark = SparkSession.builder \
-  .appName('SparkCassandraApp') \
-  .config('spark.cassandra.connection.host', 'localhost') \
-  .config('spark.cassandra.connection.port', '9042') \
-  .config('spark.cassandra.output.consistency.level','ONE') \
-  .master('local[2]') \
-  .getOrCreate()
+    .appName('SparkCassandraApp') \
+    .config('spark.cassandra.connection.host', 'localhost') \
+    .config('spark.cassandra.connection.port', '9042') \
+    .config('spark.cassandra.output.consistency.level','ONE') \
+    .master('local[2]') \
+    .getOrCreate()
 
 
 ####################################
@@ -115,6 +117,14 @@ def CountByYear(dates_list, year):
 
 def ReviewEDA():
     df = ImporterJSON(file = 'reviews.json')
+    
+    df = drop_duplicates(df)
+
+    df['user_id'] = drop_bad_ids(df, 'user_id')
+    df['business_id'] = drop_bad_ids(df, 'business_id')
+    df['review_id'] = drop_bad_ids(df, 'review_id')
+
+    impute_num(df, ['useful', 'funny', 'cool'], True)
 
     df['datetime'] = df.date.astype(datetime)
     df['date'] = df.datetime.apply(lambda x: x.date())
@@ -137,7 +147,7 @@ def ReviewEDA():
 
 def UserEDA():
     df = ImporterJSON(file = 'users.json')
-
+    df = drop_duplicates(df)
     df['friends_number'] = df['friends'].apply(CountItemsFromList)
 
     df['n_interactions_send'] = df['useful'] + df['funny'] + df['cool']
@@ -166,7 +176,7 @@ def UserEDA():
 
 def BusinessEDA():
     df = ImporterJSON(file = 'business.json')
-
+    df = drop_duplicates(df)
 
     ######## ATRIBUTES ##########
     attributes = pd.json_normalize(df['attributes'])
@@ -218,6 +228,8 @@ def BusinessEDA():
 
 def CheckinEDA():
     df = ImporterJSON(file = 'checkin.json')
+
+    df = drop_duplicates(df)
     
     df['number_visits'] = df['date'].apply(CountItemsFromList)
 
@@ -242,6 +254,9 @@ def CheckinEDA():
 
 def TipsEDA():
     df = ImporterJSON(file = 'tips.json')
+    df = drop_duplicates(df)
+
+    df = drop_bad_str(df, 'text')
 
     df['date'] = ps.to_datetime(df['date'])
     df['year'] = df.datetime.dt.year
@@ -259,19 +274,8 @@ def TipsEDA():
 ######## SENTIMENT UPLOAD  #######
 ####################################
 
-def TipsEDA():
-    df = ImporterJSON(file = 'tips.json')
-
-    df['date'] = ps.to_datetime(df['date'])
-    df['year'] = df.datetime.dt.year
-    df['word_count'] = df.text.apply(GetWordCount)
-
-    try:
-        UploadToCassandra(df, 'tips')
-        print('Tips uploaded to Cassandra')
-        return "Done"
-    except:
-        print('ERROR uploading TIPS to Cassandra')
+def SentimentUpload():
+    return ""
 
 ####################################
 ######### QUERY FUNCTIONS  ##########
