@@ -39,6 +39,7 @@ def ImporterJSON(file:str, path:Path = path_1, format:str = 'json'):
     This function imports files with spark and transforms them into DataFrame using the koala library
 
     Arguments:
+    :: file: str of the file name
     :: path: 'path' path where the file is stored
     :: format: 'str' file format 
 
@@ -47,10 +48,8 @@ def ImporterJSON(file:str, path:Path = path_1, format:str = 'json'):
     Dataframe and print shape 
     '''
     path_final = path + file
-    df = spark.read.load(path, format=format)
-    df = df.to_koalas()
-    print(df.shape)
-
+    df = ps.read_json(path_final, lines=True)
+    print(f"Shape of {file} is {df.shape}")
     return df
 
 def GetTime(datetime):
