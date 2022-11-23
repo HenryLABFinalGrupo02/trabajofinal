@@ -7,8 +7,9 @@ import findspark
 import databricks.koalas as ks
 import pyspark.pandas as ps
 import pandas as pd
+from pathlib import Path
 from IPython.display import display, clear_output
-ks.set_option('compute.ops_on_diff_frames', True)
+
 
 ####################################
 ######## SPARK RUNNING ##########
@@ -16,18 +17,22 @@ ks.set_option('compute.ops_on_diff_frames', True)
 os.environ["JAVA_HOME"] = "/opt/java"
 os.environ["SPARK_HOME"] = "/opt/spark"
 findspark.init()
+spark = SparkSession.builder.master("local[*]").getOrCreate()
+'''
 spark = SparkSession.builder \
     .appName('SparkCassandraApp') \
     .config('spark.cassandra.connection.host', 'localhost') \
     .config('spark.cassandra.connection.port', '9042') \
     .config('spark.cassandra.output.consistency.level','ONE') \
-    .master('local[2]') \
+    .master("local[*]") \
     .getOrCreate()
+'''
+ks.set_option('compute.ops_on_diff_frames', True)
 
 ####################################
 ######## PATH SETTINGS ##########
 ####################################
-path_1 = "./data/"
+path_1 = "./"
 
 # HELPER FUNCTIONS
 
@@ -73,7 +78,8 @@ def import_json(file:str, path:Path = path_1, format:str = 'json'):
     Dataframe and print shape 
     '''
     path_final = path + file
-    df = ps.read_json(path_final, lines=True)
+    print('READING JSON')
+    df = ks.read_json(path_final, lines=True)
     print(f"Shape of {file} is {df.shape}")
     return df
 
@@ -230,7 +236,7 @@ def row_hours_to_list(row):
     return [[day_dicc[key],
             int(value[0].split(':')[0])+int(value[0].split(':')[1]),
             int(value[1].split(':')[0])+int(value[1].split(':')[1])
-            ] if value is not None else [day_dicc[key],None,None] for key,value in check]
+            ] if value is not None else [day_dicc[key],0,0] for key,value in check]
 
 def row_hours_to_series(series):
     """
@@ -261,7 +267,13 @@ def get_total_checkins(value):
     return len(ls)
 
 def get_state_city(df):
-    cities = df.city.to_list()
-    states = df.state.to_list()
+    print('SETTING OPTION')
+    ks.set_option('compute.ops_on_diff_frames', True)
+    print('GeTTING CITY LIST')
+    cities = list(df.city.to_numpy())
+    print('GeTTING STATE LIST')
+    states = list(df.state.to_numpy())
+    print('OBTAINING SERIES')
     state_city = ks.Series([[states[i],cities[i]] for i in range(len(cities))])
+    print('CREATING COLUMN')
     df['state_city'] = state_city
