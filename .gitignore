@@ -11,7 +11,17 @@ Airflow-Spark/airflow/dags/__pycache__
 Airflow-Spark/airflow/dags/__pycache__/Spark.cpython-37.pyc
 *.pyc
 Airflow-Spark/cassandra
+<<<<<<< HEAD
 
 # Maico estos los podes eliminar 
 nlp/use classifier spark copy.ipynb
 nlp/use classifier spark.ipynb
+=======
+Airflow-Spark/java/release
+Airflow-Spark/spark/RELEASE
+Airflow-Spark/airflow/dags/desktop.ini
+Airflow-Spark/airflow/desktop.ini
+Airflow-Spark/airflow/plugins/
+Airflow-Spark/desktop.ini
+desktop.ini
+>>>>>>> 01380fff26caeda1704e43d7e5ace0586a2121ba
