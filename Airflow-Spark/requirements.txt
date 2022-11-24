@@ -1,5 +1,7 @@
 pandas
 numpy
+pyspark
+findspark
 koalas
 pyarrow
 sqlalchemy
@@ -7,11 +9,10 @@ pymysql
 Flask
 gunicorn
 openpyxl
-findspark
-pyspark
 Jupyter
 ipython
 ipykernel
 seaborn
 matplotlib
 cassandra-driver
+datetime
