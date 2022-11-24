@@ -7,7 +7,6 @@ import os
 
 from functions import *
 
-
 ####################################
 ######## SPARK RUNNING ##########
 ####################################
@@ -37,7 +36,7 @@ default_args = {
     'depends_on_past': False,
     'email_on_failure': False,
     'email_on_retry': False,
-    'retries': 5,
+    'retries': 1,
     'start_date':  days_ago(2),
     'retry_delay': timedelta(minutes=5),
 }
@@ -45,16 +44,16 @@ default_args = {
 path_base = '../../data/'
 
 
-with DAG('InitialLoading37', schedule_interval='@once', default_args=default_args) as dag:
+with DAG('InitialLoading54', schedule_interval='@once', default_args=default_args) as dag:
     StartPipeline = EmptyOperator(
         task_id = 'StartPipeline',
         dag = dag
         )
 
-    PythonLoad1 = PythonOperator(
-        task_id="LoadTips",
-        python_callable=TipsEDA,
-         )
+    # PythonLoad1 = PythonOperator(
+    #     task_id="LoadTips",
+    #     python_callable=TipsEDA,
+    #      )
 
     
     PythonLoad2 = PythonOperator(
@@ -62,21 +61,20 @@ with DAG('InitialLoading37', schedule_interval='@once', default_args=default_arg
         python_callable=CheckinEDA,
         )
 
-    PythonLoad3 = PythonOperator(
-        task_id="LoadBusiness",
-        python_callable=BusinessEDA,
-        )
+    # PythonLoad3 = PythonOperator(
+    #     task_id="LoadBusiness",
+    #     python_callable=BusinessEDA,
+    #     )
 
-    PythonLoad4 = PythonOperator(
-        task_id="LoadReviews",
-        python_callable=ReviewEDA,
-        )
-
+    # PythonLoad4 = PythonOperator(
+    #     task_id="LoadReviews",
+    #     python_callable=ReviewEDA,
+    #     )
     
-    PythonLoad5 = PythonOperator(
-        task_id="LoadUsers",
-        python_callable=UserEDA,
-        )
+    # PythonLoad5 = PythonOperator(
+    #     task_id="LoadUsers",
+    #     python_callable=UserEDA,
+    #     )
 
     FinishETL= EmptyOperator(
         task_id = 'FinishETLAndLoading',
@@ -97,8 +95,8 @@ with DAG('InitialLoading37', schedule_interval='@once', default_args=default_arg
         )
 
 
-StartPipeline >> PythonLoad1 >> PythonLoad2 >> PythonLoad3 >> PythonLoad4 >> PythonLoad5 >> FinishETL
+#StartPipeline >> PythonLoad1 >> PythonLoad2 >> PythonLoad3 >> PythonLoad4 >> PythonLoad5 >> FinishETL
 
-#StartPipeline >> PythonLoad5 >> FinishETL
+StartPipeline >> PythonLoad2 >> FinishETL
 
 FinishETL >> CheckWithQuery >> FinishPipeline

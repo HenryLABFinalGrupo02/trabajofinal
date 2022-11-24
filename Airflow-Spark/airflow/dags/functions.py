@@ -18,6 +18,64 @@ print('IMPORTING EXTRA FUNCTIONS')
 from transform_funcs import *
 
 
+
+####################################
+    ######## TIPS  ##########
+####################################
+
+print('TIPS')
+
+def TipsEDA():
+    print('IMPORTING')
+    df = import_json(file = 'tip.json', path = '/opt/data/')
+
+    print('DROPPING DUPS')
+    df = drop_duplicates(df)
+
+    #print('DROPPING BAD STRS')
+    #df = drop_bad_str(df, 'text')
+
+    print('TRANSFORMING DATES')
+    df['date'] = transform_dates(df, 'date', '%Y-%m-%d')
+
+    try:
+        upload_to_cassandra(df, 'tips')
+        print('Tips uploaded to Cassandra')
+        return "Done"
+    except:
+        print('ERROR uploading TIPS to Cassandra')
+
+
+
+####################################
+    ######## CHECKIN  ##########
+####################################
+
+print('CHECKIN')
+
+def CheckinEDA():
+    print('IMPORTING')
+    df = import_json(file = 'checkin.json', path = '/opt/data/')
+
+    print('DROPPING DUPS')
+    df = drop_duplicates(df)
+    
+    print('GETTING DATE LIST')
+    df['date'] = df['date'].apply(get_date_as_list)
+
+    print('GETTING TOTAL')
+    df['total'] = df['date'].apply(lambda x: len(x)) #(get_total_checkins)
+    print('TRYING TO UPLOAD')
+    try:
+        upload_to_cassandra(df, 'checkin')
+        print('Checkin uploaded to Cassandra')
+        return "Done"
+    except:
+        print('ERROR uploading CHECKIN to Cassandra')
+
+
+
+
 ####################################
     ######## BUSINESS  ##########
 ####################################
@@ -53,58 +111,36 @@ def BusinessEDA():
         print('ERROR uploading BUSINESS to Cassandra')
 
 
+
 ####################################
-    ######## CHECKIN  ##########
+    ######## REVIEWS  ##########
 ####################################
+print('REVIEW')
 
-print('CHECKIN')
-
-def CheckinEDA():
-    print('IMPORTING')
-    df = import_json(file = 'checkin.json', path = '/opt/data/')
-
-    print('DROPPING DUPS')
-    df = drop_duplicates(df)
+def ReviewEDA():
+    df = import_json(file = 'review_2021.json', path = '/opt/data/')
     
-    #print('GETTING DATE LIST')
-    #df['date'] = df['date'].apply(get_date_as_list)
-
-    #print('GETTING TOTAL')
-    #df['total'] = df['date'].apply(get_total_checkins)
-    print('TRYING TO UPLOAD')
-    try:
-        upload_to_cassandra(df, 'checkin')
-        print('Checkin uploaded to Cassandra')
-        return "Done"
-    except:
-        print('ERROR uploading CHECKIN to Cassandra')
-
-
-####################################
-    ######## TIPS  ##########
-####################################
-
-print('TIPS')
-
-def TipsEDA():
-    print('IMPORTING')
-    df = import_json(file = 'tip.json', path = '/opt/data/')
-
-    print('DROPPING DUPS')
+    print('DELETING DUPLICATES')
     df = drop_duplicates(df)
 
-    #print('DROPPING BAD STRS')
-    #df = drop_bad_str(df, 'text')
+    #print('DELETING BAD ID')
+    #df['user_id'] = drop_bad_ids(df, 'user_id')
+    #df['business_id'] = drop_bad_ids(df, 'business_id')
+    #df['review_id'] = drop_bad_ids(df, 'review_id')
+
+    #print('IMPUTING NEGATIVE VOTES')
+    #impute_num(df, ['useful', 'funny', 'cool'], True) ##### REALLY SLOW
 
     #print('TRANSFORMING DATES')
     #df['date'] = transform_dates(df, 'date', '%Y-%m-%d')
 
     try:
-        upload_to_cassandra(df, 'tips')
-        print('Tips uploaded to Cassandra')
+        upload_to_cassandra(df, 'reviews')
+        print('Reviews uploaded to Cassandra')
         return "Done"
     except:
-        print('ERROR uploading TIPS to Cassandra')
+        print('ERROR uploading REVIEWS to Cassandra')
+
 
 
 ####################################
@@ -136,36 +172,6 @@ def UserEDA():
     except:
         print('ERROR uploading USERS to Cassandra')
 
-
-
-####################################
-    ######## REVIEWS  ##########
-####################################
-print('REVIEW')
-
-def ReviewEDA():
-    df = import_json(file = 'review_2021.json', path = '/opt/data/')
-    
-    print('DELETING DUPLICATES')
-    df = drop_duplicates(df)
-
-    #print('DELETING BAD ID')
-    #df['user_id'] = drop_bad_ids(df, 'user_id')
-    #df['business_id'] = drop_bad_ids(df, 'business_id')
-    #df['review_id'] = drop_bad_ids(df, 'review_id')
-
-    #print('IMPUTING NEGATIVE VOTES')
-    #impute_num(df, ['useful', 'funny', 'cool'], True) ##### REALLY SLOW
-
-    #print('TRANSFORMING DATES')
-    #df['date'] = transform_dates(df, 'date', '%Y-%m-%d')
-
-    try:
-        upload_to_cassandra(df, 'reviews')
-        print('Reviews uploaded to Cassandra')
-        return "Done"
-    except:
-        print('ERROR uploading REVIEWS to Cassandra')
 
 
 ####################################
