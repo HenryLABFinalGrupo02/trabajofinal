@@ -13,7 +13,6 @@ import pyspark.pandas as ps
 import databricks.koalas as ks
 ks.set_option('compute.ops_on_diff_frames', True)
 ps.set_option('compute.ops_on_diff_frames', True)
-import functions
 import pandas as pd
 import transform_funcs
 import pathlib
