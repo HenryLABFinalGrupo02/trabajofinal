@@ -24,7 +24,7 @@ import casspark
 from cassandra.cluster import Cluster
 
 
-cass_ip = '192.168.1.7'
+cass_ip = 'cassandra'
 
 
 def load_tips():
