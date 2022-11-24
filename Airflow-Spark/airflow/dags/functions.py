@@ -26,20 +26,20 @@ print("BUSINESS")
 
 def BusinessEDA():
     print('IMPORTING BUSINESS')
-    df = import_json(file = 'business.json', path = './data/')
+    df = import_json(file = 'business.json', path = '/opt/data/')
     print('DROPPING DUPLICATES')
     df = drop_duplicates(df)
     
     ######## OPEN HOURS ##########
     #df['hours'] = df['hours'].apply(row_hours_to_series)
     
-    print('CHECKING STRINGS')
+    #print('CHECKING STRINGS')
     ######## CATEGORIES ##########
-    df['categories'] = df['categories'].apply(check_str_list)
+    #df['categories'] = df['categories'].apply(check_str_list)
 
     ######## CITY/STATE ##########
-    print('GETTING STATE_CITY COL')
-    get_state_city(df)
+    #print('GETTING STATE_CITY COL')
+    #get_state_city(df)
     print('DROPPING CITY & STATE COLS')
     df = df.drop(['city', 'state'], axis=1)
 
@@ -61,17 +61,17 @@ print('CHECKIN')
 
 def CheckinEDA():
     print('IMPORTING')
-    df = import_json(file = 'checkin.json', path = './data/')
+    df = import_json(file = 'checkin.json', path = '/opt/data/')
 
     print('DROPPING DUPS')
     df = drop_duplicates(df)
     
-    print('GETTING DATE LIST')
-    df['date'] = df['date'].apply(get_date_as_list)
+    #print('GETTING DATE LIST')
+    #df['date'] = df['date'].apply(get_date_as_list)
 
     #print('GETTING TOTAL')
     #df['total'] = df['date'].apply(get_total_checkins)
-
+    print('TRYING TO UPLOAD')
     try:
         upload_to_cassandra(df, 'checkin')
         print('Checkin uploaded to Cassandra')
@@ -87,15 +87,17 @@ def CheckinEDA():
 print('TIPS')
 
 def TipsEDA():
+    print('IMPORTING')
+    df = import_json(file = 'tip.json', path = '/opt/data/')
 
-    df = import_json(file = 'tip.json', path = './data/')
-
-
+    print('DROPPING DUPS')
     df = drop_duplicates(df)
 
-    df = drop_bad_str(df, 'text')
+    #print('DROPPING BAD STRS')
+    #df = drop_bad_str(df, 'text')
 
-    df['date'] = transform_dates(df, 'date', '%Y-%m-%d')
+    #print('TRANSFORMING DATES')
+    #df['date'] = transform_dates(df, 'date', '%Y-%m-%d')
 
     try:
         upload_to_cassandra(df, 'tips')
@@ -112,14 +114,20 @@ def TipsEDA():
 print('USERS')
 
 def UserEDA():
-    df = import_json(file = 'user.json', path = './data/')
+    print('IMPORTING')
+    df = import_json(file = 'user.json', path = '/opt/data/')
+    
+    print('DROPPING DUPS')
     df = drop_duplicates(df)
 
-    df['friends'] = df['friends'].apply(check_str_list)
+    #print('CHECKING STR LIST')
+    #df['friends'] = df['friends'].apply(check_str_list)
 
-    df['elite'] = df['elite'].apply(check_str_list)
+    #print('CHECKING 2ND STR LIST')
+    #df['elite'] = df['elite'].apply(check_str_list)
 
-    df['yelping_since'] = transform_dates(df, 'yelping_since', '%Y-%m-%d')
+    #print('TRANSFORMING DATES')
+    #df['yelping_since'] = transform_dates(df, 'yelping_since', '%Y-%m-%d')
 
     try:
         upload_to_cassandra(df, 'users')
@@ -136,7 +144,7 @@ def UserEDA():
 print('REVIEW')
 
 def ReviewEDA():
-    df = import_json(file = 'review.json', path = './data/')
+    df = import_json(file = 'review_2021.json', path = '/opt/data/')
     
     print('DELETING DUPLICATES')
     df = drop_duplicates(df)
@@ -149,8 +157,8 @@ def ReviewEDA():
     #print('IMPUTING NEGATIVE VOTES')
     #impute_num(df, ['useful', 'funny', 'cool'], True) ##### REALLY SLOW
 
-    print('TRANSFORMING DATES')
-    df['date'] = transform_dates(df, 'date', '%Y-%m-%d')
+    #print('TRANSFORMING DATES')
+    #df['date'] = transform_dates(df, 'date', '%Y-%m-%d')
 
     try:
         upload_to_cassandra(df, 'reviews')

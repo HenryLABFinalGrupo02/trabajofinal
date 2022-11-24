@@ -1,39 +1,19 @@
 ####################################
 ######## LIBRARIES IMPORT ##########
 ####################################
-import os
-from pyspark.sql import SparkSession
-import findspark
+
+
 import databricks.koalas as ks
 import pyspark.pandas as ps
 import pandas as pd
 from pathlib import Path
 from IPython.display import display, clear_output
-
-
-####################################
-######## SPARK RUNNING ##########
-####################################
-os.environ["JAVA_HOME"] = "/usr"
-os.environ["SPARK_HOME"] = "/opt/spark"
-findspark.init()
-spark = SparkSession.builder.master("local[*]").getOrCreate()
-'''
-spark = SparkSession.builder \
-    .appName('SparkCassandraApp') \
-    .config('spark.cassandra.connection.host', 'localhost') \
-    .config('spark.cassandra.connection.port', '9042') \
-    .config('spark.cassandra.output.consistency.level','ONE') \
-    .master("local[*]") \
-    .getOrCreate()
-'''
-spark.sparkContext.setLogLevel("OFF")
-ks.set_option('compute.ops_on_diff_frames', True)
+import dill
 
 ####################################
 ######## PATH SETTINGS ##########
 ####################################
-path_1 = "./"
+
 
 # HELPER FUNCTIONS
 
@@ -65,7 +45,7 @@ def drop_duplicates(Table):
 ####################################
 ######## COMMON FUNCTIONS ##########
 ####################################
-def import_json(file:str, path:Path = path_1, format:str = 'json'):
+def import_json(file:str, path, format:str = 'json'):
     '''
     This function imports files with spark and transforms them into DataFrame using the koala library
 
@@ -275,7 +255,11 @@ def get_state_city(df):
     cities = list(df.city.to_numpy())
     print('GeTTING STATE LIST')
     states = list(df.state.to_numpy())
+    print('GET LIST')
+    st_ct_list = [[states[i],cities[i]] for i in range(len(cities))]
     print('OBTAINING SERIES')
-    state_city = ks.Series([[states[i],cities[i]] for i in range(len(cities))])
+    dill.extend(False)
+    state_city = ks.Series(st_ct_list)
+    dill.extend(True)
     print('CREATING COLUMN')
     df['state_city'] = state_city
