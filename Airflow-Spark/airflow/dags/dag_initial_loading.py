@@ -15,10 +15,10 @@ os.environ["SPARK_HOME"] = "/opt/spark"
 
 from pyspark.sql import SparkSession
 import findspark
-from pyspark.context import SparkContext
-from pyspark.conf import SparkConf
+#from pyspark.context import SparkContext
+#from pyspark.conf import SparkConf
 
-from pyspark.serializers import PickleSerializer
+#from pyspark.serializers import PickleSerializer
 
 #conf = SparkConf()
 #conf.set("spark.serializer", "org.apache.spark.serializer.KryoSerializer")
@@ -44,16 +44,16 @@ default_args = {
 path_base = '../../data/'
 
 
-with DAG('InitialLoading54', schedule_interval='@once', default_args=default_args) as dag:
+with DAG('InitialLoading100', schedule_interval='@once', default_args=default_args) as dag:
     StartPipeline = EmptyOperator(
         task_id = 'StartPipeline',
         dag = dag
         )
 
-    # PythonLoad1 = PythonOperator(
-    #     task_id="LoadTips",
-    #     python_callable=TipsEDA,
-    #      )
+    PythonLoad1 = PythonOperator(
+        task_id="LoadTips",
+        python_callable=TipsEDA,
+        )
 
     
     PythonLoad2 = PythonOperator(
@@ -61,21 +61,26 @@ with DAG('InitialLoading54', schedule_interval='@once', default_args=default_arg
         python_callable=CheckinEDA,
         )
 
-    # PythonLoad3 = PythonOperator(
-    #     task_id="LoadBusiness",
-    #     python_callable=BusinessEDA,
-    #     )
+    PythonLoad3 = PythonOperator(
+        task_id="LoadBusiness",
+        python_callable=BusinessEDA,
+        )
 
-    # PythonLoad4 = PythonOperator(
-    #     task_id="LoadReviews",
-    #     python_callable=ReviewEDA,
+    PythonLoad4 = PythonOperator(
+        task_id="LoadReviews",
+        python_callable=ReviewEDA,
+        )
+    
+    PythonLoad5 = PythonOperator(
+        task_id="LoadUsers",
+        python_callable=UserEDA,
+        )
+
+    # HalfETL= EmptyOperator(
+    #     task_id = 'HalfETLAndLoading',
+    #     dag = dag
     #     )
     
-    # PythonLoad5 = PythonOperator(
-    #     task_id="LoadUsers",
-    #     python_callable=UserEDA,
-    #     )
-
     FinishETL= EmptyOperator(
         task_id = 'FinishETLAndLoading',
         dag = dag
@@ -97,6 +102,8 @@ with DAG('InitialLoading54', schedule_interval='@once', default_args=default_arg
 
 #StartPipeline >> PythonLoad1 >> PythonLoad2 >> PythonLoad3 >> PythonLoad4 >> PythonLoad5 >> FinishETL
 
-StartPipeline >> PythonLoad2 >> FinishETL
+StartPipeline >> [PythonLoad1, PythonLoad2] >> PythonLoad4 >> [PythonLoad3, PythonLoad5] >> FinishETL
+
+#StartPipeline >> PythonLoad5 >> FinishETL
 
 FinishETL >> CheckWithQuery >> FinishPipeline
