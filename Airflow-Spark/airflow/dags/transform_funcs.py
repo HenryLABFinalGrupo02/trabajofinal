@@ -12,29 +12,6 @@ from IPython.display import display, clear_output
 import dateutil
 
 
-####################################
-######## SPARK RUNNING ##########
-####################################
-os.environ["JAVA_HOME"] = "/opt/java"
-os.environ["SPARK_HOME"] = "/opt/spark"
-findspark.init()
-spark = SparkSession.builder.master("local[*]").getOrCreate()
-'''
-spark = SparkSession.builder \
-    .appName('SparkCassandraApp') \
-    .config('spark.cassandra.connection.host', 'localhost') \
-    .config('spark.cassandra.connection.port', '9042') \
-    .config('spark.cassandra.output.consistency.level','ONE') \
-    .master("local[*]") \
-    .getOrCreate()
-'''
-#ks.set_option('compute.ops_on_diff_frames', True)
-
-####################################
-######## PATH SETTINGS ##########
-####################################
-path_1 = "./"
-
 # HELPER FUNCTIONS
 
 def values_type(dataframe, column): 
@@ -52,43 +29,16 @@ def values_type(dataframe, column):
 
 # DEALING WITH DUPLICATED REGISTERS
 
-def drop_duplicates(Table):
-    """
-    Returns a Dataframe with no duplicates
+#def drop_duplicates(Table):
+#    """
+#    Returns a Dataframe with no duplicates
+#
+#    Parameters:
+#    - Table: Pandas or Koalas dataframe           #Innecesario
+#    """
+#    return Table.drop_duplicates()
 
-    Parameters:
-    - Table: Pandas or Koalas dataframe
-    """
-    return Table.drop_duplicates()
 
-
-####################################
-######## COMMON FUNCTIONS ##########
-####################################
-def import_json(file:str, path:Path = path_1, format:str = 'json'):
-    '''
-    This function imports files with spark and transforms them into DataFrame using the koala library
-
-    Arguments:
-    :: file: str of the file name
-    :: path: 'path' path where the file is stored
-    :: format: 'str' file format
-
-    Returns:
-    ---------
-    Dataframe and print shape
-    '''
-    path_final = path + file
-    print('READING JSON')
-    df = ps.read_json(path_final, lines=True)
-    print(f"Shape of {file} is {df.shape}")
-    return df
-
-def upload_to_cassandra(df, table_name):
-    df.write.format("org.apache.spark.sql.cassandra")\
-    .options(table=table_name, keyspace="yelp")\
-    .mode('append')\
-    .save()
 
 
 # ID VALIDATION
@@ -156,18 +106,30 @@ def clean_string(string):
     new_str = string.strip().replace('  ',' ').lower()
     return new_str
 
-'''
-def transform_dates(input):
-    if isinstance(input,str):
-        try:
-            return(dateutil.parser.parse(input))  #NO REEMPLAZA POR MODA | USAR APPLY
-        except: return pd.NaT
-    else: return pd.NaT
-'''
+#def drop_bad_str(Table, col):
+#    """
+#    This function takes a Dataframe and the name of a column that contains string values, 
+#    imputes missing values in the column, cleans it's strings and removes registers where 
+#    the string in the column has 2 or less characters.
+#    The function returns the dataframe after performing the above mentioned transformations
+#    and dropping the unwanted registers.
+#
+#    Parameters:
+#    - Table: Pandas or Koalas dataframe
+#    - col: string, the name of the column to transform
+#    """
+#    T_ok = Table.copy()
+#    T_ok[col] = T_ok[col].fillna('NO DATA')
+#    T_ok[col] = T_ok[col].apply(clean_string)
+#    bad_strs = []
+#    for index, tip in T_ok[col].iteritems():
+#        if len(tip) <=2:
+#            bad_strs.append(index)
+#    return T_ok[ks.Series((~Table.index.isin(bad_strs)).to_list())].reset_index(drop=True)
 
 # NUEVA FUNCION, USAR APPLY Y LUEGO MASCARA != 'REMOVE_THIS_ROW'
 def drop_bad_str(input):
-    if ps.isna(input):
+    if ks.isna(input):
         return 'NO DATA'
     else:
         output = input.strip().replace('  ',' ').lower()
@@ -177,59 +139,30 @@ def drop_bad_str(input):
 
 '''
 
-def drop_bad_str(Table, col):
-    """
-    This function takes a Dataframe and the name of a column that contains string values, 
-    imputes missing values in the column, cleans it's strings and removes registers where 
-    the string in the column has 2 or less characters.
-    The function returns the dataframe after performing the above mentioned transformations
-    and dropping the unwanted registers.
-
-    Parameters:
-    - Table: Pandas or Koalas dataframe
-    - col: string, the name of the column to transform
-    """
-    print('COPYING TABLE')
-    T_ok = Table.copy()
-    print("FILLING NA")
-    T_ok[col] = T_ok[col].fillna('NO DATA')
-    print("CLEANING STRINGS")
-    T_ok[col] = T_ok[col].apply(clean_string)
-    print('GETTING BAD STRS LIST')
-    bad_strs = []
-    table_len = T_ok.shape[0]
-    print(f'ROWS: {table_len}')
-    for i in range(table_len):
-        if len(T_ok[col][i]) <=2:
-            bad_strs.append(i)
-        
-    
-    # for index, tip in T_ok[col].items():
-    #     if len(tip) <=2:
-    #         bad_strs.append(index)
-    
-    print('RETURNING TABLE DROPPING BAD STRS')
-    return T_ok[ks.Series((~Table.index.isin(bad_strs)).to_list())].reset_index(drop=True)
-
-'''
-
 # DATETIME VALUES
 
-def transform_dates(dataframe,column,format):
-    """
-    This function recieves 1) a dataframe, 2) the name of a column containing timestamp values
-    and 3) a date format. It returns the dataframe after transforming the column to the desired 
-    format.
-    
-    Parameters:
-    - dataframe: a Koalas dataframe
-    - column: the name of the column containing timestamp values
-    - format: the datetime format to which the column will be transformed
-    """
-    series = ps.to_datetime(dataframe[column], errors='coerce')
-    mode = series.mode().iloc[0].strftime(format)
-    series = series.apply(lambda x: mode if (x is pd.NaT) else x.strftime(format))
-    return series
+#def transform_dates(date_series,format):
+#    """
+#    This function recieves 1) a dataframe, 2) the name of a column containing timestamp values
+#    and 3) a date format. It returns the dataframe after transforming the column to the desired 
+#    format.
+#    
+#    Parameters:
+#    - date_series: a Koalas series
+#    - format: the datetime format to which the column will be transformed
+#    """
+#    series = ks.to_datetime(date_series, errors='coerce')
+#    mode = series.mode().iloc[0].strftime(format)
+#    series = series.apply(lambda x: mode if (x is pd.NaT) else x.strftime(format))
+#    return series
+
+import dateutil
+def transform_dates(input):
+    if isinstance(input,str):
+        try:
+            return(dateutil.parser.parse(input))  #NO REEMPLAZA POR MODA | USAR APPLY
+        except: return pd.NaT
+    else: return pd.NaT
 
 
 # LISTS OF STRINGS
@@ -240,14 +173,10 @@ def check_str_list(ls):
     original list. In case there were none, it returns an empty list. If a None value is passed, 
     the function returns an empty list.
     """
-    try:
-        ls_ok = []
-        for x in ls:
-            if type(x) == str:
-                ls_ok.append(x)
-        return ls_ok
-    except:
-        return []
+    if isinstance(ls, str):
+        return ls.split(', ')
+    else: return []
+
 
 # DICTIONARY
 
@@ -296,26 +225,26 @@ def row_hours_to_series(series):
             series_output.append(series_mode)
         else:
             series_output.append(row_hours_to_list(value))
-    print("RETURNING SERIES")
     return ps.Series(series_output)
+
+def row_att_to_series(att_series):
+    att_series_mode = [[key,str(value)] if value is bool else [key,'0'] for (key,value) in att_series.mode().iloc[0].asDict().items()] 
+    att_series_output = []
+    for index, value in att_series.items():
+        if value is None:
+            att_series_output.append(att_series_mode)
+        else:
+            att_series_output.append([[key,str(int(value))] if value is bool else [key,'0'] for (key,value) in value.asDict().items()])
+    return ps.Series(att_series_output)
 
 
 def get_date_as_list(value):
     ls = value.split(', ')
-    return ls
+    return [x[:10] for x in ls]
 
 def get_total_checkins(value):
     ls = value.split(', ')
     return len(ls)
 
-def get_state_city(df):
-    print('SETTING OPTION')
-    #ks.set_option('compute.ops_on_diff_frames', True)
-    print('GETTING CITY LIST')
-    cities = list(df.city.to_numpy())
-    print('GETTING STATE LIST')
-    states = list(df.state.to_numpy())
-    print('OBTAINING SERIES')
-    state_city = ps.Series([[states[i],cities[i]] for i in range(len(cities))])
-    print('CREATING COLUMN')
-    df['state_city'] = state_city
+def get_state_city(series_city,series_state):
+    return ps.Series([[state,city] for (city,state) in zip(series_city.values,series_state.values)])
