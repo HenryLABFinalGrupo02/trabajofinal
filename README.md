@@ -1,4 +1,4 @@
-![FantansyLogo](https://d31uz8lwfmyn8g.cloudfront.net/Assets/logo-henry-white-lg.png)
+![HenryLogo](https://d31uz8lwfmyn8g.cloudfront.net/Assets/logo-henry-white-lg.png)
 
 # **Henry Final Project - Group Nº2**
 
@@ -7,7 +7,7 @@
 # <h1 align="center">**`YELP REVIEWS AND RECOMMENDATIONS`**</h1>
 
 <p align="center">
-<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/ad/Yelp_Logo.svg/2560px-Yelp_Logo.svg.png"  height="100">
+<img src="https://github.com/HenryLABFinalGrupo02/trabajofinal/blob/main/MEDIA/henry_logo.png"  height="100">
 </p>
 
 
@@ -26,6 +26,8 @@ You can read the full instructions [here](https://github.com/soyHenry/PF_DS/blob
 - - -
 ## **Team**
 
+<img src="https://github.com/HenryLABFinalGrupo02/trabajofinal/blob/main/MEDIA/logo_white.png"  height="100">
+
 | **Role** | **Name** | **Github** |
 |:---:|:---:|---|
 | _Data Analyst_ | Lila Alves | @LilaAlvesDC |
@@ -36,7 +38,7 @@ You can read the full instructions [here](https://github.com/soyHenry/PF_DS/blob
 
 - - -
 ## **Data structure**
-You can read the full data structure analysis [here]("/DOCS/data_structure.md")
+You can read the full data structure analysis [here]("https://github.com/HenryLABFinalGrupo02/trabajofinal/blob/main/DOCS/data_structure.md")
 
 
 
@@ -53,7 +55,7 @@ You can watch the slides presentation [here](https://www.canva.com/design/DAFSIR
 ### **Second Week**
 
 Data engineering.
-You can see specific documentation [here]("./DOCS/week2.md")
+You can see specific documentation [here]("https://github.com/HenryLABFinalGrupo02/trabajofinal/blob/main/DOCS/week2.md") and the slides presentation [here]()
 
 ### **Third Week**
 Data analysis and machine learning.

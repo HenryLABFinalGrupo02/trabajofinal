@@ -1,4 +1,4 @@
-## ** Data Structure*
+## **Data Structure**
 
 ### business.json
 Contains business data including location data, attributes, and categories.
