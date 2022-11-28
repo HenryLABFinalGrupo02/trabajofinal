@@ -53,6 +53,8 @@ class HerramientaTrabajo:
         st.write(fig)
     def metrica(self,label,value,delta=None,delta_color="normal"):
         st.metric(label, value, delta=delta, delta_color=delta_color)
+    def tabla(self,tabla):
+        st.table(tabla)
 
 
 ht = HerramientaTrabajo()
