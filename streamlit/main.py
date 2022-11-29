@@ -7,6 +7,7 @@ from os import write
 from turtle import onclick, onscreenclick
 from typing import List
 from numpy.core.fromnumeric import size
+from pages.main import home as m
 
 st.set_page_config(
    page_title="Project Henry",
@@ -89,27 +90,6 @@ with st.sidebar:
 #### FUNTIONS ####
 ##################
 
-def metricas(): 
-   review_stars = business['stars'].mean()
-   review['positive_score'] = review['pos_reviews'] / ( review['neg_reviews'] + review['pos_reviews'])
-   Positive_sentiment = review['positive_score'].mean()
-   review_total = review.shape[0]
-   number_visits = checkin['number_visits'].sum()
-
-   st.markdown("### Oportunities")
-   oportunity = st.columns(3)
-   oportunity[0].metric('Business Line', '98,7%', delta=None, delta_color="normal")
-   oportunity[1].metric('Location', '93,5%', delta=None, delta_color="normal")
-   oportunity[2].metric('Services', '90,7%', delta=None, delta_color="normal")
-
-   st.markdown("### Account Summary")
-   metrics = st.columns(6)
-   metrics[0].metric('Review Total', review_total, delta=None, delta_color="normal")
-   metrics[1].metric('Review stars', round(review_stars, 2), delta=None, delta_color="normal")
-   metrics[2].metric('Positive sentiment', f'{round(Positive_sentiment, 2)*100}%', delta=None, delta_color="normal")
-   metrics[3].metric('Influencer Score', '98,7%', delta=None, delta_color="normal")
-   metrics[4].metric('Top Hour', '18:00', delta=None, delta_color="normal")
-   metrics[5].metric('Number_visits', number_visits)
 
 # 47OfnYwhB3NTM8Tx_sNnbw
 # m1HVolBJiYajyq07J550jQ
@@ -126,9 +106,7 @@ def metricas():
 
 ## HOME ## 
 if selected2 == "Home":
-	st.subheader("Home")
-
-metricas() 
+   m.metricas()
 
 ## My Business
 if selected2 == "My Business":
