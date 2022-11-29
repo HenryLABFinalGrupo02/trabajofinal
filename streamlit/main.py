@@ -124,6 +124,6 @@ metricas()
 # LObAexsCZ9mgh_xLPK2S2w
 # ThztWldIIslYvTiTA_CMtg
 
-business_name = business['name'].to_list()
-business_name
+# business_name = business['name'].to_list()
+# business_name
 
