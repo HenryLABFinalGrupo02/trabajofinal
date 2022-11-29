@@ -8,6 +8,7 @@ from turtle import onclick, onscreenclick
 from typing import List
 from numpy.core.fromnumeric import size
 from pages.main import home as m
+from pages.main import business as p
 
 st.set_page_config(
    page_title="Project Henry",
@@ -110,8 +111,4 @@ if selected2 == "Home":
 
 ## My Business
 if selected2 == "My Business":
-	st.subheader("My Business")
-
-	with st.form(key='searchForm'):
-		search_movie = st.text_input("Search Movie")
-		submit_button = st.form_submit_button(label='Search')
+   p.func()
