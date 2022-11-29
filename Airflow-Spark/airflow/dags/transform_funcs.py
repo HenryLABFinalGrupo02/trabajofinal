@@ -137,7 +137,6 @@ def drop_bad_str(input):
             return 'REMOVE_THIS_ROW'
         else: return output
 
-'''
 
 # DATETIME VALUES
 
@@ -248,3 +247,6 @@ def get_total_checkins(value):
 
 def get_state_city(series_city,series_state):
     return ps.Series([[state,city] for (city,state) in zip(series_city.values,series_state.values)])
+
+def get_elite_list(series):
+    return ps.Series([[x] for x in series])

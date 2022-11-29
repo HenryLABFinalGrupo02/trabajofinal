@@ -82,7 +82,7 @@ def load_bussiness():
     cluster = Cluster(contact_points=[cass_ip],port=9042)
     session = cluster.connect()
     print('READING BUSINESS FILE')
-    business = ps.read_json(r'/opt/data/initial_load/business.json').head(10000)
+    business = ps.read_json(r'/opt/data/initial_load/business.json', lines=True).head(10000)
     print('DROPPING DUPLICATED ROWS')
     business = business.drop_duplicates()
     print('JOINING CITY AND STATE')
@@ -112,7 +112,7 @@ def load_review():
     cluster = Cluster(contact_points=[cass_ip],port=9042)
     session = cluster.connect()
     print('READING REVIEW FILE')
-    review = ps.read_json(r'/opt/data/initial_load/review.json').head(10000)
+    review = ps.read_json(r'/opt/data/initial_load/review.json', lines=True).head(10000)
     print('DROPPING DUPLICATED ROWS')
     review = review.drop_duplicates()
     print('NORMALIZING DATES')
@@ -123,7 +123,9 @@ CREATE KEYSPACE IF NOT EXISTS henry WITH REPLICATION = { 'class' : 'SimpleStrate
 """)
     print('CREATING TABLE')
     session.execute("""
-CREATE TABLE IF NOT EXISTS henry.review(review_id text, user_id text business_id text stars float date string text string useful int funny int cool int,PRIMARY KEY(review_id))
+CREATE TABLE IF NOT EXISTS henry.review(review_id text, user_id text, business_id text,
+                                        stars float, date string, text string,
+                                        useful int, funny int, cool int, PRIMARY KEY(review_id))
 """)
     print('UPLOADING DATAFRAME TO CASSANDRA')
     casspark.spark_pandas_insert(review,'henry','review',session,debug=True)
@@ -135,22 +137,41 @@ def load_user():
     print('ESTABLISHING CONNECTION TO CASSANDRA')
     cluster = Cluster(contact_points=[cass_ip],port=9042)
     session = cluster.connect()
+
     print('READING USER FILE')
-    user = ps.read_json(r'/opt/data/initial_load/user.json').head(10000)
+    user = ps.read_json(r'/opt/data/initial_load/user.json', lines=True).head(10000)
+
     print('DROPPING DUPLICATED ROWS')
     user = user.drop_duplicates()
 
     print('NORMALIZING DATES')
     user['yelping_since'] = user['yelping_since'].apply(transform_funcs.transform_dates).dt.strftime('%Y-%m-%d')
 
+    #print('TRANSFORMING ELITE')
+    #user['elite'] = transform_funcs.get_elite_list(user['elite'])
+
+    print('DROPPING ELITE & FRIENDS') #elite list <int>, friends varchar,
+    user = user.drop(['elite', 'friends'], axis=1)
+
     print('CREATING KEYSPACE')
     session.execute("""
 CREATE KEYSPACE IF NOT EXISTS henry WITH REPLICATION = { 'class' : 'SimpleStrategy', 'replication_factor' : 3 };
 """)
+    # print('DROPPING TABLE')
+    # session.execute('DROP TABLE [IF EXISTS] henry.user')
+
     print('CREATING TABLE')
     session.execute("""
-CREATE TABLE IF NOT EXISTS henry.user(user_id text, name text review_count int yelping_since string friends list <text> useful int funny int cool int fans int elite list <int> average_stars float 
-compliment_hot float compliment_more int compliment_profile int compliment_cute int compliment_list int compliment_note int compliment_plain int compliment_cool int compliment_funny int compliment_writer int compliment_photos int,PRIMARY KEY(user_id))
+CREATE TABLE IF NOT EXISTS henry.user(user_id text, name text, review_count int, 
+                                      yelping_since text, 
+                                      useful int, funny int, cool int, fans int,
+                                      average_stars float,
+                                      compliment_hot float, compliment_more int, 
+                                      compliment_profile int, compliment_cute int, 
+                                      compliment_list int, compliment_note int, 
+                                      compliment_plain int, compliment_cool int, 
+                                      compliment_funny int, compliment_writer int,
+                                      compliment_photos int, PRIMARY KEY(user_id))
 """)
     print('UPLOADING DATAFRAME TO CASSANDRA')
     casspark.spark_pandas_insert(user,'henry','user',session,debug=True)
@@ -159,7 +180,7 @@ compliment_hot float compliment_more int compliment_profile int compliment_cute 
 
 
 #DAG de Airflow
-with DAG(dag_id='Test345',start_date=datetime.datetime(2022,8,25),schedule_interval='@once') as dag:
+with DAG(dag_id='Test360',start_date=datetime.datetime(2022,8,25),schedule_interval='@once') as dag:
 
     t_load_tips = PythonOperator(task_id='load_tips',python_callable=load_tips)
 
@@ -167,8 +188,8 @@ with DAG(dag_id='Test345',start_date=datetime.datetime(2022,8,25),schedule_inter
 
     t_load_bussiness = PythonOperator(task_id='load_bussiness',python_callable=load_bussiness)
 
-    t_load_review = PythonOperator(task_id='load_bussiness',python_callable=load_review)
+    t_load_review = PythonOperator(task_id='load_review',python_callable=load_review)
 
-    t_load_user = PythonOperator(task_id='load_bussiness',python_callable=load_user)
+    t_load_user = PythonOperator(task_id='load_user',python_callable=load_user)
 
-    t_load_bussiness >> t_load_checkin >> t_load_tips  >> t_load_review >> t_load_user
+    t_load_user >> t_load_checkin >> t_load_tips  >> t_load_review >> t_load_bussiness
