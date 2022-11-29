@@ -1,7 +1,12 @@
 import streamlit as st
 import pandas as pd 
-from st_on_hover_tabs import on_hover_tabs
 from streamlit_option_menu import option_menu
+from cgitb import text
+from multiprocessing import Value
+from os import write
+from turtle import onclick, onscreenclick
+from typing import List
+from numpy.core.fromnumeric import size
 
 st.set_page_config(
    page_title="Project Henry",
@@ -56,8 +61,8 @@ review = pd.read_csv(r'review_1000.csv')
 
 
 with st.sidebar:
-   selected3 = option_menu(None, ["Home", "Upload",  "Tasks", 'Settings'], 
-   icons=['house', 'cloud-upload', "list-task", 'gear'], 
+   selected2 = option_menu(None, ["Home", "My Business", 'Settings'], 
+   icons=['house', 'cloud-upload', 'gear'], 
    menu_icon="cast", default_index=0, orientation="vertical",
    styles={
         "container": {"padding": "0!important", "background-color": "#109138"},
@@ -66,25 +71,19 @@ with st.sidebar:
         "nav-link-selected": {"background-color": "#16C64D" },
     })
 
-## 1
-selected3 = option_menu(None, ["Home", "Upload",  "Tasks", 'Settings'], 
-   icons=['house', 'cloud-upload', "list-task", 'gear'], 
-   menu_icon="cast", default_index=0, orientation="horizontal",
-   styles={
-        "container": {"padding": "0!important", "background-color": "#fafafa"},
-        "icon": {"color": "orange", "font-size": "25px"}, 
-        "nav-link": {"font-size": "25px", "text-align": "left", "margin":"0px", "--hover-color": "#eee"},
-        "nav-link-selected": {"background-color": "green"},
-    })
-## 2
-
-
+## HORIZONTAL ##
+# selected3 = option_menu(None, ["Home", "Upload",  "Tasks", 'Settings'], 
+#    icons=['house', 'cloud-upload', "list-task", 'gear'], 
+#    menu_icon="cast", default_index=0, orientation="horizontal",
+#    styles={
+#         "container": {"padding": "0!important", "background-color": "#fafafa"},
+#         "icon": {"color": "orange", "font-size": "25px"}, 
+#         "nav-link": {"font-size": "25px", "text-align": "left", "margin":"0px", "--hover-color": "#eee"},
+#         "nav-link-selected": {"background-color": "green"},
+#     })
 
 # st.sidebar.title('Menu')
 # paginas = st.sidebar.selectbox("Select :",['pagina1','pagina2'])
-
-
-      
 
 ##################
 #### FUNTIONS ####
@@ -112,9 +111,6 @@ def metricas():
    metrics[4].metric('Top Hour', '18:00', delta=None, delta_color="normal")
    metrics[5].metric('Number_visits', number_visits)
 
-
-metricas()  
-
 # 47OfnYwhB3NTM8Tx_sNnbw
 # m1HVolBJiYajyq07J550jQ
 # _EqGhRXzlUaTpu5eToC8MA
@@ -127,3 +123,17 @@ metricas()
 # business_name = business['name'].to_list()
 # business_name
 
+
+## HOME ## 
+if selected2 == "Home":
+	st.subheader("Home")
+
+metricas() 
+
+## My Business
+if selected2 == "My Business":
+	st.subheader("My Business")
+
+	with st.form(key='searchForm'):
+		search_movie = st.text_input("Search Movie")
+		submit_button = st.form_submit_button(label='Search')
