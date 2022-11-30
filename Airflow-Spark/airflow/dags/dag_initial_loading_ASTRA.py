@@ -10,6 +10,9 @@ spark.sparkContext.addPyFile(r'/opt/airflow/dags/transform_funcs.py')
 spark.sparkContext.addPyFile(r'/opt/airflow/dags/dag_initial_loading_ASTRA.py')
 spark.sparkContext.addPyFile(r'/opt/airflow/dags/casspark.py')
 spark.sparkContext.addPyFile(r'/opt/airflow/dags/tiny_functions.py')
+
+spark.conf.set("spark.sql.catalog.AstraHenry", "com.datastax.spark.connector.datasource.CassandraCatalog")
+
 import transform_funcs
 import casspark
 import pyspark.pandas as ps
@@ -312,7 +315,11 @@ def load_business():
         PRIMARY KEY(business_id))
     """)
     print('UPLOADING DATAFRAME TO CASSANDRA')
-    casspark.spark_pandas_insert(full_data2,'yelp','business',session,debug=True)
+    full_data2.write\
+    .format("org.apache.spark.sql.cassandra")\
+    .mode('append')\
+    .options(table="business", keyspace="yelp")\
+    .save()
     print('DONE')
 
 
