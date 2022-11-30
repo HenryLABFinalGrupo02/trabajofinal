@@ -41,6 +41,11 @@ def connect_to_astra():
     session = cluster.connect()
     return session
 
+def lower_col_names(cols):
+    new_names = {}
+    for x in cols:
+        new_names[x] = x.lower()
+    return new_names    
 
 def load_top_tips(df):
     ##### UPLOADS SMALL DATASET TOP TIPS TO CASSANDRA
@@ -50,6 +55,8 @@ def load_top_tips(df):
     top_tips.rename(columns={'business_id': 'number_tips'}, inplace=True)
     top_tips['business_id'] = top_tips.index
     top_tips.reset_index(drop=True, inplace=True)
+
+    top_tips.rename(columns=lower_col_names(top_tips.columns), inplace=True)
 
     #### CONNECT TO CASSANDRA
     print('ESTABLISHING CONNECTION TO CASSANDRA FOR TOP TIPS')
@@ -65,7 +72,12 @@ def load_top_tips(df):
 
     #### UPLOAD DATAFRAME TO CASSANDRA
     print('UPLOADING DATAFRAME TO CASSANDRA FOR TOP TIPS')
-    casspark.spark_pandas_insert(top_tips,'yelp','top_tips',session,debug=True)
+    top_tips.to_spark().write\
+    .format("org.apache.spark.sql.cassandra")\
+    .mode('append')\
+    .options(table="business", keyspace="yelp")\
+    .save()
+    print('DONE')
     print('DONE FOR TOP TIPS')
 
 
@@ -112,6 +124,8 @@ def load_user_metrics():
     'Influencer', 'Influencer_Score', 'Influencer_2', 'Influencer_Score_2']]
     print('TRANSFORMATIONS FOR USER METRICS DONE')
 
+    user_df.rename(columns=lower_col_names(user_df.columns), inplace=True)
+
     print('STABLISHING CONNECTION TO ASTRA')
     session = connect_to_astra()
     
@@ -144,7 +158,11 @@ def load_user_metrics():
     # session.execute('ALTER TABLE yelp.user_metrics DROP COMPACT STORAGE')
 
     print('UPLOADING DATAFRAME TO CASSANDRA FOR USER METRICS')
-    casspark.spark_pandas_insert(user_df,'yelp','user_metrics',session,debug=True)
+    user_df.to_spark().write\
+    .format("org.apache.spark.sql.cassandra")\
+    .mode('append')\
+    .options(table="user_metrics", keyspace="yelp")\
+    .save()
     print('DONE')
 
 
@@ -168,6 +186,8 @@ def load_tips():
     print('UPLOADING SMALL DATABASE WITH TIP COUNT BY BUSINESS')
     load_top_tips(tip)
 
+    tip.rename(columns=lower_col_names(tip.columns), inplace=True)
+
     #### CONNECT TO CASSANDRA
 
 
@@ -184,7 +204,11 @@ def load_tips():
 
     #### UPLOAD DATAFRAME TO CASSANDRA
     print('UPLOADING DATAFRAME TO CASSANDRA')
-    casspark.spark_pandas_insert(tip,'yelp','tip',session,debug=True)
+    tip.to_spark().write\
+    .format("org.apache.spark.sql.cassandra")\
+    .mode('append')\
+    .options(table="tip", keyspace="yelp")\
+    .save()
     print('DONE')
 
 
@@ -203,6 +227,8 @@ def load_checkin():
     print('NORMALIZING DATES')
     checkin['date'] = checkin['date'].apply(transform_funcs.get_date_as_list)
 
+    checkin.rename(columns=lower_col_names(checkin.columns), inplace=True)
+
     session = connect_to_astra()
 
     print('DROPPING TABLE IF EXISTS')
@@ -215,13 +241,17 @@ def load_checkin():
 
     #### UPLOAD DATAFRAME TO CASSANDRA
     print('UPLOADING DATAFRAME TO CASSANDRA')
-    casspark.spark_pandas_insert(checkin,'yelp','checkin',session,debug=True)
+    checkin.to_spark().write\
+    .format("org.apache.spark.sql.cassandra")\
+    .mode('append')\
+    .options(table="checkin", keyspace="yelp")\
+    .save()
     print('DONE')
 
 
 def load_business():
     print('READING BUSINESS FILE')
-    business = pd.read_json(r'/opt/data/initial_load/business.json', lines=True).head(1000)
+    business = pd.read_json(r'/opt/data/initial_load/business.json', lines=True)
     
 
     print('TRANSFORMING ATTRIBUTES')
@@ -252,11 +282,7 @@ def load_business():
     full_data['mean_close_hour'] = full_data.mean_close_hour.astype(str)
     full_data['RestaurantsPriceRange2'] = full_data.RestaurantsPriceRange2.astype(str)
 
-    new_names = {}
-    for x in full_data.columns:
-        new_names[x] = x.lower()
-
-    full_data.rename(columns=new_names, inplace=True)
+    full_data.rename(columns=lower_col_names(full_data.columns), inplace=True)
 
     print('CONVERTING TO PYSPAK PANDAS')
     full_data2 = ps.from_pandas(full_data)
@@ -337,6 +363,8 @@ def load_review():
     print('NORMALIZING DATES')
     review['date'] = review['date'].apply(transform_funcs.transform_dates).dt.strftime('%Y-%m-%d')
 
+    review.rename(columns=lower_col_names(review.columns), inplace=True)
+
     session = connect_to_astra()
 
     print('CREATING TABLE')
@@ -354,7 +382,11 @@ def load_review():
         PRIMARY KEY(review_id))
     """)
     print('UPLOADING DATAFRAME TO CASSANDRA')
-    casspark.spark_pandas_insert(review,'yelp','review',session,debug=True)
+    review.to_spark().write\
+    .format("org.apache.spark.sql.cassandra")\
+    .mode('append')\
+    .options(table="review", keyspace="yelp")\
+    .save()
     print('DONE')
 
 
@@ -376,6 +408,8 @@ def load_user():
 
     print('USER COLS')
     print(user.columns)
+
+    user.rename(columns=lower_col_names(user.columns), inplace=True)
 
     session = connect_to_astra()
 
@@ -408,13 +442,19 @@ def load_user():
     PRIMARY KEY(user_id))
 """)
     print('UPLOADING DATAFRAME TO CASSANDRA')
-    casspark.spark_pandas_insert(user,'yelp','user',session,debug=True)
+    user.to_spark().write\
+    .format("org.apache.spark.sql.cassandra")\
+    .mode('append')\
+    .options(table="user", keyspace="yelp")\
+    .save()
     print('DONE')
 
 
 
 def load_sentiment_business():
     sentiment = pd.read_csv(r'./data/initial_load/sentiment_ok_unique.csv')
+
+    sentiment.rename(columns=lower_col_names(sentiment.columns), inplace=True)
 
     session = connect_to_astra()
     
@@ -427,7 +467,11 @@ def load_sentiment_business():
         PRIMARY KEY(business_id))
 """)
     print('UPLOADING DATAFRAME TO CASSANDRA')
-    casspark.spark_pandas_insert(sentiment,'yelp','sentiment',session,debug=True)
+    sentiment.to_spark().write\
+    .format("org.apache.spark.sql.cassandra")\
+    .mode('append')\
+    .options(table="sentiment_business", keyspace="yelp")\
+    .save()
     print('DONE')
 
 
