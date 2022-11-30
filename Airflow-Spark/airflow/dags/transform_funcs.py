@@ -186,7 +186,7 @@ def row_hours_to_list(row):
     Parameters:
     - row: pyspark row object
     """
-    print('GETTING DICT')
+    #print('GETTING DICT')
     dicc = row.asDict()
     day_dicc = {
         'Monday': 1,
@@ -197,9 +197,9 @@ def row_hours_to_list(row):
         'Saturday': 6,
         'Sunday': 7
     }
-    print('ZIPPING')
+    #print('ZIPPING')
     check = zip(dicc.keys(),list(map(lambda x: x.split('-') if isinstance(x,str) else x,dicc.values())))
-    print('RETURNING')
+    #print('RETURNING')
     return [[day_dicc[key],
             int(value[0].split(':')[0])+int(value[0].split(':')[1]),
             int(value[1].split(':')[0])+int(value[1].split(':')[1])
