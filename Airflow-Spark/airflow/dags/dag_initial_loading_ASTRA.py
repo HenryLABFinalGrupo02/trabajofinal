@@ -221,7 +221,7 @@ def load_checkin():
 
 def load_business():
     print('READING BUSINESS FILE')
-    business = pd.read_json(r'/opt/data/initial_load/business.json', lines=True)
+    business = pd.read_json(r'/opt/data/initial_load/business.json', lines=True).head(1000)
     
 
     print('TRANSFORMING ATTRIBUTES')
