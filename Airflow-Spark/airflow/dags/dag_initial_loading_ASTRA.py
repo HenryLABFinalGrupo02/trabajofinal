@@ -76,7 +76,7 @@ def load_user_metrics():
     friends_number, Score_influencer, Influencer, user_id
     """
     print('READING USER FILE')
-    user = ps.read_json(r'/opt/data/initial_load/user.json', lines=True).head(1000)
+    user = ps.read_json(r'/opt/data/initial_load/user.json', lines=True)
     print('DROPPING DUPLICATED ROWS')
     user = user.drop_duplicates()
 
@@ -151,7 +151,7 @@ def load_user_metrics():
 def load_tips():
     #### READS FILE AND MAKES TRANSFORMATION
     print('READING TIPS FILE')
-    tip = ps.read_json(r'/opt/data/initial_load/tip.json').head(1000)
+    tip = ps.read_json(r'/opt/data/initial_load/tip.json')
 
     #### TRANSFORMATIONS
     print('DROPPING DUPLICATED ROWS')
@@ -188,7 +188,7 @@ def load_tips():
 def load_checkin():
     #### READS FILE AND MAKES TRANSFORMATION
     print('READING TIPS FILE')
-    checkin = ps.read_json(r'/opt/data/initial_load/checkin.json').head(1000)
+    checkin = ps.read_json(r'/opt/data/initial_load/checkin.json')
 
     #### TRANSFORMATIONS
     print('DROPPING DUPLICATED ROWS')
@@ -218,7 +218,7 @@ def load_checkin():
 
 def load_business():
     print('READING BUSINESS FILE')
-    business = pd.read_json(r'/opt/data/initial_load/business.json', lines=True).head(1000)
+    business = pd.read_json(r'/opt/data/initial_load/business.json', lines=True)
     
 
     print('TRANSFORMING ATTRIBUTES')
@@ -318,7 +318,7 @@ def load_business():
 
 def load_review():
     print('READING REVIEW FILE')
-    review = ps.read_json(r'/opt/data/initial_load/review.json').head(1000)
+    review = ps.read_json(r'/opt/data/initial_load/review.json')
     print('DROPPING DUPLICATED ROWS')
     review = review.drop_duplicates()
     print('NORMALIZING DATES')
@@ -348,7 +348,7 @@ def load_review():
 
 def load_user():
     print('READING USER FILE')
-    user = ps.read_json(r'/opt/data/initial_load/user.json', lines=True).head(1000)
+    user = ps.read_json(r'/opt/data/initial_load/user.json', lines=True)
     print('DROPPING DUPLICATED ROWS')
     user = user.drop_duplicates()
 
@@ -401,7 +401,7 @@ def load_user():
 
 
 def load_sentiment_business():
-    sentiment = pd.read_csv(r'./data/initial_load/sentiment_ok_unique.csv').head(1000)
+    sentiment = pd.read_csv(r'./data/initial_load/sentiment_ok_unique.csv')
 
     session = connect_to_astra()
     
