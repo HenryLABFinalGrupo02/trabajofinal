@@ -315,7 +315,7 @@ def load_business():
         PRIMARY KEY(business_id))
     """)
     print('UPLOADING DATAFRAME TO CASSANDRA')
-    full_data2.write\
+    full_data2.to_spark().write\
     .format("org.apache.spark.sql.cassandra")\
     .mode('append')\
     .options(table="business", keyspace="yelp")\
