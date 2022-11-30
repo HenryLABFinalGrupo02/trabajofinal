@@ -58,6 +58,8 @@ def load_top_tips(df):
 
     top_tips.rename(columns=lower_col_names(top_tips.columns), inplace=True)
 
+    top_tips2 = ps.from_pandas(top_tips)
+
     #### CONNECT TO CASSANDRA
     print('ESTABLISHING CONNECTION TO CASSANDRA FOR TOP TIPS')
     session = connect_to_astra()
@@ -72,7 +74,7 @@ def load_top_tips(df):
 
     #### UPLOAD DATAFRAME TO CASSANDRA
     print('UPLOADING DATAFRAME TO CASSANDRA FOR TOP TIPS')
-    top_tips.to_spark().write\
+    top_tips2.to_spark().write\
     .format("org.apache.spark.sql.cassandra")\
     .mode('append')\
     .options(table="business", keyspace="yelp")\
@@ -456,6 +458,8 @@ def load_sentiment_business():
 
     sentiment.rename(columns=lower_col_names(sentiment.columns), inplace=True)
 
+    sentiment2 = ps.from_pandas(sentiment)
+
     session = connect_to_astra()
     
     print('CREATING TABLE')
@@ -492,4 +496,4 @@ with DAG(dag_id='Test387',start_date=datetime.datetime(2022,8,25),schedule_inter
 
     t_load_user_metrics = PythonOperator(task_id='load_user_metrics',python_callable=load_user_metrics)
 
-    t_load_bussiness >> t_load_tips  >> t_load_review >> t_load_user_metrics >> t_load_user >> t_load_checkin
+    t_load_tips  >> t_load_review >> t_load_user_metrics >> t_load_user >> t_load_checkin
