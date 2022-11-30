@@ -252,6 +252,12 @@ def load_business():
     full_data['mean_close_hour'] = full_data.mean_close_hour.astype(str)
     full_data['RestaurantsPriceRange2'] = full_data.RestaurantsPriceRange2.astype(str)
 
+    new_names = {}
+    for x in full_data.columns:
+        new_names[x] = x.lower()
+
+    full_data.rename(columns=new_names, inplace=True)
+
     print('CONVERTING TO PYSPAK PANDAS')
     full_data2 = ps.from_pandas(full_data)
 
