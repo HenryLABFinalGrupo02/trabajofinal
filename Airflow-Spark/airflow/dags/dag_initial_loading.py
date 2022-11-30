@@ -180,7 +180,7 @@ CREATE TABLE IF NOT EXISTS henry.user(user_id text, name text, review_count int,
 
 
 #DAG de Airflow
-with DAG(dag_id='Test360',start_date=datetime.datetime(2022,8,25),schedule_interval='@once') as dag:
+with DAG(dag_id='Test362',start_date=datetime.datetime(2022,8,25),schedule_interval='@once') as dag:
 
     t_load_tips = PythonOperator(task_id='load_tips',python_callable=load_tips)
 
@@ -192,4 +192,4 @@ with DAG(dag_id='Test360',start_date=datetime.datetime(2022,8,25),schedule_inter
 
     t_load_user = PythonOperator(task_id='load_user',python_callable=load_user)
 
-    t_load_user >> t_load_checkin >> t_load_tips  >> t_load_review >> t_load_bussiness
+    t_load_user >> t_load_review >> t_load_checkin >> t_load_tips  >> t_load_bussiness

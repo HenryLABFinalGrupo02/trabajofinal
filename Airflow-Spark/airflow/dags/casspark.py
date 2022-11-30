@@ -26,13 +26,16 @@ def spark_pandas_insert(dataframe,keyspace,table,cassandra_session, debug=False)
 
     _iter = 1
     _df_len = len(dataframe)
+    print('DEFINING QUERY')
     query = "INSERT INTO {keyspace_str}.{table_str}({columns_str}) VALUES ({emptycols})".format(
     keyspace_str=keyspace,
     table_str=table,
     columns_str=','.join(list(dataframe.columns)),
     emptycols=','.join(['?' for i in list(dataframe.columns)])
     )
+    print('PREPARING QUERY')
     prepared = cassandra_session.prepare(query)
+    print('LOOPING')
     for index, row in dataframe.iterrows():
         cassandra_session.execute(prepared,([row[column] for column in list(dataframe.columns)]))
         if debug:
