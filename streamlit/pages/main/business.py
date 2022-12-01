@@ -17,7 +17,7 @@ def cql_to_pandas(cql_query,cassandra_session):
     return result._current_rows
 
 
-def selete_business(): 
+def select_business(): 
     business = pd.read_csv(r'business_1000.csv')
     name_business = business['name']
 
