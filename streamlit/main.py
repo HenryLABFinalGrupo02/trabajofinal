@@ -5,6 +5,7 @@ from multiprocessing import Value
 from pages.main import home as m
 from pages.main import business as p
 from pages.main import model as ml
+from PIL import Image
 
 st.set_page_config(
    page_title="Vocado",
