@@ -1,22 +1,11 @@
 import streamlit as st
 import pandas as pd 
-from streamlit_option_menu import option_menu
-from cgitb import text
 from multiprocessing import Value
-from os import write
-from turtle import onclick, onscreenclick
 from typing import List
-from numpy.core.fromnumeric import size
-from PIL import Image
 
-
-
-business = pd.read_csv(r'business_1000.csv')
-checkin = pd.read_csv(r'checkin_1000.csv')
-review = pd.read_csv(r'review_1000.csv')
-im = Image.open('pages/main/logo.png')
-
-
+business = pd.read_csv(r'data\business_1000.csv')
+checkin = pd.read_csv(r'data\checkin_1000.csv')
+review = pd.read_csv(r'data\review_1000.csv')
 
 def metricas(): 
    review_stars = business['stars'].mean()

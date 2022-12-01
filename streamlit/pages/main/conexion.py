@@ -2,8 +2,6 @@ import cassandra
 from cassandra.auth import PlainTextAuthProvider 
 from cassandra.cluster import Cluster
 import json
-import pandas as pd 
-
 
 cloud_config= {'secure_connect_bundle': r'secure-connect-henry.zip'}
 auth_provider = PlainTextAuthProvider(json.load(open('log_in.json'))['log_user'], json.load(open('log_in.json'))['log_password'])
