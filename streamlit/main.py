@@ -8,7 +8,6 @@ from pages.main import model as ml
 from pages.main import timeseries as ts
 from PIL import Image
 
->>>>>>> 2d857c5e318ba6819f8fe34fc470cda101928ffe
 st.set_page_config(
    page_title="Vocado",
    page_icon="🥑",  

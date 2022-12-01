@@ -7,8 +7,6 @@ from cassandra.auth import PlainTextAuthProvider
 import json
 from pathlib import Path
 
-
-
 def cql_to_pandas(cql_query,cassandra_session):
     """
     It takes a CQL query and a Cassandra session as input, and returns a Pandas dataframe
@@ -58,9 +56,6 @@ def l(filtro):
    metrics[4].metric('Top Hour', '18:00', delta=None, delta_color="normal")
    metrics[5].metric('Number_visits', number_visits)
         
-
-
-
 def select_business(): 
     name_business = cql_to_pandas("""select name from yelp.business ALLOW FILTERING;""",session)
     option = st.selectbox(
