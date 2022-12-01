@@ -4,11 +4,15 @@ from streamlit_option_menu import option_menu
 from multiprocessing import Value
 from pages.main import home as m
 from pages.main import business as p
+<<<<<<< HEAD
+from pages.main import model as ml
+=======
 from PIL import Image
 
 ##################
 ## PAGE CONFIG ###
 ##################
+>>>>>>> a56658d55ed1db92a8945702d088064c12a49d91
 
 st.set_page_config(
    page_title="Vocado",
@@ -78,4 +82,8 @@ if selected2 == "Competition":
 
 ## My Opportunities
 if selected2 == "Opportunities":
+
    st.title('Opportunities Admin Center')
+
+   ml.machine_learning()
+ 
