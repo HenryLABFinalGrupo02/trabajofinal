@@ -1,24 +1,27 @@
 import streamlit as st
 import pandas as pd 
 from streamlit_option_menu import option_menu
-from cgitb import text
 from multiprocessing import Value
-from os import write
-from turtle import onclick, onscreenclick
-from typing import List
-from numpy.core.fromnumeric import size
 from pages.main import home as m
 from pages.main import business as p
+<<<<<<< HEAD
 from pages.main import model as ml
+=======
+from PIL import Image
+
+##################
+## PAGE CONFIG ###
+##################
+>>>>>>> a56658d55ed1db92a8945702d088064c12a49d91
 
 st.set_page_config(
-   page_title="Project Henry",
-   page_icon="👋",  
+   page_title="Vocado",
+   page_icon="🥑",  
    layout="wide", 
    menu_items = {
-         'Get Help': 'https://www.extremelycoolapp.com/help',
-         'Report a bug': "https://www.extremelycoolapp.com/bug",
-         'About': "# This is a header. This is an *extremely* cool app!"}
+         'Get Help': 'https://github.com/HenryLABFinalGrupo02/trabajofinal',
+         'Report a bug': "https://github.com/HenryLABFinalGrupo02/trabajofinal",
+         'About': "# This is a header. This is an *VOCADO* cool app!"}
 )
 
 with open('style.css') as f:
@@ -34,89 +37,36 @@ review = pd.read_csv(r'review_1000.csv')
 #tip = pd.read_csv(r'C:\Users\USER\Documents\SOYHENRY\LABS\TRABAJO_GRUPAL\trabajofinal\Airflow-Spark\data\tip_1000.csv')
 #user = pd.read_csv(r'C:\Users\USER\Documents\SOYHENRY\LABS\TRABAJO_GRUPAL\trabajofinal\Airflow-Spark\data\user_1000.csv')
 
-# st.sidebar.title('Menu')
-# paginas = st.sidebar.selectbox("Select :",['pagina1','pagina2'])
-
-# with st.sidebar:
-#         tabs = on_hover_tabs(tabName=['Home', 'Business #1', 'Business #2'], 
-#                              iconName=['home', 'business', 'business'],
-#                              styles = {'navtab': {'background-color':'transparent',
-#                                                   'color': '#FFFFFF',
-#                                                   'font-size': '18px',
-#                                                   'transition': '.3s',
-#                                                   'white-space': 'nowrap',
-#                                                   'text-transform': 'uppercase'},
-#                                        'tabOptionsStyle': {':hover :hover': {'color': '#E4FFED',
-#                                                                       'cursor': 'pointer'}},
-#                                        'iconStyle':{'position':'fixed',
-#                                                     'left':'7.5px',
-#                                                     'text-align': 'left'},
-#                                        'tabStyle' : {'list-style-type': 'none',
-#                                                      'margin-bottom': '30px',
-#                                                      'padding-left': '30px'}},
-#                              key="0")
-
-# with st.sidebar:
-#    st.sidebar.title('Menu')
-#    st.button('Home')
-#    add_selectbox = st.sidebar.selectbox(
-#       "How would you like to be contacted?",
-#       ('Bu', "Home phone", "Mobile phone")
-#    )
-
-
 ##################
 ###### MENU ######
 ##################
 
 with st.sidebar:
+   st.image(Image.open('logo_vocado.png'))
+
    selected2 = option_menu(None, ["Home", "My Business", "Competition", "Opportunities", "Settings", "Add business"], 
-   icons=['house', 'building', 'building', 'gear', 'building', 'plus'], 
+   icons=['house', 'building', 'globe', 'star', 'gear', 'plus'], 
    menu_icon="cast", default_index=0, orientation="vertical",
    styles={
-        "container": {"padding": "0!important", "background-color": "#109138"},
-        "icon": {"color": "#F4C01E", "font-size": "25px"}, 
-        "nav-link": {"font-size": "25px", "text-align": "left", 
+        "container": {"padding": "0!important", 
+                     "background-color": "#109138"},
+        "icon": {"color": "#F4C01E",
+                  "font-size": "25px"}, 
+        "nav-link": {"font-size": "25px", 
                      "margin":"0px", 
-                     "--hover-color": "#16C64D"},
+                     "--hover-color": "#16C64D", 
+                     "font-family":"Sans-serif"},
         "nav-link-selected": {"background-color": "#16C64D", 
                               "font-style":"Sans-serif", 
                               "font-weight": "bold",
-                              "color":"#000000"},
+                              "color":"#121212"},
     })
 
-## HORIZONTAL ##
-# selected3 = option_menu(None, ["Home", "Upload",  "Tasks", 'Settings'], 
-#    icons=['house', 'cloud-upload', "list-task", 'gear'], 
-#    menu_icon="cast", default_index=0, orientation="horizontal",
-#    styles={
-#         "container": {"padding": "0!important", "background-color": "#fafafa"},
-#         "icon": {"color": "orange", "font-size": "25px"}, 
-#         "nav-link": {"font-size": "25px", "text-align": "left", "margin":"0px", "--hover-color": "#eee"},
-#         "nav-link-selected": {"background-color": "green"},
-#     })
+#####################
+## IMPORT FUNTIONS ##
+#####################
 
-# st.sidebar.title('Menu')
-# paginas = st.sidebar.selectbox("Select :",['pagina1','pagina2'])
-
-##################
-#### FUNTIONS ####
-##################
-
-
-# 47OfnYwhB3NTM8Tx_sNnbw
-# m1HVolBJiYajyq07J550jQ
-# _EqGhRXzlUaTpu5eToC8MA
-# ytynqOUb3hjKeJfRj5Tshw
-# ynuDiKFEoESUpYf0QP-Ulw
-# Xs95WXSbawqZFmJ0nhahJQ
-# LObAexsCZ9mgh_xLPK2S2w
-# ThztWldIIslYvTiTA_CMtg
-
-# business_name = business['name'].to_list()
-# business_name
-
-## HOME ## 
+## HOME 
 if selected2 == "Home":
    st.title('Welcome to Vocado Admin Center')
    m.metricas()
@@ -124,12 +74,11 @@ if selected2 == "Home":
 ## My Business
 if selected2 == "My Business":
    st.title('Business Admin Center')
-   p.selete_business()
+   p.select_business()
 
 ## My Competition
 if selected2 == "Competition":
    st.title('Competition Admin Center')
-
 
 ## My Opportunities
 if selected2 == "Opportunities":
