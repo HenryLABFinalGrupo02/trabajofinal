@@ -58,11 +58,11 @@ with st.sidebar:
                               "color":"#121212"},
     })
 
-##################
-#### FUNTIONS ####
-##################
+#####################
+## IMPORT FUNTIONS ##
+#####################
 
-## HOME ## 
+## HOME 
 if selected2 == "Home":
    st.title('Welcome to Vocado Admin Center')
    m.metricas()
