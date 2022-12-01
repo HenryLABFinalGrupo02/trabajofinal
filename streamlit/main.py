@@ -2,10 +2,7 @@ import streamlit as st
 import pandas as pd 
 from streamlit_option_menu import option_menu
 from multiprocessing import Value
-from pages.main import home as m
-from pages.main import business as p
-from pages.main import model as ml
-from pages.main import timeseries as ts
+from pages.main import tabs_functions as tf
 from PIL import Image
 
 st.set_page_config(
@@ -63,27 +60,27 @@ with st.sidebar:
 ## HOME 
 if selected2 == "Home":
    st.title('Welcome to Vocado Admin Center')
-   m.metricas()
+   tf.metricas()
 
 ## My Business
 if selected2 == "My Business":
    st.title('Business Admin Center')
-   p.select_business()
+   tf.select_business()
 
 ## My Competition
 if selected2 == "Competition":
    st.title('Competition')
-   ts.timeseries()
+   tf.timeseries()
 
 ## My Opportunities
 if selected2 == "Opportunities":
    st.title('Opportunities Exploration')
-   ml.machine_learning()
+   tf.machine_learning()
  
 # ## Time Series Analysis
 # if selected2 == "Time Series Analysis":
 #    st.title('Time Series Analysis')
-#    ts.timeseries()
+#    tf.timeseries()
 
 
 
