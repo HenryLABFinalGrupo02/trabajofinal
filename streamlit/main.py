@@ -5,18 +5,9 @@ from multiprocessing import Value
 from pages.main import home as m
 from pages.main import business as p
 from pages.main import model as ml
-<<<<<<< HEAD
-from PIL import Image
-
-##################
-## PAGE CONFIG ###
-##################
-
-=======
 from pages.main import timeseries as ts
 from PIL import Image
 
->>>>>>> ef6bf87899e725d74eef66b28f6397cb151c3f36
 st.set_page_config(
    page_title="Vocado",
    page_icon="🥑",  
@@ -44,11 +35,7 @@ review = pd.read_csv(r'./data/review_1000.csv')
 ##################
 
 with st.sidebar:
-<<<<<<< HEAD
-   st.image(Image.open('image/logo_vocado.png'))
-=======
    st.image(Image.open('./image/logo_vocado.png'))
->>>>>>> ef6bf87899e725d74eef66b28f6397cb151c3f36
 
    selected2 = option_menu(None, ["Home", "My Business", "Competition", "Opportunities", "Settings", "Add business"], 
    icons=['house', 'building', 'globe', 'star', 'gear', 'plus'], 

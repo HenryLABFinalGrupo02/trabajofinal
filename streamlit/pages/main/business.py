@@ -1,7 +1,3 @@
-<<<<<<< HEAD
-#import conexion
-=======
->>>>>>> ef6bf87899e725d74eef66b28f6397cb151c3f36
 import streamlit as st
 import pandas as pd 
 from multiprocessing import Value
