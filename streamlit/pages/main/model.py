@@ -16,13 +16,13 @@ import xgboost
 
 
 def machine_learning():
-    st.markdown('Model to classify business into popular vs. no popular')
+    st.markdown("Discover which business lines, location and services get you the better chances at being successful (Based on popularity)")
 
-    st.header("Business features")
+    st.header("Business Features")
     col1, col2, col3 = st.columns(3)
 
     with col1:
-        st.text("Geographic location")
+        # st.text("Geographic location")
         area = st.selectbox('Select geographical area', [
         'Philadelphia', 
         'Indianapolis', 
@@ -35,7 +35,7 @@ def machine_learning():
         'Reno', 
         'Boise'])
 
-        st.text("Type of business")
+        # st.text("Type of business")
         type_of_business = st.selectbox('Select type of business', [
             'Restaurant', 
             'Food', 
@@ -50,42 +50,41 @@ def machine_learning():
             'Other'])
 
     with col2:
-
-        
-        st.text("Price range")
+        # st.text("Price range")
         price_range = st.slider('Price range', min_value = 0, max_value = 4, value = 1)
 
-        st.text("Noise level")
+        # st.text("Noise level")
         noise_level = st.slider('Noise level', min_value = 0, max_value = 4, value = 1)
 
     with col3: 
-        st.text("Open times")
+        # st.text("Open times")
+        meal_diversity = st.slider('Meal diversity (if restaurant)', min_value = 0, max_value = 6, value = 1,
+        help = "Meal diversity, 1 being only breakfast or dinner, 6 being all meals")
 
+        open_hours = st.slider('Open Hours', min_value = 0.0, max_value = 24.0, value = 1.0, help= "Total open hours per day")
+        
         weekends = st.checkbox(
         "Open on weekends",
         help="Weekends mean friday, saturday and sundays")
 
-        open_hours = st.slider('Total open hours per day', min_value = 0.0, max_value = 24.0, value = 1.0)
-
-
-    st.header("Additional features")
+    st.header("Additional Features")
     col1, col2, col3 = st.columns(3)
 
     with col1:
         ambience = st.checkbox(
         "Good ambience",
-        help="Good ambience")
+        help="Comfortable, clean, peaceful, etc.")
 
         good_for_groups = st.checkbox(
         "Good for groups",
-        help="Good for groups")
+        help="Offers space for groups allocation")
 
         good_for_kids = st.checkbox(
         "Good for kids",
-        help="Good for kids")
+        help="Offers space for kids entertainment")
         
         has_tv = st.checkbox(
-        "Has TV",
+        "TV",
         help="Has TV")
 
         outdoor_seating = st.checkbox(
@@ -108,38 +107,32 @@ def machine_learning():
 
         bike_parking = st.checkbox(
         "Bike parking",
-        help="Bike parking")
+        help="Offers parking locations for bikes")
 
         credit_cards = st.checkbox(
         "Credit cards",
-        help="Credit cards")
-
-
+        help="Accept credit cards")
 
     with col3:
         caters = st.checkbox(
         "Caters",
-        help="Caters")
+        help="Provides food service at a remote site")
 
         elegancy = st.checkbox(
-        "Elegant place / formal",
-        help="Elegancy")
+        "Elegant",
+        help="Provide elegant or formal ambience")
 
         by_appointment_only = st.checkbox(
-        "By appointment only",
+        "Appointment",
         help="By appointment only")
 
         wifi = st.checkbox(
         "Wifi",
-        help="Wifi")  
+        help="Has Wifi")  
 
         reservations = st.checkbox(
         "Accept reservations",
-        help="Accept reservations")  
-
-        meal_diversity = st.slider('Meal diversity', min_value = 0, max_value = 6, value = 1,
-        help = "Meal diversity, 1 being only breakfast or dinner, 6 being all meals")
-
+        help="Accept reservations prior to attendance")  
 
     if st.button('Predict Business Success'):
 

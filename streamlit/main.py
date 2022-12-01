@@ -5,12 +5,18 @@ from multiprocessing import Value
 from pages.main import home as m
 from pages.main import business as p
 from pages.main import model as ml
+<<<<<<< HEAD
 from PIL import Image
 
 ##################
 ## PAGE CONFIG ###
 ##################
 
+=======
+from pages.main import timeseries as ts
+from PIL import Image
+
+>>>>>>> ef6bf87899e725d74eef66b28f6397cb151c3f36
 st.set_page_config(
    page_title="Vocado",
    page_icon="🥑",  
@@ -18,8 +24,7 @@ st.set_page_config(
    menu_items = {
          'Get Help': 'https://github.com/HenryLABFinalGrupo02/trabajofinal',
          'Report a bug': "https://github.com/HenryLABFinalGrupo02/trabajofinal",
-         'About': "# This is a header. This is an *VOCADO* cool app!"}
-)
+         'About': "# This is a header. This is an *VOCADO* cool app!"})
 
 with open('style.css') as f:
     st.markdown(f'<style>{f.read()}</style>', unsafe_allow_html=True)
@@ -28,9 +33,9 @@ with open('style.css') as f:
 ## IMPORT DATA ###
 ##################
 
-business = pd.read_csv(r'business_1000.csv')
-checkin = pd.read_csv(r'checkin_1000.csv')
-review = pd.read_csv(r'review_1000.csv')
+business = pd.read_csv(r'./data/business_1000.csv')
+checkin = pd.read_csv(r'./data/checkin_1000.csv')
+review = pd.read_csv(r'./data/review_1000.csv')
 #tip = pd.read_csv(r'C:\Users\USER\Documents\SOYHENRY\LABS\TRABAJO_GRUPAL\trabajofinal\Airflow-Spark\data\tip_1000.csv')
 #user = pd.read_csv(r'C:\Users\USER\Documents\SOYHENRY\LABS\TRABAJO_GRUPAL\trabajofinal\Airflow-Spark\data\user_1000.csv')
 
@@ -39,7 +44,11 @@ review = pd.read_csv(r'review_1000.csv')
 ##################
 
 with st.sidebar:
+<<<<<<< HEAD
    st.image(Image.open('image/logo_vocado.png'))
+=======
+   st.image(Image.open('./image/logo_vocado.png'))
+>>>>>>> ef6bf87899e725d74eef66b28f6397cb151c3f36
 
    selected2 = option_menu(None, ["Home", "My Business", "Competition", "Opportunities", "Settings", "Add business"], 
    icons=['house', 'building', 'globe', 'star', 'gear', 'plus'], 
@@ -52,7 +61,8 @@ with st.sidebar:
         "nav-link": {"font-size": "25px", 
                      "margin":"0px", 
                      "--hover-color": "#16C64D", 
-                     "font-family":"Sans-serif"},
+                     "font-family":"Sans-serif", 
+                     "background-color": "#109138"},
         "nav-link-selected": {"background-color": "#16C64D", 
                               "font-style":"Sans-serif", 
                               "font-weight": "bold",
@@ -75,12 +85,18 @@ if selected2 == "My Business":
 
 ## My Competition
 if selected2 == "Competition":
-   st.title('Competition Admin Center')
+   st.title('Competition')
+   ts.timeseries()
 
 ## My Opportunities
 if selected2 == "Opportunities":
-
-   st.title('Opportunities Admin Center')
-
+   st.title('Opportunities Exploration')
    ml.machine_learning()
  
+# ## Time Series Analysis
+# if selected2 == "Time Series Analysis":
+#    st.title('Time Series Analysis')
+#    ts.timeseries()
+
+
+
