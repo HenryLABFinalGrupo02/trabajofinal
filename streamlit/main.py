@@ -2,10 +2,7 @@ import streamlit as st
 import pandas as pd 
 from streamlit_option_menu import option_menu
 from multiprocessing import Value
-from pages.main import home as m
-from pages.main import business as p
-from pages.main import model as ml
-from pages.main import timeseries as ts
+from pages.main import tabs_functions as tf
 from PIL import Image
 
 st.set_page_config(
@@ -24,9 +21,9 @@ with open('style.css') as f:
 ## IMPORT DATA ###
 ##################
 
-business = pd.read_csv(r'./data/business_1000.csv')
-checkin = pd.read_csv(r'./data/checkin_1000.csv')
-review = pd.read_csv(r'./data/review_1000.csv')
+business = pd.read_csv(r'pages/main/data/business_1000.csv')
+checkin = pd.read_csv(r'pages/main/data/checkin_1000.csv')
+review = pd.read_csv(r'pages/main/data/review_1000.csv')
 #tip = pd.read_csv(r'C:\Users\USER\Documents\SOYHENRY\LABS\TRABAJO_GRUPAL\trabajofinal\Airflow-Spark\data\tip_1000.csv')
 #user = pd.read_csv(r'C:\Users\USER\Documents\SOYHENRY\LABS\TRABAJO_GRUPAL\trabajofinal\Airflow-Spark\data\user_1000.csv')
 
@@ -63,27 +60,27 @@ with st.sidebar:
 ## HOME 
 if selected2 == "Home":
    st.title('Welcome to Vocado Admin Center')
-   m.metricas()
+   tf.metricas()
 
 ## My Business
 if selected2 == "My Business":
    st.title('Business Admin Center')
-   p.select_business()
+   tf.select_business()
 
 ## My Competition
 if selected2 == "Competition":
    st.title('Competition')
-   ts.timeseries()
+   tf.timeseries()
 
 ## My Opportunities
 if selected2 == "Opportunities":
    st.title('Opportunities Exploration')
-   ml.machine_learning()
+   tf.machine_learning()
  
 # ## Time Series Analysis
 # if selected2 == "Time Series Analysis":
 #    st.title('Time Series Analysis')
-#    ts.timeseries()
+#    tf.timeseries()
 
 
 
