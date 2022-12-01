@@ -11,9 +11,9 @@ from PIL import Image
 
 
 
-business = pd.read_csv(r'business_1000.csv')
-checkin = pd.read_csv(r'checkin_1000.csv')
-review = pd.read_csv(r'review_1000.csv')
+business = pd.read_csv(r'C:\Users\julie\OneDrive\Escritorio\trabajogrupal\trabajofinal\streamlit\data\business_1000.csv')
+checkin = pd.read_csv(r'C:\Users\julie\OneDrive\Escritorio\trabajogrupal\trabajofinal\streamlit\data\checkin_1000.csv')
+review = pd.read_csv(r'C:\Users\julie\OneDrive\Escritorio\trabajogrupal\trabajofinal\streamlit\data\review_1000.csv')
 im = Image.open('pages\main\logo.png')
 
 
