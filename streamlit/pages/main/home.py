@@ -1,11 +1,11 @@
 import streamlit as st
 import pandas as pd 
 from multiprocessing import Value
+from os import write
+#from turtle import onclick, onscreenclick
 from typing import List
 from numpy.core.fromnumeric import size
 from PIL import Image
-
-
 
 business = pd.read_csv(r'./data/business_1000.csv')
 checkin = pd.read_csv(r'./data/checkin_1000.csv')
