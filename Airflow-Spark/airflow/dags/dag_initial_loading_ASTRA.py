@@ -29,6 +29,7 @@ from airflow import DAG
 from airflow.operators.python import PythonOperator
 from cassandra.cluster import Cluster
 from cassandra.auth import PlainTextAuthProvider
+from time import sleep
 from functools import reduce
 from tiny_functions import *
 
@@ -71,7 +72,7 @@ def load_top_tips(df):
     session.execute("""
     CREATE TABLE IF NOT EXISTS yelp.top_tips_full(business_id text, number_tips int, PRIMARY KEY((business_id)))
     """)
-
+    sleep(5)
     #### UPLOAD DATAFRAME TO CASSANDRA
     print('UPLOADING DATAFRAME TO CASSANDRA FOR TOP TIPS')
     top_tips2.to_spark().write\
@@ -149,15 +150,7 @@ def load_user_metrics():
         PRIMARY KEY(user_id));
 """) #friends list <text>,
     
-    print('COLUMNS:')
-    print(user_df.columns)
-    print('SHAPE:')
-    print(user_df.shape)
-    print('DATAFRAME COLUMNS JOIN BY ,')
-    #print(','.join(list(user_df.columns)))
-    #print(','.join(['?' for i in list(user_df.columns)]))
-    # print('ALTERING TABLE: DROP COMPACT STORAGE;')
-    # session.execute('ALTER TABLE yelp.user_metrics DROP COMPACT STORAGE')
+    sleep(5)
 
     print('UPLOADING DATAFRAME TO CASSANDRA FOR USER METRICS')
     user_df.to_spark().write\
@@ -204,6 +197,7 @@ def load_tips():
     CREATE TABLE IF NOT EXISTS yelp.tip_full(business_id text, date text, user_id text, compliment_count int, text text,PRIMARY KEY((business_id,date,user_id)))
     """)
 
+    sleep(5)
     #### UPLOAD DATAFRAME TO CASSANDRA
     print('UPLOADING DATAFRAME TO CASSANDRA')
     tip.to_spark().write\
@@ -241,6 +235,7 @@ def load_checkin():
     CREATE TABLE IF NOT EXISTS yelp.checkin_full(business_id text, date list<text>, total int,PRIMARY KEY(business_id))
     """)
 
+    sleep(5)
     #### UPLOAD DATAFRAME TO CASSANDRA
     print('UPLOADING DATAFRAME TO CASSANDRA')
     checkin.to_spark().write\
@@ -348,6 +343,8 @@ def load_business():
         areas int,
         PRIMARY KEY(business_id))
     """)
+
+    sleep(5)
     print('UPLOADING DATAFRAME TO CASSANDRA')
     full_data2.to_spark().write\
     .format("org.apache.spark.sql.cassandra")\
@@ -386,6 +383,8 @@ def load_review():
         cool int,
         PRIMARY KEY(review_id))
     """)
+
+    sleep(5)
     print('UPLOADING DATAFRAME TO CASSANDRA')
     review.to_spark().write\
     .format("org.apache.spark.sql.cassandra")\
@@ -446,6 +445,8 @@ def load_user():
         compliment_photos int,
     PRIMARY KEY(user_id))
 """)
+
+    sleep(5)
     print('UPLOADING DATAFRAME TO CASSANDRA')
     user.to_spark().write\
     .format("org.apache.spark.sql.cassandra")\
@@ -476,8 +477,9 @@ def load_sentiment_business():
         pos_reviews int,
         PRIMARY KEY(business_id))
 """)
+    sleep(5)
     print('UPLOADING DATAFRAME TO CASSANDRA')
-    sentiment.to_spark().write\
+    sentiment2.to_spark().write\
     .format("org.apache.spark.sql.cassandra")\
     .mode('append')\
     .options(table="sentiment_business_full", keyspace="yelp")\
