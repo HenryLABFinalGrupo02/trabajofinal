@@ -5,17 +5,12 @@ from multiprocessing import Value
 from pages.main import home as m
 from pages.main import business as p
 from pages.main import model as ml
-<<<<<<< HEAD
+from pages.main import timeseries as ts
 from PIL import Image
 
 ##################
 ## PAGE CONFIG ###
 ##################
-=======
-from pages.main import timeseries as ts
-
-from PIL import Image
->>>>>>> 6bdb230a01ff2940037e89bd85ce794e99b0e462
 
 st.set_page_config(
    page_title="Vocado",
@@ -24,8 +19,7 @@ st.set_page_config(
    menu_items = {
          'Get Help': 'https://github.com/HenryLABFinalGrupo02/trabajofinal',
          'Report a bug': "https://github.com/HenryLABFinalGrupo02/trabajofinal",
-         'About': "# This is a header. This is an *VOCADO* cool app!"}
-)
+         'About': "# This is a header. This is an *VOCADO* cool app!"})
 
 with open('style.css') as f:
     st.markdown(f'<style>{f.read()}</style>', unsafe_allow_html=True)
@@ -47,7 +41,7 @@ review = pd.read_csv(r'./data/review_1000.csv')
 with st.sidebar:
    st.image(Image.open('.\image\logo_vocado.png'))
 
-   selected2 = option_menu(None, ["Home", "My Business", "Competition", "Opportunities", "Time Series Analysis", "Settings", "Add business"], 
+   selected2 = option_menu(None, ["Home", "My Business", "Competition", "Opportunities", "Settings", "Add business"], 
    icons=['house', 'building', 'globe', 'star', 'gear', 'plus'], 
    menu_icon="cast", default_index=0, orientation="vertical",
    styles={
@@ -82,16 +76,17 @@ if selected2 == "My Business":
 
 ## My Competition
 if selected2 == "Competition":
-   st.title('Competition Admin Center')
+   st.title('Competition')
+   ts.timeseries()
 
 ## My Opportunities
 if selected2 == "Opportunities":
-   st.title('Opportunities Admin Center')
+   st.title('Opportunities Exploration')
    ml.machine_learning()
  
-## Time Series Analysis
-if selected2 == "Time Series Analysis":
-   st.title('Time Series Analysis')
-   ts.timeseries()
+# ## Time Series Analysis
+# if selected2 == "Time Series Analysis":
+#    st.title('Time Series Analysis')
+#    ts.timeseries()
 
 

@@ -18,7 +18,7 @@ def timeseries():
     df = pd.read_csv('./data/forecasting.csv', parse_dates=['month'], index_col='month')
     df = df['2010':]
 
-    st.title('Time Series Visualization')
+    # st.title('Time Series Visualization')
     st.markdown('Reviews/Tips/Checkins by Month for the Top Brands in USA'
     )
 
@@ -26,7 +26,6 @@ def timeseries():
     st.text("Select you favourite brand")
     top_brand_selected = st.selectbox('Select brand', df.columns.tolist())
 
-    
     st.plotly_chart(df[top_brand_selected].plot(title = 'Total Review/Tips/Checkins Counts on Yelp for Top Brands'))
 
 
