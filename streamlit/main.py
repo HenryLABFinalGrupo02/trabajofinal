@@ -4,15 +4,10 @@ from streamlit_option_menu import option_menu
 from multiprocessing import Value
 from pages.main import home as m
 from pages.main import business as p
-<<<<<<< HEAD
 from pages.main import model as ml
-=======
-from PIL import Image
+from pages.main import timeseries as ts
 
-##################
-## PAGE CONFIG ###
-##################
->>>>>>> a56658d55ed1db92a8945702d088064c12a49d91
+from PIL import Image
 
 st.set_page_config(
    page_title="Vocado",
@@ -31,9 +26,9 @@ with open('style.css') as f:
 ## IMPORT DATA ###
 ##################
 
-business = pd.read_csv(r'business_1000.csv')
-checkin = pd.read_csv(r'checkin_1000.csv')
-review = pd.read_csv(r'review_1000.csv')
+business = pd.read_csv(r'./data/business_1000.csv')
+checkin = pd.read_csv(r'./data/checkin_1000.csv')
+review = pd.read_csv(r'./data/review_1000.csv')
 #tip = pd.read_csv(r'C:\Users\USER\Documents\SOYHENRY\LABS\TRABAJO_GRUPAL\trabajofinal\Airflow-Spark\data\tip_1000.csv')
 #user = pd.read_csv(r'C:\Users\USER\Documents\SOYHENRY\LABS\TRABAJO_GRUPAL\trabajofinal\Airflow-Spark\data\user_1000.csv')
 
@@ -42,9 +37,9 @@ review = pd.read_csv(r'review_1000.csv')
 ##################
 
 with st.sidebar:
-   st.image(Image.open('logo_vocado.png'))
+   st.image(Image.open('./image/logo_vocado.png'))
 
-   selected2 = option_menu(None, ["Home", "My Business", "Competition", "Opportunities", "Settings", "Add business"], 
+   selected2 = option_menu(None, ["Home", "My Business", "Competition", "Opportunities", "Time Series Analysis", "Settings", "Add business"], 
    icons=['house', 'building', 'globe', 'star', 'gear', 'plus'], 
    menu_icon="cast", default_index=0, orientation="vertical",
    styles={
@@ -87,3 +82,9 @@ if selected2 == "Opportunities":
 
    ml.machine_learning()
  
+## Time Series Analysis
+if selected2 == "Time Series Analysis":
+   st.title('Time Series Analysis')
+   ts.timeseries()
+
+

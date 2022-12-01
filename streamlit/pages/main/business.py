@@ -1,4 +1,4 @@
-import conexion
+#import conexion
 import streamlit as st
 import pandas as pd 
 from multiprocessing import Value
@@ -18,7 +18,7 @@ def cql_to_pandas(cql_query,cassandra_session):
 
 
 def select_business(): 
-    business = pd.read_csv(r'business_1000.csv')
+    business = pd.read_csv(r'./data/business_1000.csv')
     name_business = business['name']
 
     option = st.selectbox(
