@@ -1,15 +1,17 @@
 import streamlit as st
 import pandas as pd 
-from streamlit_option_menu import option_menu
-from cgitb import text
 from multiprocessing import Value
-from os import write
-from turtle import onclick, onscreenclick
 from typing import List
-from numpy.core.fromnumeric import size
-#import conexion as cn
 
+def selete_business(): 
+    business = pd.read_csv(r'business_1000.csv')
+    name_business = business['name']
 
+    option = st.selectbox(
+        'My businesses',
+        (name_business.to_list()))
+
+    st.write('You selected:', option)
 
 
 #def func():
