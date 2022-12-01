@@ -9,6 +9,7 @@ from typing import List
 from numpy.core.fromnumeric import size
 from pages.main import home as m
 from pages.main import business as p
+from pages.main import model as ml
 
 st.set_page_config(
    page_title="Project Henry",
@@ -132,4 +133,8 @@ if selected2 == "Competition":
 
 ## My Opportunities
 if selected2 == "Opportunities":
+
    st.title('Opportunities Admin Center')
+
+   ml.machine_learning()
+ 
