@@ -1,4 +1,4 @@
-import conexion
+#import conexion
 import streamlit as st
 import pandas as pd 
 from multiprocessing import Value
@@ -8,32 +8,32 @@ from typing import List
 
 
 
-def cql_to_pandas(cql_query,cassandra_session):
-    def pandaspark_factory(colnames, rows):\
-        return pd.DataFrame(rows, columns=colnames)
-    cassandra_session.row_factory = pandaspark_factory
-    cassandra_session.default_fetch_size = None
-    result = cassandra_session.execute(cql_query, timeout=None)
-    return result._current_rows
+#def cql_to_pandas(cql_query,cassandra_session):
+#    def pandaspark_factory(colnames, rows):\
+#        return pd.DataFrame(rows, columns=colnames)
+#    cassandra_session.row_factory = pandaspark_factory
+#    cassandra_session.default_fetch_size = None
+#    result = cassandra_session.execute(cql_query, timeout=None)
+#    return result._current_rows
 
 
-def select_business(): 
-    business = pd.read_csv(r'business_1000.csv')
-    name_business = business['name']
-
-    option = st.selectbox(
-        'My businesses',
-        (name_business.to_list()))
-
-    st.write('You selected:', option)
+#def select_business(): 
+#    #business = pd.read_csv(r'business_1000.csv')
+#    #name_business = business['name']
+#
+#    option = st.selectbox(
+#        'My businesses',
+#        (name_business.to_list()))
+#
+#    st.write('You selected:', option)
 
 
 #def func():
 #    with st.form(key='searchForm'):
 #        search_movie = st.text_input("Search Movie")
 #        ubmit_button = st.form_submit_button(label='Search')
-#business = pd.read_csv(r'C:\Users\julie\OneDrive\Escritorio\trabajogrupal\trabajofinal\streamlit\business_1000.csv')
-#name_business = business['name']
+business = pd.read_csv(r'C:\Users\julie\OneDrive\Escritorio\trabajogrupal\trabajofinal\streamlit\data\business_1000.csv')
+name_business = business['name']
 #checkin = pd.read_csv(r'C:\Users\julie\OneDrive\Escritorio\trabajogrupal\trabajofinal\streamlit\checkin_1000.csv')
 #review = pd.read_csv(r'C:\Users\julie\OneDrive\Escritorio\trabajogrupal\trabajofinal\streamlit\review_1000.csv') 
 #business = cn.businessdf
@@ -66,10 +66,10 @@ def select_business():
 
 
 def selete_business(): 
-    business_name = cql_to_pandas("""select name from yelp.business ALLOW FILTERING;""",conexion.seccion)
+    #business_name = cql_to_pandas("""select name from yelp.business ALLOW FILTERING;""",conexion.seccion)
     option = st.selectbox(
         'My businesses',
-        (business_name.to_list()))
+        (name_business.to_list()))
 
     st.write('You selected:', option)
     #print(option)
