@@ -42,6 +42,5 @@ def metricas():
    metrics[5].metric('Number_visits', number_visits)
 
 
-def l():
-   st.image(im,width=600)
+
    
