@@ -65,11 +65,11 @@ def load_top_tips(df):
     session = connect_to_astra()
 
     print('DROPPING TABLE IF EXISTS')
-    session.execute("DROP TABLE IF EXISTS yelp.top_tips;")
+    session.execute("DROP TABLE IF EXISTS yelp.top_tips_full;")
 
     print('CREATING TABLE FOR TOP TIPS')
     session.execute("""
-    CREATE TABLE IF NOT EXISTS yelp.top_tips(business_id text, number_tips int, PRIMARY KEY((business_id)))
+    CREATE TABLE IF NOT EXISTS yelp.top_tips_full(business_id text, number_tips int, PRIMARY KEY((business_id)))
     """)
 
     #### UPLOAD DATAFRAME TO CASSANDRA
@@ -77,7 +77,7 @@ def load_top_tips(df):
     top_tips2.to_spark().write\
     .format("org.apache.spark.sql.cassandra")\
     .mode('append')\
-    .options(table="top_tips", keyspace="yelp")\
+    .options(table="top_tips_full", keyspace="yelp")\
     .save()
     print('DONE')
     print('DONE FOR TOP TIPS')
@@ -93,7 +93,7 @@ def load_user_metrics():
     friends_number, Score_influencer, Influencer, user_id
     """
     print('READING USER FILE')
-    user = ps.read_json(r'/opt/data/initial_load/user.json', lines=True)
+    user = ps.read_json(r'/opt/data/initial_load/user.json')
     print('DROPPING DUPLICATED ROWS')
     user = user.drop_duplicates()
 
@@ -132,11 +132,11 @@ def load_user_metrics():
     session = connect_to_astra()
     
     print('DROPPING TABLE IF EXISTS')
-    session.execute("DROP TABLE IF EXISTS yelp.user_metrics;")
+    session.execute("DROP TABLE IF EXISTS yelp.user_metrics_full;")
     
     print('CREATING TABLE FOR USER METRICS')
     session.execute("""
-    CREATE TABLE IF NOT EXISTS yelp.user_metrics(
+    CREATE TABLE IF NOT EXISTS yelp.user_metrics_full(
         user_id text, 
         n_ints_rec int,
         n_interactions_send int,
@@ -163,7 +163,7 @@ def load_user_metrics():
     user_df.to_spark().write\
     .format("org.apache.spark.sql.cassandra")\
     .mode('append')\
-    .options(table="user_metrics", keyspace="yelp")\
+    .options(table="user_metrics_full", keyspace="yelp")\
     .save()
     print('DONE')
 
@@ -196,12 +196,12 @@ def load_tips():
     session = connect_to_astra()
 
     print('DROPPING TABLE IF EXISTS')
-    session.execute("DROP TABLE IF EXISTS yelp.tips;")
+    session.execute("DROP TABLE IF EXISTS yelp.tip_full;")
 
     #### CREATE KEYSPACE AND TABLE
     print('CREATING TABLE')
     session.execute("""
-    CREATE TABLE IF NOT EXISTS yelp.tip(business_id text, date text, user_id text, compliment_count int, text text,PRIMARY KEY((business_id,date,user_id)))
+    CREATE TABLE IF NOT EXISTS yelp.tip_full(business_id text, date text, user_id text, compliment_count int, text text,PRIMARY KEY((business_id,date,user_id)))
     """)
 
     #### UPLOAD DATAFRAME TO CASSANDRA
@@ -209,7 +209,7 @@ def load_tips():
     tip.to_spark().write\
     .format("org.apache.spark.sql.cassandra")\
     .mode('append')\
-    .options(table="tip", keyspace="yelp")\
+    .options(table="tip_full", keyspace="yelp")\
     .save()
     print('DONE')
 
@@ -234,11 +234,11 @@ def load_checkin():
     session = connect_to_astra()
 
     print('DROPPING TABLE IF EXISTS')
-    session.execute("DROP TABLE IF EXISTS yelp.checkin;")
+    session.execute("DROP TABLE IF EXISTS yelp.checkin_full;")
 
     print('CREATING TABLE')
     session.execute("""
-    CREATE TABLE IF NOT EXISTS yelp.checkin(business_id text, date list<text>, total int,PRIMARY KEY(business_id))
+    CREATE TABLE IF NOT EXISTS yelp.checkin_full(business_id text, date list<text>, total int,PRIMARY KEY(business_id))
     """)
 
     #### UPLOAD DATAFRAME TO CASSANDRA
@@ -246,7 +246,7 @@ def load_checkin():
     checkin.to_spark().write\
     .format("org.apache.spark.sql.cassandra")\
     .mode('append')\
-    .options(table="checkin", keyspace="yelp")\
+    .options(table="checkin_full", keyspace="yelp")\
     .save()
     print('DONE')
 
@@ -292,13 +292,13 @@ def load_business():
     session = connect_to_astra()
 
     print('DROPPING TABLE IF EXISTS')
-    session.execute("DROP TABLE IF EXISTS yelp.business;")
+    session.execute("DROP TABLE IF EXISTS yelp.business_full;")
 
     print(f'FULL DATA COLUMNS:\n{full_data.columns.to_list()}')
 
     print('CREATING TABLE')
     session.execute("""
-    CREATE TABLE IF NOT EXISTS yelp.business(
+    CREATE TABLE IF NOT EXISTS yelp.business_full(
         business_id text,
         name text,
         address text,
@@ -352,7 +352,7 @@ def load_business():
     full_data2.to_spark().write\
     .format("org.apache.spark.sql.cassandra")\
     .mode('append')\
-    .options(table="business", keyspace="yelp")\
+    .options(table="business_full", keyspace="yelp")\
     .save()
     print('DONE')
 
@@ -369,9 +369,12 @@ def load_review():
 
     session = connect_to_astra()
 
+    print('DROPPING TABLE IF EXISTS')
+    session.execute("DROP TABLE IF EXISTS yelp.review_full;")
+
     print('CREATING TABLE')
     session.execute("""
-    CREATE TABLE IF NOT EXISTS yelp.review(
+    CREATE TABLE IF NOT EXISTS yelp.review_full(
         review_id text,
         user_id text,
         business_id text,
@@ -387,7 +390,7 @@ def load_review():
     review.to_spark().write\
     .format("org.apache.spark.sql.cassandra")\
     .mode('append')\
-    .options(table="review", keyspace="yelp")\
+    .options(table="review_full", keyspace="yelp")\
     .save()
     print('DONE')
 
@@ -395,7 +398,7 @@ def load_review():
 
 def load_user():
     print('READING USER FILE')
-    user = ps.read_json(r'/opt/data/initial_load/user.json', lines=True)
+    user = ps.read_json(r'/opt/data/initial_load/user.json')
     print('DROPPING DUPLICATED ROWS')
     user = user.drop_duplicates()
 
@@ -416,11 +419,11 @@ def load_user():
     session = connect_to_astra()
 
     print('DROPPING TABLE IF EXISTS')
-    session.execute("DROP TABLE IF EXISTS yelp.user;")
+    session.execute("DROP TABLE IF EXISTS yelp.user_full;")
 
     print('CREATING TABLE')
     session.execute("""
-    CREATE TABLE IF NOT EXISTS yelp.user(
+    CREATE TABLE IF NOT EXISTS yelp.user_full(
         user_id text,
         name text,
         review_count int,
@@ -447,14 +450,14 @@ def load_user():
     user.to_spark().write\
     .format("org.apache.spark.sql.cassandra")\
     .mode('append')\
-    .options(table="user", keyspace="yelp")\
+    .options(table="user_full", keyspace="yelp")\
     .save()
     print('DONE')
 
 
 
 def load_sentiment_business():
-    sentiment = pd.read_csv(r'./data/initial_load/sentiment_ok_unique.csv')
+    sentiment = pd.read_csv(r'./data/sentiment_ok_unique.csv')
 
     sentiment.rename(columns=lower_col_names(sentiment.columns), inplace=True)
 
@@ -462,9 +465,12 @@ def load_sentiment_business():
 
     session = connect_to_astra()
     
+    print('DROPPING TABLE IF EXISTS')
+    session.execute("DROP TABLE IF EXISTS yelp.sentiment_business_full;")
+
     print('CREATING TABLE')
     session.execute("""
-    CREATE TABLE IF NOT EXISTS yelp.sentiment_business(
+    CREATE TABLE IF NOT EXISTS yelp.sentiment_business_full(
         business_id text,
         neg_reviews int, 
         pos_reviews int,
@@ -474,7 +480,7 @@ def load_sentiment_business():
     sentiment.to_spark().write\
     .format("org.apache.spark.sql.cassandra")\
     .mode('append')\
-    .options(table="sentiment_business", keyspace="yelp")\
+    .options(table="sentiment_business_full", keyspace="yelp")\
     .save()
     print('DONE')
 
@@ -496,4 +502,6 @@ with DAG(dag_id='Test387',start_date=datetime.datetime(2022,8,25),schedule_inter
 
     t_load_user_metrics = PythonOperator(task_id='load_user_metrics',python_callable=load_user_metrics)
 
-    t_load_tips  >> t_load_review >> t_load_user_metrics >> t_load_user >> t_load_checkin >> t_load_bussiness
+    t_load_sentiment_business = PythonOperator(task_id='load_sentiment_business',python_callable=load_sentiment_business)
+
+    t_load_user_metrics >> t_load_user >> t_load_checkin >> t_load_bussiness >> t_load_tips  >> t_load_review >> t_load_sentiment_business
