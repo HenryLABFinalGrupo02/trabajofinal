@@ -12,7 +12,6 @@ checkin = pd.read_csv(r'./data/checkin_1000.csv')
 review = pd.read_csv(r'./data/review_1000.csv')
 im = Image.open(r'./image/logo_vocado.png')
 
-
 business = pd.read_csv(r'data\business_1000.csv')
 checkin = pd.read_csv(r'data\checkin_1000.csv')
 review = pd.read_csv(r'data\review_1000.csv')

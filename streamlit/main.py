@@ -8,10 +8,7 @@ from pages.main import model as ml
 from pages.main import timeseries as ts
 from PIL import Image
 
-##################
-## PAGE CONFIG ###
-##################
-
+>>>>>>> 2d857c5e318ba6819f8fe34fc470cda101928ffe
 st.set_page_config(
    page_title="Vocado",
    page_icon="🥑",  
@@ -39,7 +36,7 @@ review = pd.read_csv(r'./data/review_1000.csv')
 ##################
 
 with st.sidebar:
-   st.image(Image.open('.\image\logo_vocado.png'))
+   st.image(Image.open('./image/logo_vocado.png'))
 
    selected2 = option_menu(None, ["Home", "My Business", "Competition", "Opportunities", "Settings", "Add business"], 
    icons=['house', 'building', 'globe', 'star', 'gear', 'plus'], 

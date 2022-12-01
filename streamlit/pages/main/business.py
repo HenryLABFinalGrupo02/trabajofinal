@@ -1,8 +1,13 @@
-#import conexion
 import streamlit as st
 import pandas as pd 
 from multiprocessing import Value
 from typing import List
+from cassandra.cluster import Cluster
+from cassandra.auth import PlainTextAuthProvider
+import json
+from pathlib import Path
+
+
 
 def cql_to_pandas(cql_query,cassandra_session):
     """
@@ -19,23 +24,51 @@ def cql_to_pandas(cql_query,cassandra_session):
     result = cassandra_session.execute(cql_query, timeout=None)
     return result._current_rows
 
+cloud_config= {'secure_connect_bundle': r'secure-connect-henry.zip'}
+auth_provider = PlainTextAuthProvider(json.load(open(r'log_in.json'))['log_user'], json.load(open(r'log_in.json'))['log_password'])
+cluster = Cluster(cloud=cloud_config, auth_provider=auth_provider)
+session = cluster.connect()
+
+
+business = cql_to_pandas("""select * from yelp.business ALLOW FILTERING;""",session)
+#checkin = cql_to_pandas("""select * from yelp.checkin ALLOW FILTERING;""",session)
+#review = cql_to_pandas("""select * from yelp.review ALLOW FILTERING;""",session)
+review = pd.read_csv(r'C:\Users\julie\OneDrive\Escritorio\trabajogrupal\trabajofinal\streamlit\data\review_1000.csv') 
+checkin = pd.read_csv(r'C:\Users\julie\OneDrive\Escritorio\trabajogrupal\trabajofinal\streamlit\data\checkin_1000.csv')
+
+
+def l(filtro):
+   ids = filtro['business_id'].to_list()
+   review_stars = filtro['stars'].mean()
+   review1 = review.loc[review['business_id'].isin(ids)]
+   checkin1 = checkin.loc[checkin['business_id'].isin(ids)]
+   
+   review1['positive_score'] = review1['pos_reviews'] / ( review1['neg_reviews'] + review1['pos_reviews'])
+   Positive_sentiment = review1['positive_score'].mean()
+   review_total = review1.shape[0]
+   number_visits = checkin1['number_visits'].sum()   
+   st.markdown("### Account Summary")
+   
+   metrics = st.columns(6)
+   
+   metrics[0].metric('Review Total',review_total, delta=None, delta_color="normal")
+   metrics[1].metric('Review stars', round(review_stars, 2), delta=None, delta_color="normal")
+   metrics[2].metric('Positive sentiment', f'{round(Positive_sentiment, 2)*100}%', delta=None, delta_color="normal")
+   metrics[3].metric('Influencer Score', '98,7%', delta=None, delta_color="normal")
+   metrics[4].metric('Top Hour', '18:00', delta=None, delta_color="normal")
+   metrics[5].metric('Number_visits', number_visits)
+        
+
+
+
 def select_business(): 
-    """
-    The function reads in a csv file with a list of business names, and then creates a multi-select
-    widget that allows the user to select multiple business names from the list. 
-    """
-    business = pd.read_csv(r'data/business_1000.csv')
-    name_business = business['name']
-
-    option = st.multiselect(
-        'My businesses',
-        (name_business.to_list()))
-
-    st.write('You selected:', option)
-
-def selete_business(): 
-    business_name = cql_to_pandas("""select name from yelp.business ALLOW FILTERING;""",conexion.seccion)
+    name_business = cql_to_pandas("""select name from yelp.business ALLOW FILTERING;""",session)
     option = st.selectbox(
         'My businesses',
-        (business_name.to_list()))
+        (name_business))
+
     st.write('You selected:', option)
+    if option in option:
+        filtro = business[business['name'] == option]
+        l(filtro)
+
