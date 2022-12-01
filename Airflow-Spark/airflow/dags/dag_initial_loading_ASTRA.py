@@ -496,4 +496,4 @@ with DAG(dag_id='Test387',start_date=datetime.datetime(2022,8,25),schedule_inter
 
     t_load_user_metrics = PythonOperator(task_id='load_user_metrics',python_callable=load_user_metrics)
 
-    t_load_tips  >> t_load_review >> t_load_user_metrics >> t_load_user >> t_load_checkin
+    t_load_tips  >> t_load_review >> t_load_user_metrics >> t_load_user >> t_load_checkin >> t_load_bussiness
