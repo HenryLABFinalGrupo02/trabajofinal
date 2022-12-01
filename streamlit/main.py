@@ -3,8 +3,10 @@ import pandas as pd
 from streamlit_option_menu import option_menu
 from multiprocessing import Value
 from pages.main import home as m
-from pages.main import business as p
+#from pages.main import business as p
 from PIL import Image
+from cassandra.cluster import Cluster
+from cached_data.data import unique_business_id
 
 ##################
 ## PAGE CONFIG ###
@@ -27,9 +29,12 @@ with open('style.css') as f:
 ## IMPORT DATA ###
 ##################
 
-business = pd.read_csv(r'business_1000.csv')
-checkin = pd.read_csv(r'checkin_1000.csv')
-review = pd.read_csv(r'review_1000.csv')
+
+#business = pd.read_csv(r'business_1000.csv')
+
+#checkin = pd.read_csv(r'checkin_1000.csv')
+
+#review = pd.read_csv(r'review_1000.csv')
 #tip = pd.read_csv(r'C:\Users\USER\Documents\SOYHENRY\LABS\TRABAJO_GRUPAL\trabajofinal\Airflow-Spark\data\tip_1000.csv')
 #user = pd.read_csv(r'C:\Users\USER\Documents\SOYHENRY\LABS\TRABAJO_GRUPAL\trabajofinal\Airflow-Spark\data\user_1000.csv')
 
@@ -38,8 +43,7 @@ review = pd.read_csv(r'review_1000.csv')
 ##################
 
 with st.sidebar:
-   st.image(Image.open('logo_vocado.png'))
-
+   st.image(Image.open('image/logo_vocado.png'))
    selected2 = option_menu(None, ["Home", "My Business", "Competition", "Opportunities", "Settings", "Add business"], 
    icons=['house', 'building', 'globe', 'star', 'gear', 'plus'], 
    menu_icon="cast", default_index=0, orientation="vertical",
@@ -57,6 +61,7 @@ with st.sidebar:
                               "font-weight": "bold",
                               "color":"#121212"},
     })
+   selected_bussiness = st.selectbox('Business',unique_business_id())
 
 #####################
 ## IMPORT FUNTIONS ##
@@ -65,7 +70,7 @@ with st.sidebar:
 ## HOME 
 if selected2 == "Home":
    st.title('Welcome to Vocado Admin Center')
-   m.metricas()
+   m.metricas(selected_bussiness)
 
 ## My Business
 if selected2 == "My Business":
