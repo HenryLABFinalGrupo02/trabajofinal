@@ -13,10 +13,12 @@ from pages.main import business as p
 st.set_page_config(
    page_title="Project Henry",
    page_icon="👋",  
-   layout="wide"
+   layout="wide", 
+   menu_items = {
+         'Get Help': 'https://www.extremelycoolapp.com/help',
+         'Report a bug': "https://www.extremelycoolapp.com/bug",
+         'About': "# This is a header. This is an *extremely* cool app!"}
 )
-
-st.title('Welcome to Vocado Admin Center')
 
 with open('style.css') as f:
     st.markdown(f'<style>{f.read()}</style>', unsafe_allow_html=True)
@@ -62,15 +64,24 @@ review = pd.read_csv(r'review_1000.csv')
 #    )
 
 
+##################
+###### MENU ######
+##################
+
 with st.sidebar:
-   selected2 = option_menu(None, ["Home", "My Business", 'Settings'], 
-   icons=['house', 'cloud-upload', 'gear'], 
+   selected2 = option_menu(None, ["Home", "My Business", "Competition", "Opportunities", "Settings", "Add business"], 
+   icons=['house', 'building', 'building', 'gear', 'building', 'plus'], 
    menu_icon="cast", default_index=0, orientation="vertical",
    styles={
         "container": {"padding": "0!important", "background-color": "#109138"},
         "icon": {"color": "#F4C01E", "font-size": "25px"}, 
-        "nav-link": {"font-size": "25px", "text-align": "left", "margin":"0px", "--hover-color": "#16C64D"},
-        "nav-link-selected": {"background-color": "#16C64D" },
+        "nav-link": {"font-size": "25px", "text-align": "left", 
+                     "margin":"0px", 
+                     "--hover-color": "#16C64D"},
+        "nav-link-selected": {"background-color": "#16C64D", 
+                              "font-style":"Sans-serif", 
+                              "font-weight": "bold",
+                              "color":"#000000"},
     })
 
 ## HORIZONTAL ##
@@ -104,11 +115,21 @@ with st.sidebar:
 # business_name = business['name'].to_list()
 # business_name
 
-
 ## HOME ## 
 if selected2 == "Home":
+   st.title('Welcome to Vocado Admin Center')
    m.metricas()
 
 ## My Business
 if selected2 == "My Business":
-   p.func()
+   st.title('Business Admin Center')
+   p.selete_business()
+
+## My Competition
+if selected2 == "Competition":
+   st.title('Competition Admin Center')
+
+
+## My Opportunities
+if selected2 == "Opportunities":
+   st.title('Opportunities Admin Center')
