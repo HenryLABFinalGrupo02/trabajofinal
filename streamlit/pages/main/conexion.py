@@ -1,3 +1,4 @@
+import cassandra
 from cassandra.auth import PlainTextAuthProvider 
 from cassandra.cluster import Cluster
 import json
@@ -15,14 +16,15 @@ def connect_to_astra():
 
 seccion = connect_to_astra()
 
-seccion.execute('use yelp;')
-#a = 'neWdmzHgbpqSx62jynDd7A'
+#seccion.execute('use yelp;')
+#a = 'tYCok-NtWvg8_k7woeB83w'
 
-#review = seccion.execute('select * from yelp.review where business_id = neWdmzHgbpqSx62jynDd7A ;')
+#review = seccion.execute("""select * from yelp.review where business_id='{}' ALLOW FILTERING;""".format(a))
 #reviewdf = pd.DataFrame(review)
 #print(reviewdf)
 #business = seccion.execute('select * from yelp.business;')
 #businessdf = pd.DataFrame(business)
-
+#
 #checkin = seccion.execute('select * from yelp.checkin;')
 #checkindf = pd.DataFrame(checkin)
+#print(checkindf)
