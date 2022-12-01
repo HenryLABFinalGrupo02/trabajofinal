@@ -4,7 +4,7 @@ from streamlit_option_menu import option_menu
 from cgitb import text
 from multiprocessing import Value
 from os import write
-from turtle import onclick, onscreenclick
+#from turtle import onclick, onscreenclick
 from typing import List
 from numpy.core.fromnumeric import size
 from PIL import Image
