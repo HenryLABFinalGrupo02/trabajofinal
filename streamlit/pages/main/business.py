@@ -3,7 +3,7 @@ import pandas as pd
 from multiprocessing import Value
 from typing import List
 
-def selete_business(): 
+def select_business(): 
     business = pd.read_csv(r'business_1000.csv')
     name_business = business['name']
 
