@@ -77,7 +77,7 @@ def load_top_tips(df):
     top_tips2.to_spark().write\
     .format("org.apache.spark.sql.cassandra")\
     .mode('append')\
-    .options(table="business", keyspace="yelp")\
+    .options(table="top_tips", keyspace="yelp")\
     .save()
     print('DONE')
     print('DONE FOR TOP TIPS')
