@@ -5,8 +5,15 @@ from multiprocessing import Value
 from pages.main import home as m
 from pages.main import business as p
 from pages.main import model as ml
+<<<<<<< HEAD
 from PIL import Image
 
+=======
+from pages.main import timeseries as ts
+
+from PIL import Image
+
+>>>>>>> 2d857c5e318ba6819f8fe34fc470cda101928ffe
 st.set_page_config(
    page_title="Vocado",
    page_icon="🥑",  
@@ -24,10 +31,17 @@ with open('style.css') as f:
 ## IMPORT DATA ###
 ##################
 
+<<<<<<< HEAD
 #business = pd.read_csv(r'business_1000.csv')
 #checkin = pd.read_csv(r'checkin_1000.csv')
 #review = pd.read_csv(r'review_1000.csv')
 ##tip = pd.read_csv(r'C:\Users\USER\Documents\SOYHENRY\LABS\TRABAJO_GRUPAL\trabajofinal\Airflow-Spark\data\tip_1000.csv')
+=======
+business = pd.read_csv(r'./data/business_1000.csv')
+checkin = pd.read_csv(r'./data/checkin_1000.csv')
+review = pd.read_csv(r'./data/review_1000.csv')
+#tip = pd.read_csv(r'C:\Users\USER\Documents\SOYHENRY\LABS\TRABAJO_GRUPAL\trabajofinal\Airflow-Spark\data\tip_1000.csv')
+>>>>>>> 2d857c5e318ba6819f8fe34fc470cda101928ffe
 #user = pd.read_csv(r'C:\Users\USER\Documents\SOYHENRY\LABS\TRABAJO_GRUPAL\trabajofinal\Airflow-Spark\data\user_1000.csv')
 
 ##################
@@ -35,9 +49,13 @@ with open('style.css') as f:
 ##################
 
 with st.sidebar:
+<<<<<<< HEAD
    st.image(Image.open('image\logo_vocado.png'))
+=======
+   st.image(Image.open('./image/logo_vocado.png'))
+>>>>>>> 2d857c5e318ba6819f8fe34fc470cda101928ffe
 
-   selected2 = option_menu(None, ["Home", "My Business", "Competition", "Opportunities", "Settings", "Add business"], 
+   selected2 = option_menu(None, ["Home", "My Business", "Competition", "Opportunities", "Time Series Analysis", "Settings", "Add business"], 
    icons=['house', 'building', 'globe', 'star', 'gear', 'plus'], 
    menu_icon="cast", default_index=0, orientation="vertical",
    styles={
@@ -80,3 +98,10 @@ if selected2 == "Opportunities":
 
    ml.machine_learning()
  
+## Time Series Analysis
+if selected2 == "Time Series Analysis":
+   st.title('Time Series Analysis')
+   ts.timeseries()
+
+
+
