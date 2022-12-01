@@ -1,3 +1,4 @@
+#import conexion
 import streamlit as st
 import pandas as pd 
 from multiprocessing import Value
