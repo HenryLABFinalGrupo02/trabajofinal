@@ -34,7 +34,7 @@ def eval_model(model, train, val):
 
 def timeseries():
 
-    df = pd.read_csv('./data/forecasting.csv', parse_dates=['month'], index_col='month')
+    df = pd.read_csv('pages/main/data/forecasting.csv', parse_dates=['month'], index_col='month')
     df = df['2010':]
 
     # st.title('Time Series Visualization')

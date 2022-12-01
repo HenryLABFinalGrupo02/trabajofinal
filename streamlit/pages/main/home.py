@@ -7,14 +7,10 @@ from typing import List
 from numpy.core.fromnumeric import size
 from PIL import Image
 
-business = pd.read_csv(r'./data/business_1000.csv')
-checkin = pd.read_csv(r'./data/checkin_1000.csv')
-review = pd.read_csv(r'./data/review_1000.csv')
-im = Image.open(r'./image/logo_vocado.png')
-
-business = pd.read_csv(r'data/business_1000.csv')
-checkin = pd.read_csv(r'data/checkin_1000.csv')
-review = pd.read_csv(r'data/review_1000.csv')
+business = pd.read_csv(r'pages/main/data/business_1000.csv')
+checkin = pd.read_csv(r'pages/main/data/checkin_1000.csv')
+review = pd.read_csv(r'pages/main/data/review_1000.csv')
+im = Image.open(r'image/logo_vocado.png')
 
 def metricas(): 
    review_stars = business['stars'].mean()

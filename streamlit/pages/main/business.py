@@ -6,6 +6,7 @@ from cassandra.cluster import Cluster
 from cassandra.auth import PlainTextAuthProvider
 import json
 from pathlib import Path
+import os
 
 def cql_to_pandas(cql_query,cassandra_session):
     """
@@ -31,8 +32,9 @@ session = cluster.connect()
 business = cql_to_pandas("""select * from yelp.business ALLOW FILTERING;""",session)
 #checkin = cql_to_pandas("""select * from yelp.checkin ALLOW FILTERING;""",session)
 #review = cql_to_pandas("""select * from yelp.review ALLOW FILTERING;""",session)
-review = pd.read_csv(r'C:\Users\julie\OneDrive\Escritorio\trabajogrupal\trabajofinal\streamlit\data\review_1000.csv') 
-checkin = pd.read_csv(r'C:\Users\julie\OneDrive\Escritorio\trabajogrupal\trabajofinal\streamlit\data\checkin_1000.csv')
+review = pd.read_csv(r'pages/main/data/review_1000.csv')
+checkin = pd.read_csv(r'pages/main/data/checkin_1000.csv')
+print(os.listdir)
 
 
 def l(filtro):

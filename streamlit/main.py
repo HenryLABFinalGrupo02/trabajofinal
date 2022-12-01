@@ -24,9 +24,9 @@ with open('style.css') as f:
 ## IMPORT DATA ###
 ##################
 
-business = pd.read_csv(r'./data/business_1000.csv')
-checkin = pd.read_csv(r'./data/checkin_1000.csv')
-review = pd.read_csv(r'./data/review_1000.csv')
+business = pd.read_csv(r'pages/main/data/business_1000.csv')
+checkin = pd.read_csv(r'pages/main/data/checkin_1000.csv')
+review = pd.read_csv(r'pages/main/data/review_1000.csv')
 #tip = pd.read_csv(r'C:\Users\USER\Documents\SOYHENRY\LABS\TRABAJO_GRUPAL\trabajofinal\Airflow-Spark\data\tip_1000.csv')
 #user = pd.read_csv(r'C:\Users\USER\Documents\SOYHENRY\LABS\TRABAJO_GRUPAL\trabajofinal\Airflow-Spark\data\user_1000.csv')
 
