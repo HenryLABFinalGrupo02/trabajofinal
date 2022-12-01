@@ -1,74 +1,89 @@
 import streamlit as st
 import pandas as pd 
-from st_on_hover_tabs import on_hover_tabs
+from streamlit_option_menu import option_menu
+from multiprocessing import Value
+from pages.main import home as m
+from pages.main import business as p
+<<<<<<< HEAD
+from pages.main import model as ml
+=======
+from PIL import Image
+
+##################
+## PAGE CONFIG ###
+##################
+>>>>>>> a56658d55ed1db92a8945702d088064c12a49d91
 
 st.set_page_config(
-   page_title="Project Henry",
-   page_icon="👋",  
-   layout="wide"
+   page_title="Vocado",
+   page_icon="🥑",  
+   layout="wide", 
+   menu_items = {
+         'Get Help': 'https://github.com/HenryLABFinalGrupo02/trabajofinal',
+         'Report a bug': "https://github.com/HenryLABFinalGrupo02/trabajofinal",
+         'About': "# This is a header. This is an *VOCADO* cool app!"}
 )
 
-st.title('Welcome to Vocado Admin Center')
+with open('style.css') as f:
+    st.markdown(f'<style>{f.read()}</style>', unsafe_allow_html=True)
 
 ##################
 ## IMPORT DATA ###
 ##################
 
-business = pd.read_csv(r'C:\Users\USER\Documents\SOYHENRY\LABS\TRABAJO_GRUPAL\trabajofinal\Airflow-Spark\data\business_1000.csv')
-checkin = pd.read_csv(r'C:\Users\USER\Documents\SOYHENRY\LABS\TRABAJO_GRUPAL\trabajofinal\Airflow-Spark\data\checkin_1000.csv')
-review = pd.read_csv(r'C:\Users\USER\Documents\SOYHENRY\LABS\TRABAJO_GRUPAL\trabajofinal\Airflow-Spark\data\review_1000.csv')
-tip = pd.read_csv(r'C:\Users\USER\Documents\SOYHENRY\LABS\TRABAJO_GRUPAL\trabajofinal\Airflow-Spark\data\tip_1000.csv')
-user = pd.read_csv(r'C:\Users\USER\Documents\SOYHENRY\LABS\TRABAJO_GRUPAL\trabajofinal\Airflow-Spark\data\user_1000.csv')
+business = pd.read_csv(r'business_1000.csv')
+checkin = pd.read_csv(r'checkin_1000.csv')
+review = pd.read_csv(r'review_1000.csv')
+#tip = pd.read_csv(r'C:\Users\USER\Documents\SOYHENRY\LABS\TRABAJO_GRUPAL\trabajofinal\Airflow-Spark\data\tip_1000.csv')
+#user = pd.read_csv(r'C:\Users\USER\Documents\SOYHENRY\LABS\TRABAJO_GRUPAL\trabajofinal\Airflow-Spark\data\user_1000.csv')
 
-# st.sidebar.title('Menu')
-# paginas = st.sidebar.selectbox("Select :",['pagina1','pagina2'])
+##################
+###### MENU ######
+##################
 
 with st.sidebar:
-        tabs = on_hover_tabs(tabName=['Dashboard', 'Money', 'Economy'], 
-                             iconName=['dashboard', 'money', 'economy'],
-                             styles = {'navtab': {'background-color':'transparent',
-                                                  'color': '#818181',
-                                                  'font-size': '18px',
-                                                  'transition': '.3s',
-                                                  'white-space': 'nowrap',
-                                                  'text-transform': 'uppercase'},
-                                       'tabOptionsStyle': {':hover :hover': {'color': 'red',
-                                                                      'cursor': 'pointer'}},
-                                       'iconStyle':{'position':'fixed',
-                                                    'left':'7.5px',
-                                                    'text-align': 'left'},
-                                       'tabStyle' : {'list-style-type': 'none',
-                                                     'margin-bottom': '30px',
-                                                     'padding-left': '30px'}},
-                             key="0")
+   st.image(Image.open('logo_vocado.png'))
 
-##################
-#### FUNTIONS ####
-##################
+   selected2 = option_menu(None, ["Home", "My Business", "Competition", "Opportunities", "Settings", "Add business"], 
+   icons=['house', 'building', 'globe', 'star', 'gear', 'plus'], 
+   menu_icon="cast", default_index=0, orientation="vertical",
+   styles={
+        "container": {"padding": "0!important", 
+                     "background-color": "#109138"},
+        "icon": {"color": "#F4C01E",
+                  "font-size": "25px"}, 
+        "nav-link": {"font-size": "25px", 
+                     "margin":"0px", 
+                     "--hover-color": "#16C64D", 
+                     "font-family":"Sans-serif"},
+        "nav-link-selected": {"background-color": "#16C64D", 
+                              "font-style":"Sans-serif", 
+                              "font-weight": "bold",
+                              "color":"#121212"},
+    })
 
-def metricas(): 
-   review_stars = business['stars'].mean()
-   review['positive_score'] = review['pos_reviews'] / ( review['neg_reviews'] + review['pos_reviews'])
-   Positive_sentiment = review['positive_score'].mean()
-   review_total = review.shape[0]
-   number_visits = checkin['number_visits'].sum()
+#####################
+## IMPORT FUNTIONS ##
+#####################
 
-   st.markdown("### Oportunities")
-   oportunity = st.columns(3)
-   oportunity[0].metric('Business Line', '98,7%', delta=None, delta_color="normal")
-   oportunity[1].metric('Location', '93,5%', delta=None, delta_color="normal")
-   oportunity[2].metric('Services', '90,7%', delta=None, delta_color="normal")
+## HOME 
+if selected2 == "Home":
+   st.title('Welcome to Vocado Admin Center')
+   m.metricas()
 
-   st.markdown("### Account Summary")
-   metrics = st.columns(6)
-   metrics[0].metric('Review Total', review_total, delta=None, delta_color="normal")
-   metrics[1].metric('Review stars', round(review_stars, 2), delta=None, delta_color="normal")
-   metrics[2].metric('Positive sentiment', f'{round(Positive_sentiment, 2)*100}%', delta=None, delta_color="normal")
-   metrics[3].metric('Influencer Score', '98,7%', delta=None, delta_color="normal")
-   metrics[4].metric('Top Hour', '18:00', delta=None, delta_color="normal")
-   metrics[5].metric('Number_visits', number_visits)
+## My Business
+if selected2 == "My Business":
+   st.title('Business Admin Center')
+   p.select_business()
 
+## My Competition
+if selected2 == "Competition":
+   st.title('Competition Admin Center')
 
-metricas()  
+## My Opportunities
+if selected2 == "Opportunities":
 
+   st.title('Opportunities Admin Center')
 
+   ml.machine_learning()
+ 
