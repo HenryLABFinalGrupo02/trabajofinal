@@ -13,9 +13,6 @@ from pathlib import Path
 import pickle
 import xgboost
 #import darts 
-from darts import TimeSeries
-from darts.models import ExponentialSmoothing
-from darts.metrics import mape
 import plotly as py
 import plotly.express as px
 from plotly.offline import download_plotlyjs, init_notebook_mode, plot, iplot
@@ -465,6 +462,9 @@ def eval_model(model, train, val):
     return fig, string
 
 def timeseries():
+    from darts import TimeSeries
+    from darts.models import ExponentialSmoothing
+    from darts.metrics import mape
 
     df = pd.read_csv('pages/main/data/forecasting.csv', parse_dates=['month'], index_col='month')
     df = df['2010':]
@@ -515,5 +515,43 @@ def timeseries():
 def addbusiness():
     name = st.text_input('Add your business name 👇', '')
     
+
+
+
+
+def get_reviews(id, engine):
+    df = pd.read_sql_query("SELECT text FROM review WHERE business_id = '{}' order by date desc limit 5".format(id), engine)
+    return df
+
+
+############################################## Add business ############################################
+
+def sentiment_review():
+    st.title('Sentiment Analysis for My Business')
+    import sqlalchemy
+    engine = sqlalchemy.create_engine("mysql+pymysql://{user}:{pw}@{address}/{db}".format(user="root",
+            address = '35.239.80.227:3306',
+            pw="Henry12.BORIS99",
+            db="yelp"))
+
+    lista_business = pd.read_sql('SELECT business_id, name FROM business_clean limit 10', engine)
+
+    option_business = st.selectbox(
+        'My businesses',
+        (lista_business['name']))
+    
+    id = lista_business.loc[lista_business['name'] == option_business, 'business_id'].iloc[0]
+
+    name = st.button('Get last five reviews')
+    
+    if name:
+        reviews = get_reviews(id, engine)
+    
+        from transformers import pipeline
+        classifier = pipeline("sentiment-analysis", model="textattack/albert-base-v2-yelp-polarity") #, device=0) #for GPU support
+        
+        for index, row in reviews.iterrows():
+            st.text(f'Your review: {row["text"]}')
+            st.text(f'Sentimental Analysis: {classifier(row["text"])}')
 
 
