@@ -52,6 +52,7 @@ with st.sidebar:
 if selected2 == "Home":
    st.title('Welcome to Vocado Admin Center')
    tf.metricas()
+   
 
 ## My Business
 if selected2 == "My Business":
@@ -72,6 +73,9 @@ if selected2 == "Opportunities":
 # if selected2 == "Time Series Analysis":
 #    st.title('Time Series Analysis')
 #    tf.timeseries()
+
+if selected2 == "Add business":
+   tf.addbusiness()
 
 
 
