@@ -23,25 +23,25 @@ with open('style.css') as f:
 ##################
 
 with st.sidebar:
-   st.image(Image.open('./image/logo_vocado (5).png'))
+   st.image(Image.open('./image/logo_vocado.png'))
 
    selected2 = option_menu(None, ["Home", "My Business", "Competition", "Opportunities", "Settings", "Add business"], 
    icons=['house', 'building', 'globe', 'star', 'gear', 'plus'], 
    menu_icon="cast", default_index=0, orientation="vertical",
    styles={
         "container": {"padding": "0!important", 
-                     "background-color": "#E4FFED"},
+                     "background-color": "#109138"},
         "icon": {"color": "#F4C01E",
                   "font-size": "25px"}, 
         "nav-link": {"font-size": "25px", 
                      "margin":"0px", 
-                     "--hover-color": "#109138", 
+                     "--hover-color": "#16C64D", 
                      "font-family":"Sans-serif", 
-                     "background-color": "#E4FFED"},
-        "nav-link-selected": {"background-color": "#109138", 
+                     "background-color": "#109138"},
+        "nav-link-selected": {"background-color": "#16C64D", 
                               "font-style":"Sans-serif", 
                               "font-weight": "bold",
-                              "color":"#FFFFFF"},
+                              "color":"#121212"},
     })
 
 #####################
@@ -52,6 +52,7 @@ with st.sidebar:
 if selected2 == "Home":
    st.title('Welcome to Vocado Admin Center')
    tf.metricas()
+   
 
 ## My Business
 if selected2 == "My Business":
@@ -72,6 +73,9 @@ if selected2 == "Opportunities":
 # if selected2 == "Time Series Analysis":
 #    st.title('Time Series Analysis')
 #    tf.timeseries()
+
+if selected2 == "Add business":
+   tf.addbusiness()
 
 
 

@@ -5,13 +5,15 @@ from PIL import Image
 import pydeck as pdk
 import plotly.express as px
 
+
+
 class HerramientaTrabajo:
     def mapa3d(self,df):
         st.pydeck_chart(pdk.Deck(
             map_style=None,
             initial_view_state=pdk.ViewState(
-                latitude=df['lat'].mean(),
-                longitude=df['lon'].mean(),
+                latitude=36.406203,
+                longitude=-89.469131,
                 zoom=10,
                 pitch=50,
             ),
@@ -19,7 +21,7 @@ class HerramientaTrabajo:
                 pdk.Layer(
                    'HexagonLayer',
                    data=df,
-                   get_position='[lon, lat]',
+                   get_position='[latitude_x,longitude_x]',
                    radius=200,
                    elevation_scale=4,
                    elevation_range=[0, 1000],
@@ -29,17 +31,12 @@ class HerramientaTrabajo:
                 pdk.Layer(
                     'ScatterplotLayer',
                     data=df,
-                    get_position='[lon, lat]',
+                    get_position='[latitude_x,longitude_x]',
                     get_color='[200, 30, 10, 160]',
                     get_radius=200,
                 ),
             ],
-            tooltip={
-            'html': '<b>Elevation Value:</b> {elevationValue}',
-           'style': {
-             'color': 'white'
-            }
-           },   
+           
         ))
     def funcionLineal(self,df,columnaX, columnaY,use_container_width=True):
        st.line_chart(data=df, x=columnaX, y=columnaY, width=700, height=500, use_container_width=use_container_width)
