@@ -141,7 +141,7 @@ def query_info(filtro):
    metrics[1].metric('Review stars', round(review_stars, 2), delta=None, delta_color="normal")
    metrics[2].metric('Positive sentiment', f'{round(Positive_sentiment, 2)*100}%', delta=None, delta_color="normal")
    metrics[3].metric('Influencer Score', '98,7%', delta=None, delta_color="normal")
-   metrics[4].metric('Top Hour', '18:00', delta=None, delta_color="normal")
+   metrics[4].metric('Top Hour', f'{round(checkin1.avg_hour.mean())}:00', delta=None, delta_color="normal")
    metrics[5].metric('Number_visits', number_visits)
         
 def select_business(): 
