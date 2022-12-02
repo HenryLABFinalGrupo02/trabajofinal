@@ -23,25 +23,25 @@ with open('style.css') as f:
 ##################
 
 with st.sidebar:
-   st.image(Image.open('./image/logo_vocado.png'))
+   st.image(Image.open('./image/logo_vocado (5).png'))
 
    selected2 = option_menu(None, ["Home", "My Business", "Competition", "Opportunities", "Settings", "Add business"], 
    icons=['house', 'building', 'globe', 'star', 'gear', 'plus'], 
    menu_icon="cast", default_index=0, orientation="vertical",
    styles={
         "container": {"padding": "0!important", 
-                     "background-color": "#109138"},
+                     "background-color": "#E4FFED"},
         "icon": {"color": "#F4C01E",
                   "font-size": "25px"}, 
         "nav-link": {"font-size": "25px", 
                      "margin":"0px", 
-                     "--hover-color": "#16C64D", 
+                     "--hover-color": "#109138", 
                      "font-family":"Sans-serif", 
-                     "background-color": "#109138"},
-        "nav-link-selected": {"background-color": "#16C64D", 
+                     "background-color": "#E4FFED"},
+        "nav-link-selected": {"background-color": "#109138", 
                               "font-style":"Sans-serif", 
                               "font-weight": "bold",
-                              "color":"#121212"},
+                              "color":"#FFFFFF"},
     })
 
 #####################
