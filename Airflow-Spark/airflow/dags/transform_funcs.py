@@ -9,6 +9,7 @@ import pyspark.pandas as ps
 import pandas as pd
 from pathlib import Path
 from IPython.display import display, clear_output
+import dateutil
 
 
 # HELPER FUNCTIONS
@@ -68,7 +69,7 @@ def drop_bad_ids(Table, id_column):
     - id_column: column containing 22 character ID's
     """
     id_list = check_id_chars(Table, id_column)
-    return Table[ks.Series((~Table.index.isin(id_list)).to_list())].reset_index(drop=True)
+    return Table[ps.Series((~Table.index.isin(id_list)).to_list())].reset_index(drop=True)
 
 # NUMERIC VALUES
 
@@ -84,6 +85,7 @@ def impute_num(Table, col_list, absolute=False):
     - absolute: boolean, decides if the column will contain absolute values. Default: False.
     """
     for col in col_list:
+        print[f'----{col}']
         Table[col].fillna(0)
         if absolute:
             Table[col] = Table[col].apply(lambda x: abs(x))
@@ -161,6 +163,7 @@ def transform_dates(input):
         except: return pd.NaT
     else: return pd.NaT
 
+
 # LISTS OF STRINGS
 
 def check_str_list(ls):
@@ -183,6 +186,7 @@ def row_hours_to_list(row):
     Parameters:
     - row: pyspark row object
     """
+    #print('GETTING DICT')
     dicc = row.asDict()
     day_dicc = {
         'Monday': 1,
@@ -193,9 +197,9 @@ def row_hours_to_list(row):
         'Saturday': 6,
         'Sunday': 7
     }
-
+    #print('ZIPPING')
     check = zip(dicc.keys(),list(map(lambda x: x.split('-') if isinstance(x,str) else x,dicc.values())))
-    
+    #print('RETURNING')
     return [[day_dicc[key],
             int(value[0].split(':')[0])+int(value[0].split(':')[1]),
             int(value[1].split(':')[0])+int(value[1].split(':')[1])
@@ -211,8 +215,10 @@ def row_hours_to_series(series):
     Parameters:
     - series: koalas series
     """
+    print('CALLING hours_to_list')
     series_mode = row_hours_to_list(series.mode().iloc[0])
     series_output = []
+    print("ITERATING OVER ITEMS")
     for index, value in series.items():
         if value is None:
             series_output.append(series_mode)
@@ -241,3 +247,6 @@ def get_total_checkins(value):
 
 def get_state_city(series_city,series_state):
     return ps.Series([[state,city] for (city,state) in zip(series_city.values,series_state.values)])
+
+def get_elite_list(series):
+    return ps.Series([[x] for x in series])
