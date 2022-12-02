@@ -33,6 +33,15 @@ business = pd.read_json(r'pages/main/data/my_business.json', lines=True)
 checkin = pd.read_json(r'pages/main/data/my_checkins.json', lines=True)
 review = pd.read_json(r'pages/main/data/my_reviews.json', lines=True)
 sentiment = pd.read_json(r'pages/main/data/my_sent.json', lines=True)
+
+import gzip
+import shutil
+with gzip.open(r'pages/main/data/my_user.json.gz', 'rb') as f_in:
+    with open(r'pages/main/data/my_user.json', 'wb') as f_out:
+        shutil.copyfileobj(f_in, f_out)
+
+users = pd.read_json(r'pages/main/data/my_user.json', lines=True)
+
 # im = Image.open(r'image/logo_vocado.png')
 #business = cql_to_pandas("""select * from yelp.business ALLOW FILTERING;""",session)
 #checkin = cql_to_pandas("""select * from yelp.checkin ALLOW FILTERING;""",session)
