@@ -79,7 +79,8 @@ def metricas():
    review_stars = business['stars'].mean()
    sentiment['positive_score'] = sentiment['pos_reviews'] / ( sentiment['neg_reviews'] + sentiment['pos_reviews'])
    Positive_sentiment = sentiment['positive_score'].mean()
-   review_total = sentiment.shape[0]
+   #review_total = sentiment.shape[0]
+   review_total = review.shape[0]
    number_visits = checkin['total'].sum()
 
    st.markdown("### Oportunities")
@@ -107,20 +108,21 @@ def metricas():
 
 
 def query_info(filtro):
-   ids = filtro['business_id']
+   ids = filtro['business_id'].to_list()
    
    #review = cql_to_pandas("""select * from yelp.sentiment_business_full where business_id in '{}' ALLOW FILTERING;""".format(ids),session)
    sentiment1 = sentiment.loc[sentiment['business_id'].isin(ids)]
    #checkin = cql_to_pandas("""select * from yelp.checkin_full where business_id in '{}' ALLOW FILTERING;""".format(ids),session)
    checkin1 = checkin.loc[checkin['business_id'].isin(ids)]
-   
+   review1 = review.loc[review['business_id'].isin(ids)]
    review_stars = filtro['stars'].mean()
    
    
    
    sentiment1['positive_score'] = sentiment1['pos_reviews'] / ( sentiment1['neg_reviews'] + sentiment1['pos_reviews'])
    Positive_sentiment = sentiment1['positive_score'].mean()
-   review_total = sentiment1.shape[0]
+   #review_total = sentiment1.shape[0]
+   review_total = review1.shape[0]
    number_visits = checkin1['total'].sum()   
    st.markdown("### Account Summary")
    
