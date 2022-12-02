@@ -32,7 +32,7 @@ business = pd.read_json(r'pages/main/data/my_business.json', lines=True)
 checkin = pd.read_json(r'pages/main/data/my_checkins.json', lines=True)
 review = pd.read_json(r'pages/main/data/my_reviews.json', lines=True)
 sentiment = pd.read_json(r'pages/main/data/my_sent.json', lines=True)
-influencer_score = pd.read_csv(r'C:\Users\USER\Documents\SOYHENRY\LABS\TRABAJO_GRUPAL\trabajofinal\streamlit\pages\main\data\target_3_influencer_modified.csv')
+influencer_score = pd.read_csv(r'pages/main/data/target_3_influencer_modified.csv')
 
 #business = cql_to_pandas("""select * from yelp.business ALLOW FILTERING;""",session)
 
