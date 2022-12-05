@@ -78,7 +78,7 @@ x-airflow-common:
 
 services:
   streamlit_vocado:
-    image: streamlit_vocado:python3.9.15
+    image: codekova/streamlit_vocado:python3.9.15
     #build: .
     volumes:
         - ./data:/opt/data
