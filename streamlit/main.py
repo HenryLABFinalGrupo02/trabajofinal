@@ -59,6 +59,9 @@ if selected2 == "My Business":
    st.title('Business Admin Center')
    tf.select_business()
 
+   tf.sentiment_review()
+
+
 ## My Competition
 if selected2 == "Competition":
    st.title('Competition')

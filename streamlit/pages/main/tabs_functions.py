@@ -13,14 +13,12 @@ from pathlib import Path
 import pickle
 import xgboost
 #import darts 
-from darts import TimeSeries
-from darts.models import ExponentialSmoothing
-from darts.metrics import mape
 import plotly as py
 import plotly.express as px
 from plotly.offline import download_plotlyjs, init_notebook_mode, plot, iplot
 import plotly.graph_objects as go
 pd.options.plotting.backend = 'plotly'
+from sqlalchemy import create_engine
 #from Functions.Herramientas import ht 
 
 
@@ -465,7 +463,6 @@ def eval_model(model, train, val):
     return fig, string
 
 def timeseries():
-
     df = pd.read_csv('pages/main/data/forecasting.csv', parse_dates=['month'], index_col='month')
     df = df['2010':]
 
@@ -475,39 +472,34 @@ def timeseries():
 
     # Create a list of unique brands
     st.text("Select you favourite brand")
-    top_brand_selected = st.selectbox('Select brand', df.columns.tolist())
+    top_brand_selected = st.multiselect('Select brand', df.columns.tolist(), df.columns.tolist()[0:3])
 
     st.plotly_chart(df[top_brand_selected].plot(title = 'Total Review/Tips/Checkins Counts on Yelp for Top Brands'))
 
-    series = TimeSeries.from_dataframe(df, fill_missing_dates=True, freq='MS', fillna_value=0)
 
-    st.title('Forecasting Time Series')
-    st.markdown('Reviews/Tips/Checkins by Month for the Top Brands in USA'
-    )
+    # from darts import TimeSeries
+    # from darts.models import ExponentialSmoothing
+    # from darts.metrics import mape
+    # series = TimeSeries.from_dataframe(df, fill_missing_dates=True, freq='MS', fillna_value=0)
 
-    # Create a list of unique brands
-    st.text("Select you favourite brand")
-    top_brand_selected_f = st.selectbox('Select brand for forecast', df.columns.tolist())
+    # st.title('Forecasting Time Series')
+    # st.markdown('Reviews/Tips/Checkins by Month for the Top Brands in USA'
+    # )
 
-    train, val = series[top_brand_selected_f].split_after(pd.Timestamp('2021-01-01'))
+    # # Create a list of unique brands
+    # st.text("Select you favourite brand")
+    # top_brand_selected_f = st.selectbox('Select brand for forecast', df.columns.tolist())
+
+    # train, val = series[top_brand_selected_f].split_after(pd.Timestamp('2021-01-01'))
     
-    model = ExponentialSmoothing()
+    # model = ExponentialSmoothing()
 
-    fig, string = eval_model(model, train, val)
+    # fig, string = eval_model(model, train, val)
 
-    fig.update_layout(title=top_brand_selected_f)
-    st.plotly_chart(fig)
+    # fig.update_layout(title=top_brand_selected_f)
+    # st.plotly_chart(fig)
 
-    st.text(string)
-
-
-
-# def forecasting():
-
-#     df = pd.read_csv('./data/forecasting.csv', parse_dates=['month'], index_col='month')
-#     df = df['2010':]
-
-
+    # st.text(string)
 
 
 ############################################## Add business ############################################
@@ -517,3 +509,105 @@ def addbusiness():
     
 
 
+
+
+def get_reviews(id, engine, n_get):
+    df = pd.read_sql_query("SELECT text, date FROM review WHERE business_id = '{}' order by date desc limit {}".format(id, n_get), engine)
+    return df
+
+
+############################################## Add business ############################################
+
+def sentiment_review():
+    st.title('Sentiment Analysis for Last Reviews')
+    engine = create_engine("mysql+pymysql://{user}:{pw}@{address}/{db}".format(user="root",
+            address = '35.239.80.227:3306',
+            pw="Henry12.BORIS99",
+            db="yelp"))
+
+    lista_business = pd.read_sql('SELECT business_id, name FROM business_clean limit 10', engine)
+
+    option_business = st.selectbox(
+        'My businesses',
+        (lista_business['name']))
+    
+    id = lista_business.loc[lista_business['name'] == option_business, 'business_id'].iloc[0]
+
+    number_to_get = st.slider('Number of reviews to get', 1, 50, 10)
+    name = st.button('Analize reviews')
+    
+    if name:
+        reviews = get_reviews(id, engine, number_to_get)
+    
+        
+        from transformers import AlbertForSequenceClassification, pipeline, AlbertTokenizer
+
+        model = AlbertForSequenceClassification.from_pretrained('./model/textclass/')
+        tokenizer = AlbertTokenizer.from_pretrained('./model/textclass/')
+        classifier = pipeline("sentiment-analysis", model=model, tokenizer=tokenizer) #, device=0) #for GPU support
+        
+
+        from keybert import KeyBERT
+        kw_model = KeyBERT()
+
+        positive = 0
+        negative = 0
+        pos_keywords = []
+        neg_keywords = []
+        reviews['sentiment'] = ''
+        reviews['keywords'] = ''
+        for index, row in reviews.iterrows():
+            if classifier(row['text'], truncation = True)[0]['label'] == 'LABEL_1':
+                positive += 1
+                keywords = kw_model.extract_keywords(row['text'], keyphrase_ngram_range=(1, 1), stop_words='english')
+                pos_keywords += keywords
+                reviews.iloc[index, reviews.columns.get_loc('sentiment')] = 'positive'
+                reviews.iloc[index, reviews.columns.get_loc('keywords')] = keywords
+            elif classifier(row['text'], truncation = True)[0]['label'] == 'LABEL_0':
+                negative += 1
+                keywords = kw_model.extract_keywords(row['text'], keyphrase_ngram_range=(1, 1), stop_words='english')
+                neg_keywords += keywords
+                print(keywords, 'keywords')
+                print(neg_keywords, 'neg_keywords')
+                reviews.iloc[index, reviews.columns.get_loc('sentiment')] = 'negative'
+                reviews.iloc[index, reviews.columns.get_loc('keywords')] = keywords
+        
+        try:
+            neg_key, neg_score = zip(*neg_keywords)
+        except:
+            neg_key = []
+            neg_score = []
+        try:
+            pos_key, pos_score = zip(*pos_keywords)
+        except:
+            pos_key = []
+            pos_score = []
+
+        df_neg = pd.DataFrame({'key':neg_key, 'score':neg_score}).groupby('key').mean().sort_values('score', ascending=False)
+        df_pos = pd.DataFrame({'key':pos_key, 'score':pos_score}).groupby('key').mean().sort_values('score', ascending=False)
+            
+        st.markdown("### Reviews Summary")
+        metrics = st.columns(2)
+
+        metrics[0].markdown("### Positive Reviews")
+        metrics[0].metric('Total Positive', positive, delta=None, delta_color="normal")
+        metrics[0].text("Top 5 Keywords")
+        metrics[0].text(df_pos.head(5).index.tolist())
+
+        metrics[1].markdown("### Negative Reviews")
+        metrics[1].metric('Total Negative', negative, delta=None, delta_color="normal")
+        metrics[1].text("Top 5 Keywords")
+        metrics[1].text(df_neg.head(5).index.tolist())
+
+
+        REVIEW_TEMPLATE_MD = """{} - {}
+                                    > {}"""
+
+        with st.expander("💬 Show Reviews"):
+
+        # Show comments
+
+            st.write("**Reviews:**")
+
+            for index, entry in enumerate(reviews.itertuples()):
+                st.markdown(REVIEW_TEMPLATE_MD.format(entry.date, entry.sentiment, entry.text))

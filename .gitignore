@@ -12,4 +12,9 @@ Airflow-Spark/airflow/dags/__pycache__/Spark.cpython-37.pyc
 Airflow-Spark/cassandra
 nlp/old
 OLD
+<<<<<<< HEAD
 /streamlit/image/logo_vocado.png
+=======
+streamlit/pages/main/data
+streamlit.zip
+>>>>>>> 4ab6965c0638dfadd3743dc4c208c4dd2ad55201

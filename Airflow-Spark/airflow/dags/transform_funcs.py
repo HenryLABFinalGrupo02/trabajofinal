@@ -129,7 +129,7 @@ def clean_string(string):
 
 # NUEVA FUNCION, USAR APPLY Y LUEGO MASCARA != 'REMOVE_THIS_ROW'
 def drop_bad_str(input):
-    if ks.isna(input):
+    if pd.isna(input):
         return 'NO DATA'
     else:
         output = input.strip().replace('  ',' ').lower()
