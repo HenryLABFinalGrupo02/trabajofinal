@@ -11,3 +11,4 @@ darts
 sqlalchemy
 pymysql
 mysql-connector-python
+keybert
