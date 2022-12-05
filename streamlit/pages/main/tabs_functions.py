@@ -19,6 +19,9 @@ from plotly.offline import download_plotlyjs, init_notebook_mode, plot, iplot
 import plotly.graph_objects as go
 pd.options.plotting.backend = 'plotly'
 from sqlalchemy import create_engine
+from darts import TimeSeries
+from darts.models import ExponentialSmoothing
+from darts.metrics import mape
 #from Functions.Herramientas import ht 
 
 
@@ -27,10 +30,10 @@ from sqlalchemy import create_engine
 ##################
 
 
-business = pd.read_json(r'pages/main/data/my_business.json', lines=True)
-checkin = pd.read_json(r'pages/main/data/my_checkins.json', lines=True)
-review = pd.read_json(r'pages/main/data/my_reviews.json', lines=True)
-sentiment = pd.read_json(r'pages/main/data/my_sent.json', lines=True)
+# business = pd.read_json(r'pages/main/data/my_business.json', lines=True)
+# checkin = pd.read_json(r'pages/main/data/my_checkins.json', lines=True)
+# review = pd.read_json(r'pages/main/data/my_reviews.json', lines=True)
+# sentiment = pd.read_json(r'pages/main/data/my_sent.json', lines=True)
 influencer_score = pd.read_csv(r'pages/main/data/target_3_influencer_modified.csv')
 
 #business = cql_to_pandas("""select * from yelp.business ALLOW FILTERING;""",session)
@@ -44,9 +47,9 @@ with gzip.open(r'pages/main/data/my_user.json.gz', 'rb') as f_in:
 users = pd.read_json(r'pages/main/data/my_user.json', lines=True)
 
 # im = Image.open(r'image/logo_vocado.png')
-#business = cql_to_pandas("""select * from yelp.business ALLOW FILTERING;""",session)
-#checkin = cql_to_pandas("""select * from yelp.checkin ALLOW FILTERING;""",session)
-#review = cql_to_pandas("""select * from yelp.review ALLOW FILTERING;""",session)
+# business = cql_to_pandas("""select * from yelp.business ALLOW FILTERING;""",session)
+# checkin = cql_to_pandas("""select * from yelp.checkin ALLOW FILTERING;""",session)
+# review = cql_to_pandas("""select * from yelp.review ALLOW FILTERING;""",session)
 # review = pd.read_csv(r'pages/main/data/review_1000.csv')
 # checkin = pd.read_csv(r'pages/main/data/checkin_1000.csv')
 
@@ -72,11 +75,35 @@ users = pd.read_json(r'pages/main/data/my_user.json', lines=True)
 #    return result._current_rows
 
 users_business = ["Burger King", "Starbucks", "Subway", "Taco Bell", "CVS Pharmacy", "Acme Oyster House", "Michaelangelos Pizza", "Nana Rosa Italian"]
+#users_business = ["Michaelangelos Pizza"]
 
 # business = cql_to_pandas("""select * from yelp.business_full where name in {} ALLOW FILTERING;""".format(tuple(users_business)),session)
 # bus_ids = business.business_id.to_list()
 # checkin = cql_to_pandas("""select * from yelp.checkin_full where business_id in {} ALLOW FILTERING;""".format(tuple(bus_ids)),session)
 # reviews = cql_to_pandas("""select * from yelp.review_full where business_id in {} ALLOW FILTERING;""".format(tuple(bus_ids)),session)
+
+
+engine = create_engine("mysql+pymysql://{user}:{pw}@{address}/{db}".format(user="root",
+            address = '35.239.80.227:3306',
+            pw="Henry12.BORIS99",
+            db="yelp"))
+
+if len(users_business) > 1:
+    business = pd.read_sql("""SELECT * FROM business_clean WHERE name in {}""".format(tuple(users_business)), engine)
+    bus_ids = tuple(business.business_id.to_list())
+    checkin = pd.read_sql("""SELECT * FROM checkin_hour WHERE business_id in {}""".format(bus_ids), engine)
+    review = pd.read_sql("""SELECT * FROM review WHERE business_id in {}""".format(bus_ids), engine)
+    sentiment = pd.read_sql("""SELECT * FROM sentiment_by_business WHERE business_id in {}""".format(bus_ids), engine)
+else:
+    business = pd.read_sql("""SELECT * FROM business_clean WHERE name = '{}'""".format(users_business[0]), engine)
+    bus_ids = tuple(business.business_id.to_list())
+    checkin = pd.read_sql("""SELECT * FROM checkin_hour WHERE business_id = '{}'""".format(bus_ids[0]), engine)
+    review = pd.read_sql("""SELECT * FROM review WHERE business_id = '{}'""".format(bus_ids[0]), engine)
+    sentiment = pd.read_sql("""SELECT * FROM sentiment_by_business WHERE business_id = '{}'""".format(bus_ids[0]), engine)
+
+
+#influencer_score = pd.read_sql("""SELECT * FROM business_clean WHERE business_id in {}""".format(bus_ids), engine)
+
 
 ############################################ HOME TAB ##################################################
 
@@ -142,7 +169,10 @@ def query_info(filtro):
    metrics[0].metric('Review Total',review_total, delta=None, delta_color="normal")
    metrics[1].metric('Review stars', round(review_stars, 2), delta=None, delta_color="normal")
    metrics[2].metric('Positive sentiment', f'{round(Positive_sentiment, 2)*100}%', delta=None, delta_color="normal")
-   metrics[4].metric('Top Hour', f'{round(checkin1.avg_hour.mean())}:00', delta=None, delta_color="normal")
+   if len(checkin1) > 1:
+     metrics[4].metric('Top Hour', f'{round(checkin1.avg_hour.mean())}:00', delta=None, delta_color="normal")
+   elif len(checkin1) == 1:
+     metrics[4].metric('Top Hour', f'{round(checkin1.avg_hour.iloc[0])}:00', delta=None, delta_color="normal")
    metrics[3].metric('Influencer Score', f'{round(inf_score_1, 2)*100}%', delta=None, delta_color="normal")
    metrics[5].metric('Number_visits', number_visits)
    #location = filtro[['latitude_x','longitude_x']]
@@ -476,28 +506,27 @@ def timeseries():
 
     st.plotly_chart(df[top_brand_selected].plot(title = 'Total Review/Tips/Checkins Counts on Yelp for Top Brands'))
 
-############################################## TIME SERIES ##############################################
-   
-   series = TimeSeries.from_dataframe(df, fill_missing_dates=True, freq='MS', fillna_value=0)
 
-    st.title('Forecasting Time Series')
-    st.markdown('Reviews/Tips/Checkins by Month for the Top Brands in USA'
-    )
+    series = TimeSeries.from_dataframe(df, fill_missing_dates=True, freq='MS', fillna_value=0)
 
-    # Create a list of unique brands
-    st.text("Select you favourite brand")
-    top_brand_selected_f = st.selectbox('Select brand for forecast', df.columns.tolist())
+    # st.title('Forecasting Time Series')
+    # st.markdown('Reviews/Tips/Checkins by Month for the Top Brands in USA'
+    # )
 
-    train, val = series[top_brand_selected_f].split_after(pd.Timestamp('2021-01-01'))
+    # # Create a list of unique brands
+    # st.text("Select you favourite brand")
+    # top_brand_selected_f = st.selectbox('Select brand for forecast', df.columns.tolist())
+
+    # train, val = series[top_brand_selected_f].split_after(pd.Timestamp('2021-01-01'))
     
-    model = ExponentialSmoothing()
+    # model = ExponentialSmoothing()
 
-    fig, string = eval_model(model, train, val)
+    # fig, string = eval_model(model, train, val)
 
-    fig.update_layout(title=top_brand_selected_f)
-    st.plotly_chart(fig)
+    # fig.update_layout(title=top_brand_selected_f)
+    # st.plotly_chart(fig)
 
-    st.text(string)
+    # st.text(string)
 
 
 ############################################## Add business ############################################
@@ -518,10 +547,10 @@ def get_reviews(id, engine, n_get):
 
 def sentiment_review():
     st.title('Sentiment Analysis for Last Reviews')
-    engine = create_engine("mysql+pymysql://{user}:{pw}@{address}/{db}".format(user="root",
-            address = '35.239.80.227:3306',
-            pw="Henry12.BORIS99",
-            db="yelp"))
+    # engine = create_engine("mysql+pymysql://{user}:{pw}@{address}/{db}".format(user="root",
+    #         address = '35.239.80.227:3306',
+    #         pw="Henry12.BORIS99",
+    #         db="yelp"))
 
     lista_business = pd.read_sql('SELECT business_id, name FROM business_clean limit 10', engine)
 
