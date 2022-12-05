@@ -71,7 +71,6 @@ if selected2 == "Competition":
 if selected2 == "Opportunities":
    st.title('Opportunities Exploration')
    tf.machine_learning()
- 
 # ## Time Series Analysis
 # if selected2 == "Time Series Analysis":
 #    st.title('Time Series Analysis')

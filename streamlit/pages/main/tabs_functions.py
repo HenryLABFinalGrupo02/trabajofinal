@@ -476,30 +476,28 @@ def timeseries():
 
     st.plotly_chart(df[top_brand_selected].plot(title = 'Total Review/Tips/Checkins Counts on Yelp for Top Brands'))
 
+############################################## TIME SERIES ##############################################
+   
+   series = TimeSeries.from_dataframe(df, fill_missing_dates=True, freq='MS', fillna_value=0)
 
-    # from darts import TimeSeries
-    # from darts.models import ExponentialSmoothing
-    # from darts.metrics import mape
-    # series = TimeSeries.from_dataframe(df, fill_missing_dates=True, freq='MS', fillna_value=0)
+    st.title('Forecasting Time Series')
+    st.markdown('Reviews/Tips/Checkins by Month for the Top Brands in USA'
+    )
 
-    # st.title('Forecasting Time Series')
-    # st.markdown('Reviews/Tips/Checkins by Month for the Top Brands in USA'
-    # )
+    # Create a list of unique brands
+    st.text("Select you favourite brand")
+    top_brand_selected_f = st.selectbox('Select brand for forecast', df.columns.tolist())
 
-    # # Create a list of unique brands
-    # st.text("Select you favourite brand")
-    # top_brand_selected_f = st.selectbox('Select brand for forecast', df.columns.tolist())
-
-    # train, val = series[top_brand_selected_f].split_after(pd.Timestamp('2021-01-01'))
+    train, val = series[top_brand_selected_f].split_after(pd.Timestamp('2021-01-01'))
     
-    # model = ExponentialSmoothing()
+    model = ExponentialSmoothing()
 
-    # fig, string = eval_model(model, train, val)
+    fig, string = eval_model(model, train, val)
 
-    # fig.update_layout(title=top_brand_selected_f)
-    # st.plotly_chart(fig)
+    fig.update_layout(title=top_brand_selected_f)
+    st.plotly_chart(fig)
 
-    # st.text(string)
+    st.text(string)
 
 
 ############################################## Add business ############################################
