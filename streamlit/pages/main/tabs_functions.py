@@ -27,10 +27,10 @@ from sqlalchemy import create_engine
 ##################
 
 
-business = pd.read_json(r'pages/main/data/my_business.json', lines=True)
-checkin = pd.read_json(r'pages/main/data/my_checkins.json', lines=True)
-review = pd.read_json(r'pages/main/data/my_reviews.json', lines=True)
-sentiment = pd.read_json(r'pages/main/data/my_sent.json', lines=True)
+# business = pd.read_json(r'pages/main/data/my_business.json', lines=True)
+# checkin = pd.read_json(r'pages/main/data/my_checkins.json', lines=True)
+# review = pd.read_json(r'pages/main/data/my_reviews.json', lines=True)
+# sentiment = pd.read_json(r'pages/main/data/my_sent.json', lines=True)
 influencer_score = pd.read_csv(r'pages/main/data/target_3_influencer_modified.csv')
 
 #business = cql_to_pandas("""select * from yelp.business ALLOW FILTERING;""",session)
@@ -44,9 +44,9 @@ with gzip.open(r'pages/main/data/my_user.json.gz', 'rb') as f_in:
 users = pd.read_json(r'pages/main/data/my_user.json', lines=True)
 
 # im = Image.open(r'image/logo_vocado.png')
-#business = cql_to_pandas("""select * from yelp.business ALLOW FILTERING;""",session)
-#checkin = cql_to_pandas("""select * from yelp.checkin ALLOW FILTERING;""",session)
-#review = cql_to_pandas("""select * from yelp.review ALLOW FILTERING;""",session)
+# business = cql_to_pandas("""select * from yelp.business ALLOW FILTERING;""",session)
+# checkin = cql_to_pandas("""select * from yelp.checkin ALLOW FILTERING;""",session)
+# review = cql_to_pandas("""select * from yelp.review ALLOW FILTERING;""",session)
 # review = pd.read_csv(r'pages/main/data/review_1000.csv')
 # checkin = pd.read_csv(r'pages/main/data/checkin_1000.csv')
 
@@ -77,6 +77,20 @@ users_business = ["Burger King", "Starbucks", "Subway", "Taco Bell", "CVS Pharma
 # bus_ids = business.business_id.to_list()
 # checkin = cql_to_pandas("""select * from yelp.checkin_full where business_id in {} ALLOW FILTERING;""".format(tuple(bus_ids)),session)
 # reviews = cql_to_pandas("""select * from yelp.review_full where business_id in {} ALLOW FILTERING;""".format(tuple(bus_ids)),session)
+
+
+engine = create_engine("mysql+pymysql://{user}:{pw}@{address}/{db}".format(user="root",
+            address = '35.239.80.227:3306',
+            pw="Henry12.BORIS99",
+            db="yelp"))
+
+business = pd.read_sql("""SELECT * FROM business_clean WHERE name in {}""".format(tuple(users_business)), engine)
+bus_ids = tuple(business.business_id.to_list())
+checkin = pd.read_sql("""SELECT * FROM checkin_hour WHERE business_id in {}""".format(bus_ids), engine)
+review = pd.read_sql("""SELECT * FROM review WHERE business_id in {}""".format(bus_ids), engine)
+sentiment = pd.read_sql("""SELECT * FROM sentiment_by_business WHERE business_id in {}""".format(bus_ids), engine)
+#influencer_score = pd.read_sql("""SELECT * FROM business_clean WHERE business_id in {}""".format(bus_ids), engine)
+
 
 ############################################ HOME TAB ##################################################
 
@@ -142,7 +156,10 @@ def query_info(filtro):
    metrics[0].metric('Review Total',review_total, delta=None, delta_color="normal")
    metrics[1].metric('Review stars', round(review_stars, 2), delta=None, delta_color="normal")
    metrics[2].metric('Positive sentiment', f'{round(Positive_sentiment, 2)*100}%', delta=None, delta_color="normal")
-   metrics[4].metric('Top Hour', f'{round(checkin1.avg_hour.mean())}:00', delta=None, delta_color="normal")
+   if len(checkin1) > 1:
+     metrics[4].metric('Top Hour', f'{round(checkin1.avg_hour.mean())}:00', delta=None, delta_color="normal")
+   else:
+     metrics[4].metric('Top Hour', f'{round(checkin1.avg_hour[0])}:00', delta=None, delta_color="normal")
    metrics[3].metric('Influencer Score', f'{round(inf_score_1, 2)*100}%', delta=None, delta_color="normal")
    metrics[5].metric('Number_visits', number_visits)
    #location = filtro[['latitude_x','longitude_x']]
@@ -520,10 +537,10 @@ def get_reviews(id, engine, n_get):
 
 def sentiment_review():
     st.title('Sentiment Analysis for Last Reviews')
-    engine = create_engine("mysql+pymysql://{user}:{pw}@{address}/{db}".format(user="root",
-            address = '35.239.80.227:3306',
-            pw="Henry12.BORIS99",
-            db="yelp"))
+    # engine = create_engine("mysql+pymysql://{user}:{pw}@{address}/{db}".format(user="root",
+    #         address = '35.239.80.227:3306',
+    #         pw="Henry12.BORIS99",
+    #         db="yelp"))
 
     lista_business = pd.read_sql('SELECT business_id, name FROM business_clean limit 10', engine)
 
