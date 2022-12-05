@@ -14,3 +14,5 @@ nlp/old
 OLD
 streamlit/pages/main/data
 streamlit.zip
+.DS_Store
+ML/data
