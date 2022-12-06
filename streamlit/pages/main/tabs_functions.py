@@ -22,38 +22,14 @@ from sqlalchemy import create_engine
 # from darts import TimeSeries
 # from darts.models import ExponentialSmoothing
 # from darts.metrics import mape
-# from darts.utils.statistics import check_seasonality
+from transformers import AlbertForSequenceClassification, pipeline, AlbertTokenizer
+from keybert import KeyBERT
 #from Functions.Herramientas import ht 
 
 
 ##################
 ## IMPORT DATA ###
 ##################
-
-
-business = pd.read_json(r'pages/main/data/my_business.json', lines=True)
-checkin = pd.read_json(r'pages/main/data/my_checkins.json', lines=True)
-review = pd.read_json(r'pages/main/data/my_reviews.json', lines=True)
-sentiment = pd.read_json(r'pages/main/data/my_sent.json', lines=True)
-influencer_score = pd.read_csv(r'pages/main/data/target_3_influencer_modified.csv')
-
-#business = cql_to_pandas("""select * from yelp.business ALLOW FILTERING;""",session)
-
-import gzip
-import shutil
-with gzip.open(r'pages/main/data/my_user.json.gz', 'rb') as f_in:
-    with open(r'pages/main/data/my_user.json', 'wb') as f_out:
-        shutil.copyfileobj(f_in, f_out)
-
-users = pd.read_json(r'pages/main/data/my_user.json', lines=True)
-
-# im = Image.open(r'image/logo_vocado.png')
-#business = cql_to_pandas("""select * from yelp.business ALLOW FILTERING;""",session)
-#checkin = cql_to_pandas("""select * from yelp.checkin ALLOW FILTERING;""",session)
-#review = cql_to_pandas("""select * from yelp.review ALLOW FILTERING;""",session)
-# review = pd.read_csv(r'pages/main/data/review_1000.csv')
-# checkin = pd.read_csv(r'pages/main/data/checkin_1000.csv')
-
 
 #cloud_config= {'secure_connect_bundle': r'secure-connect-henry.zip'}
 #auth_provider = PlainTextAuthProvider(json.load(open(r'log_in.json'))['log_user'], json.load(open(r'log_in.json'))['log_password'])
@@ -75,41 +51,69 @@ users = pd.read_json(r'pages/main/data/my_user.json', lines=True)
 #    result = cassandra_session.execute(cql_query, timeout=None)
 #    return result._current_rows
 
-users_business = ["Burger King", "Starbucks", "Subway", "Taco Bell", "CVS Pharmacy", "Acme Oyster House", "Michaelangelos Pizza", "Nana Rosa Italian"]
+#users_business = ["Burger King", "Starbucks", "Subway", "Taco Bell", "CVS Pharmacy", "Acme Oyster House", "Michaelangelos Pizza", "Nana Rosa Italian"]
+users_business = ["Taco Bell", "Michaelangelos Pizza"]
 
+
+# business = cql_to_pandas("""select * from yelp.business ALLOW FILTERING;""",session)
 # business = cql_to_pandas("""select * from yelp.business_full where name in {} ALLOW FILTERING;""".format(tuple(users_business)),session)
 # bus_ids = business.business_id.to_list()
 # checkin = cql_to_pandas("""select * from yelp.checkin_full where business_id in {} ALLOW FILTERING;""".format(tuple(bus_ids)),session)
 # reviews = cql_to_pandas("""select * from yelp.review_full where business_id in {} ALLOW FILTERING;""".format(tuple(bus_ids)),session)
 
+
+engine = create_engine("mysql+pymysql://{user}:{pw}@{address}/{db}".format(user="root",
+            address = '35.239.80.227:3306',
+            pw="Henry12.BORIS99",
+            db="yelp"))
+
+if len(users_business) > 1:
+    business = pd.read_sql("""SELECT * FROM business_clean WHERE name in {}""".format(tuple(users_business)), engine)
+    bus_ids = tuple(business.business_id.to_list())
+    checkin = pd.read_sql("""SELECT * FROM checkin_hour WHERE business_id in {}""".format(bus_ids), engine)
+    review = pd.read_sql("""SELECT * FROM review WHERE business_id in {}""".format(bus_ids), engine, parse_dates=['date'])
+    sentiment = pd.read_sql("""SELECT * FROM sentiment_by_business WHERE business_id in {}""".format(bus_ids), engine)
+    influencer_score = pd.read_sql("""SELECT * FROM business_target WHERE business_id in {}""".format(bus_ids), engine)
+else:
+    business = pd.read_sql("""SELECT * FROM business_clean WHERE name = '{}'""".format(users_business[0]), engine)
+    bus_ids = tuple(business.business_id.to_list())
+    checkin = pd.read_sql("""SELECT * FROM checkin_hour WHERE business_id = '{}'""".format(bus_ids[0]), engine)
+    review = pd.read_sql("""SELECT * FROM review WHERE business_id = '{}'""".format(bus_ids[0]), engine, parse_dates=['date'])
+    sentiment = pd.read_sql("""SELECT * FROM sentiment_by_business WHERE business_id = '{}'""".format(bus_ids[0]), engine)
+    influencer_score = pd.read_sql("""SELECT * FROM business_target WHERE business_id = '{}'""".format(bus_ids[0]), engine)
+
+#influencer_score = pd.read_csv(r'pages/main/data/target_3_influencer_modified.csv')
+#influencer_score = pd.read_sql("""SELECT * FROM business_clean WHERE business_id in {}""".format(bus_ids), engine)
+
+
 ############################################ HOME TAB ##################################################
 
 
 def metricas(): 
-   review_stars = business['stars'].mean()
-   sentiment['positive_score'] = sentiment['pos_reviews'] / ( sentiment['neg_reviews'] + sentiment['pos_reviews'])
-   Positive_sentiment = sentiment['positive_score'].mean()
-   #review_total = sentiment.shape[0]
-   review_total = review.shape[0]
-   number_visits = checkin['total'].sum()
-   influencer_score['Influencer_score'] = 1 - (1 / (1 + influencer_score['avg(Influencer_2)']))
-   inf_score = influencer_score['Influencer_score'].mean()
+    review_stars = business['stars'].mean()
+    sentiment['positive_score'] = sentiment['pos_reviews'] / ( sentiment['neg_reviews'] + sentiment['pos_reviews'])
+    Positive_sentiment = sentiment['positive_score'].mean()
+    #review_total = sentiment.shape[0]
+    review_total = review.shape[0]
+    number_visits = checkin['total'].sum()
+    influencer_score['Influencer_score'] = 1 - (1 / (1 + influencer_score['avg(Influencer_2)']))
+    inf_score = influencer_score['Influencer_score'].mean()
 
-   st.markdown("### Oportunities")
-   oportunity = st.columns(3)
-   oportunity[0].metric('Business Line', '98,7%', delta=None, delta_color="normal")
-   oportunity[1].metric('Location', '93,5%', delta=None, delta_color="normal")
-   oportunity[2].metric('Services', '90,7%', delta=None, delta_color="normal")
+    st.markdown("### Oportunities")
+    oportunity = st.columns(3)
+    oportunity[0].metric('Business Line', '98,7%', delta=None, delta_color="normal")
+    oportunity[1].metric('Location', '93,5%', delta=None, delta_color="normal")
+    oportunity[2].metric('Services', '90,7%', delta=None, delta_color="normal")
 
-   st.markdown("### Account Summary")
-   metrics = st.columns(6)
-   metrics[0].metric('Review Total', review_total, delta=None, delta_color="normal")
-   # metrics[1].image(im,width=50)
-   metrics[1].metric('Review stars', round(review_stars, 2), delta=None, delta_color="normal")
-   metrics[2].metric('Positive sentiment', f'{round(Positive_sentiment, 2)*100}%', delta=None, delta_color="normal")
-   metrics[3].metric('Influencer Score', f'{round(inf_score, 2)*100}%', delta=None, delta_color="normal")
-   metrics[4].metric('Top Hour', '18:00', delta=None, delta_color="normal")
-   metrics[5].metric('Number_visits', number_visits)
+    st.markdown("### Account Summary")
+    metrics = st.columns(6)
+    metrics[0].metric('Review Total', review_total, delta=None, delta_color="normal")
+    # metrics[1].image(im,width=50)
+    metrics[1].metric('Review stars', round(review_stars, 2), delta=None, delta_color="normal")
+    metrics[2].metric('Positive sentiment', f'{round(Positive_sentiment, 2)*100}%', delta=None, delta_color="normal")
+    metrics[3].metric('Influencer Score', f'{round(inf_score, 2)*100}%', delta=None, delta_color="normal")
+    metrics[4].metric('Top Hour', '18:00', delta=None, delta_color="normal")
+    metrics[5].metric('Number_visits', number_visits)
    
    
 
@@ -121,43 +125,117 @@ def metricas():
 
 
 def query_info(filtro):
-   ids = filtro['business_id'].to_list()
-   
-   review1 = review.loc[review['business_id'].isin(ids)]
-   review_stars = filtro['stars'].mean()
-   #review = cql_to_pandas("""select * from yelp.sentiment_business_full where business_id in '{}' ALLOW FILTERING;""".format(ids),session)
-   sentiment1 = sentiment.loc[sentiment['business_id'].isin(ids)]
-   #checkin = cql_to_pandas("""select * from yelp.checkin_full where business_id in '{}' ALLOW FILTERING;""".format(ids),session)
-   checkin1 = checkin.loc[checkin['business_id'].isin(ids)]
-   influencer_score['Influencer_score'] = 1 - (1 / (1 + influencer_score['avg(Influencer_2)']))
-   inf_score_1 = influencer_score.loc[influencer_score['business_id'].isin(ids)]
+    ids = filtro['business_id'].to_list()
 
-   sentiment1['positive_score'] = sentiment1['pos_reviews'] / ( sentiment1['neg_reviews'] + sentiment1['pos_reviews'])
-   Positive_sentiment = sentiment1['positive_score'].mean()
-   #review_total = sentiment1.shape[0]
-   review_total = review1.shape[0]
-   number_visits = checkin1['total'].sum()   
-   inf_score_1 = inf_score_1['Influencer_score'].mean()
+    review1 = review.loc[review['business_id'].isin(ids)]
+    review_stars = filtro['stars'].mean()
+    sentiment1 = sentiment.loc[sentiment['business_id'].isin(ids)]
+    checkin1 = checkin.loc[checkin['business_id'].isin(ids)]
+    influencer_score['Influencer_score'] = 1 - (1 / (1 + influencer_score['avg(Influencer_2)']))
+    inf_score_1 = influencer_score.loc[influencer_score['business_id'].isin(ids)]
+    sentiment1['positive_score'] = sentiment1['pos_reviews'] / ( sentiment1['neg_reviews'] + sentiment1['pos_reviews'])
+    Positive_sentiment = sentiment1['positive_score'].mean()
+    review_total = review1.shape[0]
+    number_visits = checkin1['total'].sum()   
+    inf_score_1 = inf_score_1['Influencer_score'].mean()
 
-   st.markdown("### Account Summary")
-   
-   metrics = st.columns(6)
-   
-   metrics[0].metric('Review Total',review_total, delta=None, delta_color="normal")
-   metrics[1].metric('Review stars', round(review_stars, 2), delta=None, delta_color="normal")
-   metrics[2].metric('Positive sentiment', f'{round(Positive_sentiment, 2)*100}%', delta=None, delta_color="normal")
-   metrics[4].metric('Top Hour', f'{round(checkin1.avg_hour.mean())}:00', delta=None, delta_color="normal")
-   metrics[3].metric('Influencer Score', f'{round(inf_score_1, 2)*100}%', delta=None, delta_color="normal")
-   metrics[5].metric('Number_visits', number_visits)
-   #location = filtro[['latitude_x','longitude_x']]
-   #ht.mapa3d(location)
-    
+    st.markdown("### Account Summary")
+
+    metrics = st.columns(6)
+
+    metrics[0].metric('Review Total',review_total, delta=None, delta_color="normal")
+    metrics[1].metric('Review stars', round(review_stars, 2), delta=None, delta_color="normal")
+    metrics[2].metric('Positive sentiment', f'{round(Positive_sentiment, 2)*100}%', delta=None, delta_color="normal")
+    if len(checkin1) > 1:
+        metrics[4].metric('Top Hour', f'{round(checkin1.avg_hour.mean())}:00', delta=None, delta_color="normal")
+    elif len(checkin1) == 1:
+        metrics[4].metric('Top Hour', f'{round(checkin1.avg_hour.iloc[0])}:00', delta=None, delta_color="normal")
+    metrics[3].metric('Influencer Score', f'{round(inf_score_1, 2)*100}%', delta=None, delta_color="normal")
+    metrics[5].metric('Number_visits', number_visits)
+    #location = filtro[['latitude_x','longitude_x']]
+    #ht.mapa3d(location)
+    st.title('Sentiment Analysis for Last Reviews')
+    number_to_get = st.slider('Number of reviews to get', 1, 50, 10)
+    name = st.button('Analize reviews')
+    if name:
+        #reviews = get_reviews(id, engine, number_to_get)
+        reviews = review1[['text', 'date']].sort_values(by='date', ascending=False).head(number_to_get)
+        
+
+        model = AlbertForSequenceClassification.from_pretrained('./model/textclass/')
+        tokenizer = AlbertTokenizer.from_pretrained('./model/textclass/')
+        classifier = pipeline("sentiment-analysis", model=model, tokenizer=tokenizer) #, device=0) #for GPU support
+        
+        kw_model = KeyBERT()
+
+        positive = 0
+        negative = 0
+        pos_keywords = []
+        neg_keywords = []
+        reviews['sentiment'] = ''
+        reviews['keywords'] = ''
+        for index, row in reviews.iterrows():
+            if classifier(row['text'], truncation = True)[0]['label'] == 'LABEL_1':
+                positive += 1
+                keywords = kw_model.extract_keywords(row['text'], keyphrase_ngram_range=(1, 1), stop_words='english')
+                pos_keywords += keywords
+                reviews.sentiment[index] = 'positive'
+                reviews.keywords[index] = keywords
+                # reviews.iloc[index, reviews.columns.get_loc('sentiment')] = 'positive'
+                # reviews.iloc[index, reviews.columns.get_loc('keywords')] = keywords
+            elif classifier(row['text'], truncation = True)[0]['label'] == 'LABEL_0':
+                negative += 1
+                keywords = kw_model.extract_keywords(row['text'], keyphrase_ngram_range=(1, 1), stop_words='english')
+                neg_keywords += keywords
+                reviews.sentiment[index] = 'negative'
+                reviews.keywords[index] = keywords
+                # reviews.iloc[index, reviews.columns.get_loc('sentiment')] = 'negative'
+                # reviews.iloc[index, reviews.columns.get_loc('keywords')] = keywords
+        
+        try:
+            neg_key, neg_score = zip(*neg_keywords)
+        except:
+            neg_key = []
+            neg_score = []
+        try:
+            pos_key, pos_score = zip(*pos_keywords)
+        except:
+            pos_key = []
+            pos_score = []
+
+        df_neg = pd.DataFrame({'key':neg_key, 'score':neg_score}).groupby('key').mean().sort_values('score', ascending=False)
+        df_pos = pd.DataFrame({'key':pos_key, 'score':pos_score}).groupby('key').mean().sort_values('score', ascending=False)
+            
+        st.markdown("### Reviews Summary")
+        metrics = st.columns(2)
+
+        metrics[0].markdown("### Positive Reviews")
+        metrics[0].metric('Total Positive', positive, delta=None, delta_color="normal")
+        metrics[0].text("Top 5 Keywords")
+        metrics[0].text(df_pos.head(5).index.tolist())
+
+        metrics[1].markdown("### Negative Reviews")
+        metrics[1].metric('Total Negative', negative, delta=None, delta_color="normal")
+        metrics[1].text("Top 5 Keywords")
+        metrics[1].text(df_neg.head(5).index.tolist())
 
 
-def select_business(): 
+        REVIEW_TEMPLATE_MD = """{} - {}
+                                    > {}"""
+
+        with st.expander("💬 Show Reviews"):
+
+        # Show comments
+
+            st.write("**Reviews:**")
+
+            for index, entry in enumerate(reviews.itertuples()):
+                st.markdown(REVIEW_TEMPLATE_MD.format(entry.date, entry.sentiment, entry.text))
+
+def select_business():
     option = st.selectbox(
-        'My businesses',
-        (users_business))
+            'My businesses',
+            (users_business))
 
     #business = cql_to_pandas("""select * from yelp.business_full where business_id = '{}' ALLOW FILTERING;""".format(option),session)
 
@@ -165,7 +243,6 @@ def select_business():
     if option in option:
         filtro = business[business['name'] == option]
         query_info(filtro)
-
 
 
 
@@ -523,11 +600,6 @@ def eval_model(model, train, val):
     
 
 
-
-
-def get_reviews(id, engine, n_get):
-    df = pd.read_sql_query("SELECT text, date FROM review WHERE business_id = '{}' order by date desc limit {}".format(id, n_get), engine)
-    return df
 
 
 ############################################## Add business ############################################
