@@ -10,6 +10,7 @@ import yaml
 with open(r'config.yaml') as file:
    users = yaml.load(file, Loader=yaml.FullLoader)
 
+
 st.set_page_config(
    page_title="Vocado",
    page_icon="🥑",  
