@@ -1,0 +1,21 @@
+,Best Model
+Burger King,Exponential Smoothing
+CVS Pharmacy,ARIMA
+Chick-fil-A,Exponential Smoothing
+Domino's Pizza,ARIMA
+Dunkin',Prophet
+Enterprise Rent-A-Car,Prophet
+Great Clips,ARIMA
+Jimmy John's,Prophet
+KFC,Exponential Smoothing
+McDonald's,Exponential Smoothing
+Papa John's Pizza,Exponential Smoothing
+Pizza Hut,Prophet
+Starbucks,Exponential Smoothing
+Subway,Naive Drift
+Taco Bell,ARIMA
+The UPS Store,Prophet
+US Post Office,Prophet
+Walgreens,Naive Drift
+Wawa,Prophet
+Wendy's,Exponential Smoothing

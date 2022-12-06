@@ -19,10 +19,10 @@ from plotly.offline import download_plotlyjs, init_notebook_mode, plot, iplot
 import plotly.graph_objects as go
 pd.options.plotting.backend = 'plotly'
 from sqlalchemy import create_engine
-from darts import TimeSeries
-from darts.models import ExponentialSmoothing
-from darts.metrics import mape
-from darts.utils.statistics import check_seasonality
+# from darts import TimeSeries
+# from darts.models import ExponentialSmoothing
+# from darts.metrics import mape
+# from darts.utils.statistics import check_seasonality
 #from Functions.Herramientas import ht 
 
 
@@ -310,7 +310,7 @@ def machine_learning():
         'St. Louis', 
         'Nashville', 
         'New Orleans', 
-        'Orlando',
+        'Tampa',
         'Tucson', 
         'Santa Barbara', 
         'Reno', 
@@ -388,24 +388,26 @@ def machine_learning():
 
         if area == 'Philadelphia':
             df_4['areas_0'] = 1.0
-        elif area == 'Indianapolis':
+        elif area == 'Reno':
             df_4['areas_1'] = 1.0
-        elif area == 'St. Louis':    
+        elif area == 'Indianapolis':
             df_4['areas_2'] = 1.0
-        elif area == 'Nashville':
+        elif area == 'Tucson':
             df_4['areas_3'] = 1.0
         elif area == 'New Orleans':
             df_4['areas_4'] = 1.0
-        elif area == 'Orlando':
+        elif area == 'St. Louis':    
             df_4['areas_5'] = 1.0
-        elif area == 'Tucson':
+        elif area == 'Tampa':
             df_4['areas_6'] = 1.0
-        elif area == 'Santa Barbara':
-            df_4['areas_8'] = 1.0
-        elif area == 'Reno':
-            df_4['areas_9'] = 1.0
         elif area == 'Boise':
+            df_4['areas_7'] = 1.0
+        elif area == 'Nashville':
+            df_4['areas_9'] = 1.0
+        elif area == 'Santa Barbara':
             df_4['areas_10'] = 1.0
+        
+        
 
         df_5 = pd.DataFrame({   'price_ranges_0': [0.0],
                                             'price_ranges_1': [0.0],
@@ -466,56 +468,58 @@ def eval_model(model, train, val):
     fig = go.Figure(data = fig1.data + fig2.data)
     return fig, string
 
-def timeseries():
-    df = pd.read_csv('pages/main/data/forecasting.csv', parse_dates=['month'], index_col='month')
-    df = df['2010':]
+####### NO BORRAR #######
 
-    # st.title('Time Series Visualization')
-    st.markdown('Reviews/Tips/Checkins by Month for the Top Brands in USA'
-    )
+# def timeseries():
+#     df = pd.read_csv('pages/main/data/forecasting.csv', parse_dates=['month'], index_col='month')
+#     df = df['2010':]
 
-    # Create a list of unique brands
-    st.text("Select you favourite brand")
-    top_brand_selected = st.multiselect('Select brand', df.columns.tolist(), df.columns.tolist()[0:3])
+#     # st.title('Time Series Visualization')
+#     st.markdown('Reviews/Tips/Checkins by Month for the Top Brands in USA'
+#     )
 
-    st.plotly_chart(df[top_brand_selected].plot(title = 'Total Review/Tips/Checkins Counts on Yelp for Top Brands'))
+#     # Create a list of unique brands
+#     st.text("Select you favourite brand")
+#     top_brand_selected = st.multiselect('Select brand', df.columns.tolist(), df.columns.tolist()[0:3])
+
+#     st.plotly_chart(df[top_brand_selected].plot(title = 'Total Review/Tips/Checkins Counts on Yelp for Top Brands'))
 
 
-    series = TimeSeries.from_dataframe(df, fill_missing_dates=True, freq='MS', fillna_value=0)
+#     series = TimeSeries.from_dataframe(df, fill_missing_dates=True, freq='MS', fillna_value=0)
 
-    st.title('Forecasting Time Series')
-    st.markdown('Reviews/Tips/Checkins by Month for the Top Brands in USA'
-    )
+#     st.title('Forecasting Time Series')
+#     st.markdown('Reviews/Tips/Checkins by Month for the Top Brands in USA'
+#     )
 
-    # Create a list of unique brands
-    st.text("Select you favourite brand")
-    top_brand_selected_f = st.selectbox('Select brand for forecast', df.columns.tolist())
+#     # Create a list of unique brands
+#     st.text("Select you favourite brand")
+#     top_brand_selected_f = st.selectbox('Select brand for forecast', df.columns.tolist())
 
-    train, val = series[top_brand_selected_f].split_after(pd.Timestamp('2021-01-01'))
+#     train, val = series[top_brand_selected_f].split_after(pd.Timestamp('2021-01-01'))
     
-    for m in range(2, 25):
-        is_seasonal, mseas = check_seasonality(train, m=m, alpha=0.05)
-        if is_seasonal:
-            break
+#     for m in range(2, 25):
+#         is_seasonal, mseas = check_seasonality(train, m=m, alpha=0.05)
+#         if is_seasonal:
+#             break
     
     
-    if is_seasonal:
-        model = ExponentialSmoothing(seasonal_periods=mseas)
-    else:
-        model = ExponentialSmoothing()
+#     if is_seasonal:
+#         model = ExponentialSmoothing(seasonal_periods=mseas)
+#     else:
+#         model = ExponentialSmoothing()
 
-    fig, string = eval_model(model, train, val)
+#     fig, string = eval_model(model, train, val)
 
-    fig.update_layout(title=top_brand_selected_f)
-    st.plotly_chart(fig)
+#     fig.update_layout(title=top_brand_selected_f)
+#     st.plotly_chart(fig)
 
-    st.text(string)
+#     st.text(string)
 
 
 ############################################## Add business ############################################
 
-def addbusiness():
-    name = st.text_input('Add your business name 👇', '')
+# def addbusiness():
+#     name = st.text_input('Add your business name 👇', '')
     
 
 
@@ -621,3 +625,74 @@ def sentiment_review():
 
             for index, entry in enumerate(reviews.itertuples()):
                 st.markdown(REVIEW_TEMPLATE_MD.format(entry.date, entry.sentiment, entry.text))
+
+
+def timeseries():
+    train_df = pd.read_csv('./pages/main/data/train_ts.csv', index_col='month', parse_dates=True)
+    forecast_df = pd.read_csv('./pages/main/data/forecast_ts.csv', index_col='month', parse_dates=True)
+    type_model = pd.read_csv('./pages/main/data/model_for_each_ts.csv', index_col=0)
+    print(type_model)
+
+    st.title('Time Series Visualization')
+    st.markdown('Reviews/Tips/Checkins by Month for the Top Brands in USA')
+
+    st.text("Select you favourite brand")
+    top_brand_selected = st.multiselect('Select brand', train_df.columns.tolist(), train_df.columns.tolist()[0:3])
+
+    st.plotly_chart(train_df[top_brand_selected].plot(title = 'Total Review/Tips/Checkins Counts on Yelp for Top Brands'))
+
+    st.title('Forecasting Time Series')
+    st.markdown('Reviews/Tips/Checkins by Month for the Top Brands in USA')
+
+    st.text("Select you favourite brand")
+    top_brand_selected_f = st.multiselect('Select brand for forecast', train_df.columns.tolist(), train_df.columns.tolist()[0:2])
+
+    make_forecast = st.button('Make Forecasts')
+
+    if make_forecast:
+        for i in top_brand_selected:
+            fig1 = px.line(train_df[i])
+            fig1.update_layout(title='Actual')
+            fig1.update_traces(line_color='purple', name='Actual')
+
+            fig2 = px.line(forecast_df[i])
+            fig2.update_layout(title='Forecast')
+            fig2.update_traces(line_color='seagreen', name='Forecast')
+
+            fig = go.Figure(data = fig1.data + fig2.data)
+            fig.update_layout(title=i)
+            st.plotly_chart(fig)
+            texto = 'Type of model used for {}: {}'.format(i, type_model.loc[i, 'Best Model'])
+            htmlcode = "<p style='text-align: center; color: red;'>{}</p>".format(texto)
+            st.markdown(htmlcode, unsafe_allow_html=True)
+
+
+def addbusiness():
+    engine = create_engine("mysql+pymysql://{user}:{pw}@{address}/{db}".format(user="root",
+            address = '35.239.80.227:3306',
+            pw="Henry12.BORIS99",
+            db="yelp"))
+    st.markdown('#### Add you bussiness name')
+    name = st.text_input('Add your business name 👇', '')
+
+    if name != '':
+        df = pd.read_sql('SELECT address, postal_code FROM business_clean WHERE name = "{}" ORDER BY postal_code ASC'.format(name), con=engine)
+    
+        if len(df) > 0:
+            st.markdown('#### Postal Code')
+            zipcode = st.selectbox('Select your postal code 👇', df['postal_code'].unique().tolist())
+
+            refine_search = st.button('Refine Search')
+
+            if refine_search:
+                st.markdown('#### Address')
+                address = st.selectbox('Select your address 👇', df.loc[df['postal_code'] == zipcode,'address'].unique().tolist())
+
+                add_my_bussiness = st.button('Add my business')
+
+                if add_my_bussiness:
+                    new_business_id = pd.read_sql('SELECT business_id FROM business_clean WHERE name = "{}" AND postal_code = "{}" AND address = "{}"'.format(name, zipcode, address), con=engine)['business_id'].values[0]
+                    st.text('Your business id is: {}'.format(new_business_id))
+                    st.text('Business added to dashboard successfully')
+        else:
+            st.text('Business not found, check the name and try again')
