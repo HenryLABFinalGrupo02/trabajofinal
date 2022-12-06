@@ -53,7 +53,7 @@ from keybert import KeyBERT
 
 #users_business = ["Burger King", "Starbucks", "Subway", "Taco Bell", "CVS Pharmacy", "Acme Oyster House", "Michaelangelos Pizza", "Nana Rosa Italian"]
 users_business = ["Taco Bell", "Michaelangelos Pizza"]
-
+users_business_by_id = []
 
 # business = cql_to_pandas("""select * from yelp.business ALLOW FILTERING;""",session)
 # business = cql_to_pandas("""select * from yelp.business_full where name in {} ALLOW FILTERING;""".format(tuple(users_business)),session)
@@ -117,7 +117,7 @@ def metricas():
     ## Oportunities
     ## Gives you the top categories and locations of business according to probability predictions
     ## Of the XGBoost model 
-    
+
     df = pd.read_csv('./pages/main/data/business_proba.csv').head(50)
     sucessfull_business = tuple(df['business_id'].unique().tolist())
     sucess_query = '''SELECT DISTINCT(postal_code), areas,
@@ -280,7 +280,7 @@ def query_info(filtro):
 def select_business():
     option = st.selectbox(
             'My businesses',
-            (users_business))
+            users_business)
 
     #business = cql_to_pandas("""select * from yelp.business_full where business_id = '{}' ALLOW FILTERING;""".format(option),session)
 
@@ -789,9 +789,8 @@ def addbusiness():
             address = '35.239.80.227:3306',
             pw="Henry12.BORIS99",
             db="yelp"))
-    st.markdown('#### Add you bussiness name')
-    name = st.text_input('Add your business name 👇', '')
-
+    st.markdown('#### Add your bussiness name')
+    name = st.text_input('Add your business name 👇 and hit ENTER', '')
     if name != '':
         df = pd.read_sql('SELECT address, postal_code FROM business_clean WHERE name = "{}" ORDER BY postal_code ASC'.format(name), con=engine)
     
@@ -809,6 +808,8 @@ def addbusiness():
 
                 if add_my_bussiness:
                     new_business_id = pd.read_sql('SELECT business_id FROM business_clean WHERE name = "{}" AND postal_code = "{}" AND address = "{}"'.format(name, zipcode, address), con=engine)['business_id'].values[0]
+                    users_business_by_id.append(new_business_id)
+                    users_business.append(name)
                     st.text('Your business id is: {}'.format(new_business_id))
                     st.text('Business added to dashboard successfully')
         else:
