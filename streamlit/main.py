@@ -5,6 +5,7 @@ from multiprocessing import Value
 from pages.main import tabs_functions as tf
 from PIL import Image
 
+
 st.set_page_config(
    page_title="Vocado",
    page_icon="🥑",  
@@ -78,6 +79,3 @@ if selected2 == "Opportunities":
 
 if selected2 == "Add business":
    tf.addbusiness()
-
-
-
