@@ -52,8 +52,16 @@ from keybert import KeyBERT
 #    return result._current_rows
 
 #users_business = ["Burger King", "Starbucks", "Subway", "Taco Bell", "CVS Pharmacy", "Acme Oyster House", "Michaelangelos Pizza", "Nana Rosa Italian"]
-users_business = ["Taco Bell", "Michaelangelos Pizza"]
-users_business_by_id = []
+users_business = set()
+bus_ids = ['vCJZ0WpB9r_tOhJZpESqCQ',
+ 'Ppy-UN5RptIog4AvNnAM-g',
+ '4dW3dmdYRsfen8a2AtfZvg',
+ '_ab50qdWOk0DdB6XOrBitw',
+ 'gLKNO0m4kLSqxWQKNJgMKg',
+ '-QG6KSRQKTQ80--wqrnLTg',
+ 'pq7CAQGsxjaFcMLmhdbbvA',
+ '2cfEAFZZee8fq3Xx6yZ87w',
+ 'HgvOxHGHnEway0hEn4jjtw']
 
 # business = cql_to_pandas("""select * from yelp.business ALLOW FILTERING;""",session)
 # business = cql_to_pandas("""select * from yelp.business_full where name in {} ALLOW FILTERING;""".format(tuple(users_business)),session)
@@ -67,24 +75,34 @@ engine = create_engine("mysql+pymysql://{user}:{pw}@{address}/{db}".format(user=
             pw="Henry12.BORIS99",
             db="yelp"))
 
-if len(users_business) > 1:
-    business = pd.read_sql("""SELECT * FROM business_clean WHERE name in {}""".format(tuple(users_business)), engine)
-    bus_ids = tuple(business.business_id.to_list())
-    checkin = pd.read_sql("""SELECT * FROM checkin_hour WHERE business_id in {}""".format(bus_ids), engine)
-    review = pd.read_sql("""SELECT * FROM review WHERE business_id in {}""".format(bus_ids), engine, parse_dates=['date'])
-    sentiment = pd.read_sql("""SELECT * FROM sentiment_by_business WHERE business_id in {}""".format(bus_ids), engine)
-    influencer_score = pd.read_sql("""SELECT * FROM business_target WHERE business_id in {}""".format(bus_ids), engine)
-else:
-    business = pd.read_sql("""SELECT * FROM business_clean WHERE name = '{}'""".format(users_business[0]), engine)
-    bus_ids = tuple(business.business_id.to_list())
-    checkin = pd.read_sql("""SELECT * FROM checkin_hour WHERE business_id = '{}'""".format(bus_ids[0]), engine)
-    review = pd.read_sql("""SELECT * FROM review WHERE business_id = '{}'""".format(bus_ids[0]), engine, parse_dates=['date'])
-    sentiment = pd.read_sql("""SELECT * FROM sentiment_by_business WHERE business_id = '{}'""".format(bus_ids[0]), engine)
-    influencer_score = pd.read_sql("""SELECT * FROM business_target WHERE business_id = '{}'""".format(bus_ids[0]), engine)
+def update_my_businesses(ids_list:list):
+    print(f'UPDATING FOR: {ids_list}')
+    tup = tuple(ids_list)
+    print(f'TUPLE: {tup}')
+    if len(tup) > 1:
+        business = pd.read_sql("""SELECT * FROM business_clean WHERE business_id in {}""".format(tup), engine)
+        bus_names = business.name.to_list()
+        for x in bus_names:
+            users_business.add(x)
+        checkin = pd.read_sql("""SELECT * FROM checkin_hour WHERE business_id in {}""".format(tup), engine)
+        review = pd.read_sql("""SELECT * FROM review WHERE business_id in {}""".format(tup), engine, parse_dates=['date'])
+        sentiment = pd.read_sql("""SELECT * FROM sentiment_by_business WHERE business_id in {}""".format(tup), engine)
+        influencer_score = pd.read_sql("""SELECT * FROM business_target WHERE business_id in {}""".format(tup), engine)
+    else:
+        # business = pd.read_sql("""SELECT * FROM business_clean WHERE name = '{}'""".format(users_business[0]), engine)
+        # bus_ids = business.business_id.to_list()
+        business = pd.read_sql("""SELECT * FROM business_clean WHERE business_id = '{}'""".format(tup[0]), engine)
+        users_business.add(business.name[0])
+        checkin = pd.read_sql("""SELECT * FROM checkin_hour WHERE business_id = '{}'""".format(tup[0]), engine)
+        review = pd.read_sql("""SELECT * FROM review WHERE business_id = '{}'""".format(tup[0]), engine, parse_dates=['date'])
+        sentiment = pd.read_sql("""SELECT * FROM sentiment_by_business WHERE business_id = '{}'""".format(tup[0]), engine)
+        influencer_score = pd.read_sql("""SELECT * FROM business_target WHERE business_id = '{}'""".format(tup[0]), engine)
+    return business, checkin, review, sentiment, influencer_score
 
 #influencer_score = pd.read_csv(r'pages/main/data/target_3_influencer_modified.csv')
 #influencer_score = pd.read_sql("""SELECT * FROM business_clean WHERE business_id in {}""".format(bus_ids), engine)
 
+business, checkin, review, sentiment, influencer_score = update_my_businesses(bus_ids)
 
 ############################################ HOME TAB ##################################################
 def capitalize_each_word(original_str):
@@ -785,32 +803,44 @@ def timeseries():
 
 
 def addbusiness():
-    engine = create_engine("mysql+pymysql://{user}:{pw}@{address}/{db}".format(user="root",
-            address = '35.239.80.227:3306',
-            pw="Henry12.BORIS99",
-            db="yelp"))
+    global business, checkin, review, sentiment, influencer_score
     st.markdown('#### Add your bussiness name')
     name = st.text_input('Add your business name 👇 and hit ENTER', '')
     if name != '':
         df = pd.read_sql('SELECT address, postal_code FROM business_clean WHERE name = "{}" ORDER BY postal_code ASC'.format(name), con=engine)
     
-        if len(df) > 0:
-            st.markdown('#### Postal Code')
-            zipcode = st.selectbox('Select your postal code 👇', df['postal_code'].unique().tolist())
+        #if len(df) > 0:
 
-            refine_search = st.button('Refine Search')
+        st.markdown('#### Postal Code')
+        zipcode = st.selectbox('Select your postal code 👇', df['postal_code'].unique().tolist())
 
-            if refine_search:
-                st.markdown('#### Address')
-                address = st.selectbox('Select your address 👇', df.loc[df['postal_code'] == zipcode,'address'].unique().tolist())
+        # if refine_search:
+        st.markdown('#### Address')
+        address = st.selectbox('Select your address 👇', df.loc[df['postal_code'] == zipcode,'address'].unique().tolist())
 
-                add_my_bussiness = st.button('Add my business')
+        add_my_bussiness = st.button('Add my business')
 
-                if add_my_bussiness:
-                    new_business_id = pd.read_sql('SELECT business_id FROM business_clean WHERE name = "{}" AND postal_code = "{}" AND address = "{}"'.format(name, zipcode, address), con=engine)['business_id'].values[0]
-                    users_business_by_id.append(new_business_id)
-                    users_business.append(name)
-                    st.text('Your business id is: {}'.format(new_business_id))
-                    st.text('Business added to dashboard successfully')
-        else:
-            st.text('Business not found, check the name and try again')
+        if add_my_bussiness:
+            new_business_id = pd.read_sql('SELECT business_id FROM business_clean WHERE name = "{}" AND postal_code = "{}" AND address = "{}"'.format(name, zipcode, address), con=engine)['business_id'].values[0]
+            print(f'ADDING NEW BUSINESS: {new_business_id}')
+            bus_ids.append(new_business_id)
+            print(bus_ids)
+            users_business.add(capitalize_each_word(name))
+            print(users_business)
+            st.text('Your business id is: {}'.format(new_business_id))
+            st.text('Business added to dashboard successfully')
+            new_business, new_checkin, new_review, new_sentiment, new_influencer_score = update_my_businesses([new_business_id])
+            #print(f'BUSINESS SHAPE BEFORE CONCAT: {business.shape}')
+            business = pd.concat([business, new_business], axis=0)
+            #print(f'BUSINESS SHAPE AFTER CONCAT: {business.shape}')
+            #print(f'CHECKIN SHAPE BEFORE CONCAT: {checkin.shape}')
+            checkin = pd.concat([checkin, new_checkin], axis=0)
+            #print(f'CHECKIN SHAPE AFTER CONCAT: {checkin.shape}')
+            #print(f'REVIEW SHAPE BEFORE CONCAT: {review.shape}')
+            review = pd.concat([review, new_review], axis=0)
+            #print(f'REVIEW SHAPE AFTER CONCAT: {review.shape}')
+            sentiment = pd.concat([sentiment, new_sentiment], axis=0)
+            influencer_score = pd.concat([influencer_score, new_influencer_score], axis=0)
+
+    else:
+        st.text('Business not found, check the name and try again')
