@@ -87,7 +87,22 @@ else:
 
 
 ############################################ HOME TAB ##################################################
-
+def capitalize_each_word(original_str):
+    result = ""
+    # Split the string and get all words in a list
+    list_of_words = original_str.split()
+    # Iterate over all elements in list
+    for elem in list_of_words:
+        # capitalize first letter of each word and add to a string
+        if len(result) > 0:
+            result = result + " " + elem.strip().capitalize()
+        else:
+            result = elem.capitalize()
+    # If result is still empty then return original string else returned capitalized.
+    if not result:
+        return original_str
+    else:
+        return result
 
 def metricas(): 
     review_stars = business['stars'].mean()
@@ -99,12 +114,44 @@ def metricas():
     influencer_score['Influencer_score'] = 1 - (1 / (1 + influencer_score['avg(Influencer_2)']))
     inf_score = influencer_score['Influencer_score'].mean()
 
-    st.markdown("### Oportunities")
-    oportunity = st.columns(3)
-    oportunity[0].metric('Business Line', '98,7%', delta=None, delta_color="normal")
-    oportunity[1].metric('Location', '93,5%', delta=None, delta_color="normal")
-    oportunity[2].metric('Services', '90,7%', delta=None, delta_color="normal")
+    ## Oportunities
+    ## Gives you the top categories and locations of business according to probability predictions
+    ## Of the XGBoost model 
+    
+    df = pd.read_csv('./pages/main/data/business_proba.csv').head(50)
+    sucessfull_business = tuple(df['business_id'].unique().tolist())
+    sucess_query = '''SELECT DISTINCT(postal_code), areas,
+    restaurants, food, shopping, homeservices, beautyandspas, 
+    nightlife, healthandmedical, localservices, bars, automotive 
+    FROM yelp.business_clean where business_id IN {};'''
+    df_sucess_zip = pd.read_sql(sucess_query.format(sucessfull_business), engine)
+    df_sucess_zip['areas_name'] = df_sucess_zip['areas'].map({
+        0: 'Philadelphia',
+        1: 'Reno',
+        2: 'Indianapolis',
+        3: 'Tucson',
+        4: 'New Orleans',
+        5: 'St. Louis',
+        6: 'Tampa',
+        7: 'Boise',
+        9: 'Nashville',
+        10: 'Santa Barbara'
+    })
 
+    areas = df_sucess_zip['areas_name'].value_counts().head(3).index.tolist()
+    areas = ', '.join(areas)
+
+    subset = df_sucess_zip[['restaurants', 'food', 'shopping', 'homeservices', 'beautyandspas', 'nightlife', 'healthandmedical', 'localservices', 'bars', 'automotive']]
+    business_lines = pd.get_dummies(subset).idxmax(1).value_counts().head(3).index.tolist()
+    business_lines = ', '.join(business_lines)
+    business_lines = capitalize_each_word(business_lines)
+    
+    st.markdown("### Oportunities")
+    oportunity = st.columns(2)
+    oportunity[0].metric('Hot Business Lines', business_lines, delta=None, delta_color="normal")
+    oportunity[1].metric('Hot Locations', areas, delta=None, delta_color="normal")
+
+    ## Account Summary
     st.markdown("### Account Summary")
     metrics = st.columns(6)
     metrics[0].metric('Review Total', review_total, delta=None, delta_color="normal")
@@ -114,8 +161,6 @@ def metricas():
     metrics[3].metric('Influencer Score', f'{round(inf_score, 2)*100}%', delta=None, delta_color="normal")
     metrics[4].metric('Top Hour', '18:00', delta=None, delta_color="normal")
     metrics[5].metric('Number_visits', number_visits)
-   
-   
 
 
 
