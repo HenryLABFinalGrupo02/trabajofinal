@@ -4,6 +4,10 @@ cookie:
   name: some_cookie_name
 credentials:
   usernames:
+    dav:
+      email: acidminded95@gmail.com
+      name: David
+      password: $2b$12$deaGTnr8hstj2nzUegMN5.yRXpSLgDvP.GV7t.jVxzBD.wkvOJWwe
     julieta77:
       email: julietaciare77@gmail.com
       name: julieta
