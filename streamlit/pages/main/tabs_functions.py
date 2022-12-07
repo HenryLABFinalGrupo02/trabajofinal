@@ -19,6 +19,7 @@ from sqlalchemy import create_engine
 from transformers import AlbertForSequenceClassification, pipeline, AlbertTokenizer
 from keybert import KeyBERT
 #from Functions.Herramientas import ht 
+import pydeck as pdk
 
 
 ###########################
@@ -577,7 +578,7 @@ def machine_learning():
 
         df_predictions_final.columns = clf.get_booster().feature_names
 
-        print(df_predictions_final)
+        #print(df_predictions_final)
         
         prediction = clf.get_booster().predict(xgboost.DMatrix(df_predictions_final))
         
@@ -664,7 +665,7 @@ def timeseries():
     train_df = pd.read_csv('./pages/main/data/train_ts.csv', index_col='month', parse_dates=True)
     forecast_df = pd.read_csv('./pages/main/data/forecast_ts.csv', index_col='month', parse_dates=True)
     type_model = pd.read_csv('./pages/main/data/model_for_each_ts.csv', index_col=0)
-    print(type_model)
+    #print(type_model)
 
     st.title('Time Series Visualization')
     st.markdown('Reviews/Tips/Checkins by Month for the Top Brands in USA')
@@ -721,11 +722,11 @@ def addbusiness():
 
         if add_my_bussiness:
             new_business_id = pd.read_sql('SELECT business_id FROM business_clean WHERE name = "{}" AND postal_code = "{}" AND address = "{}"'.format(name, zipcode, address), con=engine)['business_id'].values[0]
-            print(f'ADDING NEW BUSINESS: {new_business_id}')
+            #print(f'ADDING NEW BUSINESS: {new_business_id}')
             bus_ids.append(new_business_id)
-            print(bus_ids)
+            #print(bus_ids)
             users_business.add(capitalize_each_word(name))
-            print(users_business)
+            #print(users_business)
             st.text('Your business id is: {}'.format(new_business_id))
             st.text('Business added to dashboard successfully')
             #if using_cassandra:
@@ -740,3 +741,7 @@ def addbusiness():
 
     else:
         st.text('Business not found, check the name and try again')
+
+
+#def mapa3dGrafico():
+    #df = pd.read_sql("""SELECT * FROM business_clean  bc join business_target bt on bc.business_id=bt.business_id WHERE business_id in {}""".format(tup), engine)
