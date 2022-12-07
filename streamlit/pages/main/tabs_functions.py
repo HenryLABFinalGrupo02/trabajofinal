@@ -94,15 +94,15 @@ def update_cass_businesses(ids_list:list):
     spark = SparkSession.builder.master("local[*]").getOrCreate()
     import casspark
     from cassandra.cluster import Cluster
-    cass_ip = 'cassandra'
+    cass_ip = '34.102.43.26'
     cluster = Cluster(contact_points=[cass_ip],port=9042)
     session = cluster.connect()
 
-    business = cql_to_pandas("""select * from henry.business WHERE business_id in {} ALLOW FILTERING;""".format(bus_ids),session)
-    checkin = cql_to_pandas("""select * from henry.checkin where business_id in {} ALLOW FILTERING;""".format(bus_ids),session)
-    review = cql_to_pandas("""select * from henry.review where business_id in {} ALLOW FILTERING;""".format(bus_ids),session)
-    sentiment = cql_to_pandas("""SELECT * FROM sentiment_by_business WHERE business_id = '{}' ALLOW FILTERING""".format(bus_ids), engine)
-    influencer_score = cql_to_pandas("""SELECT * FROM business_target WHERE business_id = '{}'""".format(tup[0]), engine)
+    business = cql_to_pandas("""select * from yelp.business WHERE business_id in {} ALLOW FILTERING;""".format(bus_ids),session)
+    checkin = cql_to_pandas("""select * from yelp.checkin where business_id in {} ALLOW FILTERING;""".format(bus_ids),session)
+    review = cql_to_pandas("""select * from yelp.review where business_id in {} ALLOW FILTERING;""".format(bus_ids),session)
+    sentiment = cql_to_pandas("""SELECT * FROM yelp.sentiment_by_business WHERE business_id = '{}' ALLOW FILTERING""".format(bus_ids), engine)
+    influencer_score = cql_to_pandas("""SELECT * FROM yelp.business_target WHERE business_id = '{}' ALLOW FILTERING""".format(tup[0]), engine)
     return business, checkin, review, sentiment, influencer_score
 
 
@@ -122,10 +122,14 @@ bus_ids = ['vCJZ0WpB9r_tOhJZpESqCQ',
 ## IMPORT DATA ###
 ##################
 
-try:
-    business, checkin, review, sentiment, influencer_score = update_cass_businesses(bus_ids)
-except:
-    business, checkin, review, sentiment, influencer_score = update_my_businesses(bus_ids)
+using_cassandra = False
+
+#try:
+business, checkin, review, sentiment, influencer_score = update_cass_businesses(bus_ids)
+using_cassandra = True
+# except:
+#     business, checkin, review, sentiment, influencer_score = update_my_businesses(bus_ids)
+#     using_cassandra = False
 
 ############################################ HOME TAB ##################################################
 
@@ -701,7 +705,7 @@ def timeseries():
 
 
 def addbusiness():
-    global business, checkin, review, sentiment, influencer_score
+    global business, checkin, review, sentiment, influencer_score, using_cassandra
     st.markdown('#### Add your bussiness name')
     name = st.text_input('Add your business name 👇 and hit ENTER', '')
     if name != None:
@@ -724,7 +728,10 @@ def addbusiness():
             print(users_business)
             st.text('Your business id is: {}'.format(new_business_id))
             st.text('Business added to dashboard successfully')
-            new_business, new_checkin, new_review, new_sentiment, new_influencer_score = update_my_businesses([new_business_id])
+            #if using_cassandra:
+            new_business, new_checkin, new_review, new_sentiment, new_influencer_score = update_cass_businesses([new_business_id])
+            # else:
+            #     new_business, new_checkin, new_review, new_sentiment, new_influencer_score = update_my_businesses([new_business_id])
             business = pd.concat([business, new_business], axis=0)
             checkin = pd.concat([checkin, new_checkin], axis=0)
             review = pd.concat([review, new_review], axis=0)
