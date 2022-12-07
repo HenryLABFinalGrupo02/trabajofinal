@@ -109,6 +109,7 @@ def load_user_metrics():
     print('COPYING USER DF')
     user_df = user.copy()
     print('GENERATING INTERACTIONS RECIEVED COLUMN')
+    ps.set_option('compute.ops_on_diff_frames', True)
     user_df['n_ints_rec'] = user_df[[ 'compliment_hot',
     'compliment_more', 'compliment_profile', 'compliment_cute',
     'compliment_list', 'compliment_note', 'compliment_plain',
