@@ -1,21 +1,14 @@
 import streamlit as st
 import pandas as pd 
-import numpy as np
 from multiprocessing import Value
-from os import write
 from typing import List
 from numpy.core.fromnumeric import size
-from PIL import Image
 # xtAuthProvider
-import json
-from pathlib import Path
 #import joblib
 import pickle
 import xgboost
 #import darts 
-import plotly as py
 import plotly.express as px
-from plotly.offline import download_plotlyjs, init_notebook_mode, plot, iplot
 import plotly.graph_objects as go
 pd.options.plotting.backend = 'plotly'
 from sqlalchemy import create_engine
@@ -598,7 +591,7 @@ def eval_model(model, train, val):
 
     fig1 = px.line(train.pd_dataframe())
     fig1.update_layout(title='Actual')
-    fig1.update_traces(line_color='purple', name='Actual')
+    fig1.update_traces(line_color='purple', name='Actual', x='Years', y='Total Reviews')
 
 
     fig2 = px.line(forecast.pd_dataframe())

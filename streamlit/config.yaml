@@ -16,6 +16,10 @@ credentials:
       email: lila@gmail.com
       name: lila
       password: $2b$12$.CUbBayk522X/F4E2AJUouNRi.mNyTrfLm.KgmVO0FGtlADfCPnm6
+    lilaalves:
+      email: lilaalvesonline@gmail.com
+      name: Lila
+      password: $2b$12$WzWs87RrN2lMMWuAVFZWf.SYpJ8Z2kS6q1byhFAfZYcVrZ9dZCk9y
 preauthorized:
   emails:
   - lilaavesonline@gmail.com
