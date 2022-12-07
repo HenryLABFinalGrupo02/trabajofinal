@@ -59,9 +59,9 @@ if authentication_status == None:
 if authentication_status:
 
 
-##################
+ ################
 ###### MENU ######
-##################
+ ################
 
    with st.sidebar:
       st.image(Image.open('./image/logo_vocado (5).png'))
@@ -101,9 +101,6 @@ if authentication_status:
       st.title('Business Admin Center')
       tf.select_business()
    
-      #tf.sentiment_review()
-   
-   
    ## My Competition
    if selected2 == "Competition":
       st.title('Competition')
@@ -121,6 +118,7 @@ if authentication_status:
    
    if selected2 == "Settings":
       tf.addbusiness()
+
 #if selected == "register":
    #try:
    #   if authenticator.register_user('Register user', preauthorization=False):
