@@ -1,6 +1,7 @@
-import streamlit_authenticator as stauth
+import authenticator_edit as stauth
 import yaml
 import streamlit as st
+
 
 
 with open(r'config.yaml') as file:

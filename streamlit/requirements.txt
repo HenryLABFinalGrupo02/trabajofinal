@@ -12,4 +12,4 @@ sqlalchemy
 pymysql
 mysql-connector-python
 keybert
-streamlit_authenticator== 0.2.1
+#streamlit_authenticator== 0.2.1

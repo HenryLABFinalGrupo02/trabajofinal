@@ -4,7 +4,7 @@ from streamlit_option_menu import option_menu
 from multiprocessing import Value
 from pages.main import tabs_functions as tf
 from PIL import Image
-import streamlit_authenticator as stauth
+import authenticator_edit as stauth
 import yaml
 
 with open(r'config.yaml') as file:
@@ -51,7 +51,7 @@ authenticator = stauth.Authenticate(
 #       })
 
 #if selected == 'login':
-name, authentication_status, username = authenticator.login('Login', 'main')
+name, authentication_status, username,premium = authenticator.login('Login', 'main')
 if authentication_status == False:
    st.error('Username/password is incorrect')
 if authentication_status == None:
@@ -90,43 +90,43 @@ if authentication_status:
    #####################
    
    ## HOME 
-   if selected2 == "Home":
-      st.title('Welcome to Vocado Admin Center')
-      tf.metricas()
-      authenticator.logout('Logout', 'main')
+   if premium:
+      if selected2 == "Home":
+         st.title('Welcome to Vocado Admin Center')
+         tf.metricas()
+         authenticator.logout('Logout', 'main')
+         
+      ## My Business
+      if selected2 == "My Business":
+         st.title('Business Admin Center')
+         tf.select_business()
       
-   
-   ## My Business
-   if selected2 == "My Business":
-      st.title('Business Admin Center')
-      tf.select_business()
-   
-      #tf.sentiment_review()
-   
-   
-   ## My Competition
-   if selected2 == "Competition":
-      st.title('Competition')
-      tf.timeseries()
-   
-   ## My Opportunities
-   if selected2 == "Opportunities":
-      st.title('Opportunities Exploration')
-      tf.machine_learning()
-    
-   # ## Time Series Analysis
-   # if selected2 == "Time Series Analysis":
-   #    st.title('Time Series Analysis')
-   #    tf.timeseries()
-   
-   if selected2 == "Add business":
-      tf.addbusiness()
-#if selected == "register":
-   #try:
-   #   if authenticator.register_user('Register user', preauthorization=False):
-   #      st.success('User registered successfully')
-   #except Exception as e:
-   #   st.error(e)
-   
+         #tf.sentiment_review()
+      
+      
+      ## My Competition
+      if selected2 == "Competition":
+         st.title('Competition')
+         tf.timeseries()
+      
+      ## My Opportunities
+      if selected2 == "Opportunities":
+         st.title('Opportunities Exploration')
+         tf.machine_learning()
+       
+      # ## Time Series Analysis
+      # if selected2 == "Time Series Analysis":
+      #    st.title('Time Series Analysis')
+      #    tf.timeseries()
+      
+      if selected2 == "Add business":
+         tf.addbusiness()
+#if    selected == "register":
+      #try:
+      #   if authenticator.register_user('Register user', preauthorization=False):
+      #      st.success('User registered successfully')
+      #except Exception as e:
+      #   st.error(e)
+      
    
    
