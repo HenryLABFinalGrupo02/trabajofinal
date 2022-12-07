@@ -124,12 +124,12 @@ bus_ids = ['vCJZ0WpB9r_tOhJZpESqCQ',
 
 using_cassandra = False
 
-#try:
-business, checkin, review, sentiment, influencer_score = update_cass_businesses(bus_ids)
-using_cassandra = True
-# except:
-#     business, checkin, review, sentiment, influencer_score = update_my_businesses(bus_ids)
-#     using_cassandra = False
+try:
+    business, checkin, review, sentiment, influencer_score = update_cass_businesses(bus_ids)
+    using_cassandra = True
+except:
+    business, checkin, review, sentiment, influencer_score = update_my_businesses(bus_ids)
+    using_cassandra = False
 
 ############################################ HOME TAB ##################################################
 
