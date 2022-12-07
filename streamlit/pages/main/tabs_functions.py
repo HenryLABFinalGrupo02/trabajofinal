@@ -1,5 +1,6 @@
 import streamlit as st
-import pandas as pd 
+import pandas as pd
+from datetime import datetime
 from multiprocessing import Value
 from typing import List
 from numpy.core.fromnumeric import size
@@ -20,47 +21,24 @@ from keybert import KeyBERT
 #from Functions.Herramientas import ht 
 
 
-##################
-## IMPORT DATA ###
-##################
+###########################
+## SOME USEFUL FUNCTIONS ###
+###########################
 
-#cloud_config= {'secure_connect_bundle': r'secure-connect-henry.zip'}
-#auth_provider = PlainTextAuthProvider(json.load(open(r'log_in.json'))['log_user'], json.load(open(r'log_in.json'))['log_password'])
-#cluster = Cluster(cloud=cloud_config, auth_provider=auth_provider)
-#session = cluster.connect()
-
-#def cql_to_pandas(cql_query,cassandra_session):
-#    """
-#    It takes a CQL query and a Cassandra session as input, and returns a Pandas dataframe
-#    
-#    :param cql_query: The CQL query you want to run
-#    :param cassandra_session: The Cassandra session object
-#    :return: A pandas dataframe
-#    """
-#    def pandaspark_factory(colnames, rows):\
-#        return pd.DataFrame(rows, columns=colnames)
-#    cassandra_session.row_factory = pandaspark_factory
-#    cassandra_session.default_fetch_size = None
-#    result = cassandra_session.execute(cql_query, timeout=None)
-#    return result._current_rows
-
-#users_business = ["Burger King", "Starbucks", "Subway", "Taco Bell", "CVS Pharmacy", "Acme Oyster House", "Michaelangelos Pizza", "Nana Rosa Italian"]
-users_business = set()
-bus_ids = ['vCJZ0WpB9r_tOhJZpESqCQ',
- 'Ppy-UN5RptIog4AvNnAM-g',
- '4dW3dmdYRsfen8a2AtfZvg',
- '_ab50qdWOk0DdB6XOrBitw',
- 'gLKNO0m4kLSqxWQKNJgMKg',
- '-QG6KSRQKTQ80--wqrnLTg',
- 'pq7CAQGsxjaFcMLmhdbbvA',
- '2cfEAFZZee8fq3Xx6yZ87w',
- 'HgvOxHGHnEway0hEn4jjtw']
-
-# business = cql_to_pandas("""select * from yelp.business ALLOW FILTERING;""",session)
-# business = cql_to_pandas("""select * from yelp.business_full where name in {} ALLOW FILTERING;""".format(tuple(users_business)),session)
-# bus_ids = business.business_id.to_list()
-# checkin = cql_to_pandas("""select * from yelp.checkin_full where business_id in {} ALLOW FILTERING;""".format(tuple(bus_ids)),session)
-# reviews = cql_to_pandas("""select * from yelp.review_full where business_id in {} ALLOW FILTERING;""".format(tuple(bus_ids)),session)
+def cql_to_pandas(cql_query,cassandra_session):
+   """
+   It takes a CQL query and a Cassandra session as input, and returns a Pandas dataframe
+   
+   :param cql_query: The CQL query you want to run
+   :param cassandra_session: The Cassandra session object
+   :return: A pandas dataframe
+   """
+   def pandaspark_factory(colnames, rows):\
+       return pd.DataFrame(rows, columns=colnames)
+   cassandra_session.row_factory = pandaspark_factory
+   cassandra_session.default_fetch_size = None
+   result = cassandra_session.execute(cql_query, timeout=None)
+   return result._current_rows
 
 
 def capitalize_each_word(original_str):
@@ -86,9 +64,7 @@ engine = create_engine("mysql+pymysql://{user}:{pw}@{address}/{db}".format(user=
             db="yelp"))
 
 def update_my_businesses(ids_list:list):
-    print(f'UPDATING FOR: {ids_list}')
     tup = tuple(ids_list)
-    print(f'TUPLE: {tup}')
     if len(tup) > 1:
         business = pd.read_sql("""SELECT * FROM business_clean WHERE business_id in {}""".format(tup), engine)
         bus_names = business.name.to_list()
@@ -99,8 +75,6 @@ def update_my_businesses(ids_list:list):
         sentiment = pd.read_sql("""SELECT * FROM sentiment_by_business WHERE business_id in {}""".format(tup), engine)
         influencer_score = pd.read_sql("""SELECT * FROM business_target WHERE business_id in {}""".format(tup), engine)
     else:
-        # business = pd.read_sql("""SELECT * FROM business_clean WHERE name = '{}'""".format(users_business[0]), engine)
-        # bus_ids = business.business_id.to_list()
         business = pd.read_sql("""SELECT * FROM business_clean WHERE business_id = '{}'""".format(tup[0]), engine)
         users_business.add(business.name[0])
         checkin = pd.read_sql("""SELECT * FROM checkin_hour WHERE business_id = '{}'""".format(tup[0]), engine)
@@ -109,10 +83,49 @@ def update_my_businesses(ids_list:list):
         influencer_score = pd.read_sql("""SELECT * FROM business_target WHERE business_id = '{}'""".format(tup[0]), engine)
     return business, checkin, review, sentiment, influencer_score
 
-#influencer_score = pd.read_csv(r'pages/main/data/target_3_influencer_modified.csv')
-#influencer_score = pd.read_sql("""SELECT * FROM business_clean WHERE business_id in {}""".format(bus_ids), engine)
+def update_cass_businesses(ids_list:list):
+    tup = tuple(ids_list)
+    import os
+    os.environ["JAVA_HOME"] = "/opt/java"
+    os.environ["SPARK_HOME"] = "/opt/spark"
+    import findspark
+    findspark.init()
+    from pyspark.sql import SparkSession
+    spark = SparkSession.builder.master("local[*]").getOrCreate()
+    import casspark
+    from cassandra.cluster import Cluster
+    cass_ip = 'cassandra'
+    cluster = Cluster(contact_points=[cass_ip],port=9042)
+    session = cluster.connect()
 
-business, checkin, review, sentiment, influencer_score = update_my_businesses(bus_ids)
+    business = cql_to_pandas("""select * from henry.business WHERE business_id in {} ALLOW FILTERING;""".format(bus_ids),session)
+    checkin = cql_to_pandas("""select * from henry.checkin where business_id in {} ALLOW FILTERING;""".format(bus_ids),session)
+    review = cql_to_pandas("""select * from henry.review where business_id in {} ALLOW FILTERING;""".format(bus_ids),session)
+    sentiment = cql_to_pandas("""SELECT * FROM sentiment_by_business WHERE business_id = '{}' ALLOW FILTERING""".format(bus_ids), engine)
+    influencer_score = cql_to_pandas("""SELECT * FROM business_target WHERE business_id = '{}'""".format(tup[0]), engine)
+    return business, checkin, review, sentiment, influencer_score
+
+
+#users_business = ["Burger King", "Starbucks", "Subway", "Taco Bell", "CVS Pharmacy", "Acme Oyster House", "Michaelangelos Pizza", "Nana Rosa Italian"]
+users_business = set()
+bus_ids = ['vCJZ0WpB9r_tOhJZpESqCQ',
+ 'Ppy-UN5RptIog4AvNnAM-g',
+ '4dW3dmdYRsfen8a2AtfZvg',
+ '_ab50qdWOk0DdB6XOrBitw',
+ 'gLKNO0m4kLSqxWQKNJgMKg',
+ '-QG6KSRQKTQ80--wqrnLTg',
+ 'pq7CAQGsxjaFcMLmhdbbvA',
+ '2cfEAFZZee8fq3Xx6yZ87w',
+ 'HgvOxHGHnEway0hEn4jjtw']
+
+##################
+## IMPORT DATA ###
+##################
+
+try:
+    business, checkin, review, sentiment, influencer_score = update_cass_businesses(bus_ids)
+except:
+    business, checkin, review, sentiment, influencer_score = update_my_businesses(bus_ids)
 
 ############################################ HOME TAB ##################################################
 
@@ -239,16 +252,12 @@ def query_info(filtro):
                 pos_keywords += keywords
                 reviews.sentiment[index] = 'positive'
                 reviews.keywords[index] = keywords
-                # reviews.iloc[index, reviews.columns.get_loc('sentiment')] = 'positive'
-                # reviews.iloc[index, reviews.columns.get_loc('keywords')] = keywords
             elif classifier(row['text'], truncation = True)[0]['label'] == 'LABEL_0':
                 negative += 1
                 keywords = kw_model.extract_keywords(row['text'], keyphrase_ngram_range=(1, 1), stop_words='english')
                 neg_keywords += keywords
                 reviews.sentiment[index] = 'negative'
                 reviews.keywords[index] = keywords
-                # reviews.iloc[index, reviews.columns.get_loc('sentiment')] = 'negative'
-                # reviews.iloc[index, reviews.columns.get_loc('keywords')] = keywords
         
         try:
             neg_key, neg_score = zip(*neg_keywords)
