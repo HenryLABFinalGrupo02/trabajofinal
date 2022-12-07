@@ -4,24 +4,18 @@ cookie:
   name: some_cookie_name
 credentials:
   usernames:
-    dav:
-      email: acidminded95@gmail.com
-      name: David
-      password: $2b$12$deaGTnr8hstj2nzUegMN5.yRXpSLgDvP.GV7t.jVxzBD.wkvOJWwe
     julieta77:
       email: julietaciare77@gmail.com
       name: julieta
       password: $2b$12$dM1xE832f0/fjZAgFqU/9erTNWfqley4n98qd3qkn0kGjuxLSBKhi
-    lila123:
-      email: lila@gmail.com
+      premium: true
+    lila1235:
+      email: lilaavesonline@gmail.com
       name: lila
-      password: $2b$12$.CUbBayk522X/F4E2AJUouNRi.mNyTrfLm.KgmVO0FGtlADfCPnm6
-    lilaalves:
-      email: lilaalvesonline@gmail.com
-      name: Lila
-      password: $2b$12$WzWs87RrN2lMMWuAVFZWf.SYpJ8Z2kS6q1byhFAfZYcVrZ9dZCk9y
+      password: $2b$12$tttwND8NETlEbAthS2PlUusDMa9XjUd7Cgy5YTqVZQ3wuFfGakro6
+      premium: false
 preauthorized:
   emails:
+  - bernalmaico@gmail.com
   - lilaavesonline@gmail.com
   - acidminded95@gmail.com
-  - bernalmaico@gmail.com
