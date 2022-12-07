@@ -3,6 +3,7 @@ Airflow-Spark/spark-3.3.1-bin-hadoop3.tgz
 Airflow-Spark/java
 Airflow-Spark/spark
 Airflow-Spark/data/initial_load
+Airflow-Spark/cassandra
 Airflow-Spark/airflow/dags/__pycache__
 Airflow-Spark/airflow/logs
 Airflow-Spark/airflow/dags/__pycache__
