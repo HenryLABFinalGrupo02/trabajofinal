@@ -121,12 +121,12 @@ if authentication_status:
       
       if selected2 == "Add business":
          tf.addbusiness()
-#if    selected == "register":
-      #try:
-      #   if authenticator.register_user('Register user', preauthorization=False):
-      #      st.success('User registered successfully')
-      #except Exception as e:
-      #   st.error(e)
-      
+   else:
+      if selected2 == "Home":
+         st.title('Welcome to Vocado Admin Center')
+         tf.metricas()
+         authenticator.logout('Logout', 'main')
+
+         
    
    
