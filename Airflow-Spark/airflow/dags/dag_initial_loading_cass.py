@@ -106,8 +106,9 @@ def load_user_metrics():
 
     print('NORMALIZING DATES')
     user['yelping_since'] = user['yelping_since'].apply(transform_funcs.transform_dates).dt.strftime('%Y-%m-%d')
-    print('GENERATING INTERACTIONS RECIEVED COLUMN')
+    print('COPYING USER DF')
     user_df = user.copy()
+    print('GENERATING INTERACTIONS RECIEVED COLUMN')
     user_df['n_ints_rec'] = user_df[[ 'compliment_hot',
     'compliment_more', 'compliment_profile', 'compliment_cute',
     'compliment_list', 'compliment_note', 'compliment_plain',
@@ -467,7 +468,7 @@ def load_user():
 
 
 def load_sentiment_business():
-    sentiment = pd.read_csv(r'./data/sentiment_ok_unique.csv')
+    sentiment = pd.read_csv(r'./data/initial_load/sentiment_ok_unique.csv')
 
     sentiment.rename(columns=lower_col_names(sentiment.columns), inplace=True)
 
