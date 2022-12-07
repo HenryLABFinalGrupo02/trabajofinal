@@ -28,9 +28,6 @@ cass_ip = 'cassandra'
 
 
 def load_tips():
-    print('ESTABLISHING CONNECTION TO CASSANDRA')
-    cluster = Cluster(contact_points=[cass_ip],port=9042)
-    session = cluster.connect()
     print('READING TIPS FILE')
     tip = ps.read_json(r'/opt/data/initial_load/tip.json').head(10000)
     print('DROPPING DUPLICATED ROWS')
@@ -39,6 +36,9 @@ def load_tips():
     tip = tip[tip['text'].apply(transform_funcs.drop_bad_str) != 'REMOVE_THIS_ROW']
     print('NORMALIZING DATES')
     tip['date'] = tip['date'].apply(transform_funcs.transform_dates).dt.strftime('%Y-%m-%d')
+    print('ESTABLISHING CONNECTION TO CASSANDRA')
+    cluster = Cluster(contact_points=[cass_ip],port=9042)
+    session = cluster.connect()
     print('CREATING KEYSPACE')
     session.execute("""
 CREATE KEYSPACE IF NOT EXISTS henry WITH REPLICATION = { 'class' : 'SimpleStrategy', 'replication_factor' : 3 };
@@ -54,15 +54,19 @@ CREATE TABLE IF NOT EXISTS henry.tip(business_id text, compliment_count int, dat
 
 
 def load_checkin():
-    print('ESTABLISHING CONNECTION TO CASSANDRA')
-    cluster = Cluster(contact_points=[cass_ip],port=9042)
-    session = cluster.connect()
     print('READING TIPS FILE')
     checkin = ps.read_json(r'/opt/data/initial_load/checkin.json').head(10000)
     print('DROPPING DUPLICATED ROWS')
     checkin = checkin.drop_duplicates()
+    print("CALCULATING TOTAL CHECKINS")
+    checkin['total'] = checkin['date'].apply(lambda x: get_len(x))
+    print("GETTING AVERAGE HOUR")
+    checkin['avg_hour'] = checkin.date.apply(transform_funcs.get_avg_checkins)
     print('NORMALIZING DATES')
     checkin['date'] = checkin['date'].apply(transform_funcs.get_date_as_list)
+    print('ESTABLISHING CONNECTION TO CASSANDRA')
+    cluster = Cluster(contact_points=[cass_ip],port=9042)
+    session = cluster.connect()
     print('CREATING KEYSPACE')
     session.execute("""
 CREATE KEYSPACE IF NOT EXISTS henry WITH REPLICATION = { 'class' : 'SimpleStrategy', 'replication_factor' : 3 };
@@ -78,9 +82,6 @@ CREATE TABLE IF NOT EXISTS henry.checkin(business_id text, date list<text>,PRIMA
 
 
 def load_bussiness():
-    print('ESTABLISHING CONNECTION TO CASSANDRA')
-    cluster = Cluster(contact_points=[cass_ip],port=9042)
-    session = cluster.connect()
     print('READING BUSINESS FILE')
     business = ps.read_json(r'/opt/data/initial_load/business.json', lines=True).head(10000)
     print('DROPPING DUPLICATED ROWS')
@@ -94,6 +95,9 @@ def load_bussiness():
     business['attributes'] = transform_funcs.row_att_to_series(business['attributes'])
     print('NORMALIZING CATEGORIES')
     business['categories'] = business['categories'].apply(transform_funcs.check_str_list)
+    print('ESTABLISHING CONNECTION TO CASSANDRA')
+    cluster = Cluster(contact_points=[cass_ip],port=9042)
+    session = cluster.connect()
     print('CREATING KEYSPACE')
     session.execute("""
 CREATE KEYSPACE IF NOT EXISTS henry WITH REPLICATION = { 'class' : 'SimpleStrategy', 'replication_factor' : 3 };
@@ -108,15 +112,15 @@ CREATE TABLE IF NOT EXISTS henry.business(address text, attributes list<frozen <
 
 
 def load_review():
-    print('ESTABLISHING CONNECTION TO CASSANDRA')
-    cluster = Cluster(contact_points=[cass_ip],port=9042)
-    session = cluster.connect()
     print('READING REVIEW FILE')
     review = ps.read_json(r'/opt/data/initial_load/review.json', lines=True).head(10000)
     print('DROPPING DUPLICATED ROWS')
     review = review.drop_duplicates()
     print('NORMALIZING DATES')
     review['date'] = review['date'].apply(transform_funcs.transform_dates).dt.strftime('%Y-%m-%d')
+    print('ESTABLISHING CONNECTION TO CASSANDRA')
+    cluster = Cluster(contact_points=[cass_ip],port=9042)
+    session = cluster.connect()
     print('CREATING KEYSPACE')
     session.execute("""
 CREATE KEYSPACE IF NOT EXISTS henry WITH REPLICATION = { 'class' : 'SimpleStrategy', 'replication_factor' : 3 };
@@ -134,25 +138,20 @@ CREATE TABLE IF NOT EXISTS henry.review(review_id text, user_id text, business_i
 
 
 def load_user():
-    print('ESTABLISHING CONNECTION TO CASSANDRA')
-    cluster = Cluster(contact_points=[cass_ip],port=9042)
-    session = cluster.connect()
-
     print('READING USER FILE')
     user = ps.read_json(r'/opt/data/initial_load/user.json', lines=True).head(10000)
-
     print('DROPPING DUPLICATED ROWS')
     user = user.drop_duplicates()
-
     print('NORMALIZING DATES')
     user['yelping_since'] = user['yelping_since'].apply(transform_funcs.transform_dates).dt.strftime('%Y-%m-%d')
-
     #print('TRANSFORMING ELITE')
     #user['elite'] = transform_funcs.get_elite_list(user['elite'])
 
     print('DROPPING ELITE & FRIENDS') #elite list <int>, friends varchar,
     user = user.drop(['elite', 'friends'], axis=1)
-
+    print('ESTABLISHING CONNECTION TO CASSANDRA')
+    cluster = Cluster(contact_points=[cass_ip],port=9042)
+    session = cluster.connect()
     print('CREATING KEYSPACE')
     session.execute("""
 CREATE KEYSPACE IF NOT EXISTS henry WITH REPLICATION = { 'class' : 'SimpleStrategy', 'replication_factor' : 3 };
@@ -180,7 +179,7 @@ CREATE TABLE IF NOT EXISTS henry.user(user_id text, name text, review_count int,
 
 
 #DAG de Airflow
-with DAG(dag_id='Test362',start_date=datetime.datetime(2022,8,25),schedule_interval='@once') as dag:
+with DAG(dag_id='Initial_Load',start_date=datetime.datetime(2022,8,25),schedule_interval='@once') as dag:
 
     t_load_tips = PythonOperator(task_id='load_tips',python_callable=load_tips)
 

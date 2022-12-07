@@ -9,6 +9,7 @@ import pyspark.pandas as ps
 import pandas as pd
 from pathlib import Path
 from IPython.display import display, clear_output
+from datetime import datetime
 import dateutil
 
 
@@ -250,3 +251,23 @@ def get_state_city(series_city,series_state):
 
 def get_elite_list(series):
     return ps.Series([[x] for x in series])
+
+def get_len(value):
+    ls=value.split(', ')
+    return len(ls)
+
+def lower_col_names(cols):
+    new_names = {}
+    for x in cols:
+        new_names[x] = x.lower()
+    return new_names 
+
+def get_avg_checkins(dates_list:list):
+    hours_sum = 0
+    ls = dates_list.split(', ')
+    list_len = len(ls)
+    for date in ls:
+        date_ok = datetime.strptime(date, '%Y-%m-%d %H:%M:%S')
+        hours_sum += date_ok.hour
+    avg_checkins = hours_sum/list_len
+    return round(avg_checkins)
