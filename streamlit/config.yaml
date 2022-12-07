@@ -4,6 +4,11 @@ cookie:
   name: some_cookie_name
 credentials:
   usernames:
+    dav:
+      email: acidminded95@gmail.com
+      name: dav
+      password: $2b$12$xP6q0HHcPTDprTNXYvBB3ezPiQoZiywhY13ijP/MC3VLsUhSeAsbG
+      premium: true
     julieta77:
       email: julietaciare77@gmail.com
       name: julieta
@@ -17,8 +22,4 @@ credentials:
 preauthorized:
   emails:
   - lilaavesonline@gmail.com
-  - acidminded95@gmail.com
-<<<<<<< HEAD
-=======
   - bernalmaico@gmail.com
->>>>>>> 1c83f6caccce4f3c1a9266a616e3b0a23976273b
