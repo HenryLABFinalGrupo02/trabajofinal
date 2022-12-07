@@ -66,7 +66,7 @@ if authentication_status:
    with st.sidebar:
       st.image(Image.open('./image/logo_vocado (5).png'))
    
-      selected2 = option_menu(None, ["Home", "My Business", "Competition", "Opportunities", "Settings"], 
+      selected2 = option_menu(None, ["Home", "My Business", "Competition", "Opportunities", "Add business"], 
       icons=['house', 'building', 'globe', 'star', 'gear', 'plus'], 
       menu_icon="cast", default_index=0, orientation="vertical",
       styles={
@@ -126,6 +126,22 @@ if authentication_status:
          st.title('Welcome to Vocado Admin Center')
          tf.metricas()
          authenticator.logout('Logout', 'main')
+      if selected2 == "My Business":
+         st.title("Try our free premium for 1 month to get to know all of Vocado's functionalities")
+         if st.button("Try premium!"):
+            tf.select_business()
+      if selected2 == "Competition":
+         st.title("Try our free premium for 1 month to get to know all of Vocado's functionalities")
+         if st.button("Try premium!"):
+            tf.timeseries()
+      if selected2 == "Opportunities":
+         st.title("Try our free premium for 1 month to get to know all of Vocado's functionalities")
+         if st.button("Try premium!"):
+            tf.machine_learning()
+      if selected2 == "Add business":
+         st.title("Try our free premium for 1 month to get to know all of Vocado's functionalities")
+         if st.button("Try premium!"):
+            tf.addbusiness()
 
          
    

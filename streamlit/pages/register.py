@@ -16,7 +16,7 @@ authenticator = stauth.Authenticate(
 )
 
 try:
-   if authenticator.register_user('Register user', preauthorization=False):
+   if authenticator.register_user('Register user', preauthorization=True):
       st.success('User registered successfully')
 except Exception as e:
    st.error(e)
