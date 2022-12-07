@@ -59,14 +59,14 @@ if authentication_status == None:
 if authentication_status:
 
 
-##################
+ ################
 ###### MENU ######
-##################
+ ################
 
    with st.sidebar:
       st.image(Image.open('./image/logo_vocado (5).png'))
    
-      selected2 = option_menu(None, ["Home", "My Business", "Competition", "Opportunities", "Settings", "Add business"], 
+      selected2 = option_menu(None, ["Home", "My Business", "Competition", "Opportunities", "Settings"], 
       icons=['house', 'building', 'globe', 'star', 'gear', 'plus'], 
       menu_icon="cast", default_index=0, orientation="vertical",
       styles={

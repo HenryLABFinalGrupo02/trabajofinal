@@ -1,21 +1,14 @@
 import streamlit as st
 import pandas as pd 
-import numpy as np
 from multiprocessing import Value
-from os import write
 from typing import List
 from numpy.core.fromnumeric import size
-from PIL import Image
 # xtAuthProvider
-import json
-from pathlib import Path
 #import joblib
 import pickle
 import xgboost
 #import darts 
-import plotly as py
 import plotly.express as px
-from plotly.offline import download_plotlyjs, init_notebook_mode, plot, iplot
 import plotly.graph_objects as go
 pd.options.plotting.backend = 'plotly'
 from sqlalchemy import create_engine
@@ -70,6 +63,23 @@ bus_ids = ['vCJZ0WpB9r_tOhJZpESqCQ',
 # reviews = cql_to_pandas("""select * from yelp.review_full where business_id in {} ALLOW FILTERING;""".format(tuple(bus_ids)),session)
 
 
+def capitalize_each_word(original_str):
+    result = ""
+    # Split the string and get all words in a list
+    list_of_words = original_str.split()
+    # Iterate over all elements in list
+    for elem in list_of_words:
+        # capitalize first letter of each word and add to a string
+        if len(result) > 0:
+            result = result + " " + elem.strip().capitalize()
+        else:
+            result = elem.capitalize()
+    # If result is still empty then return original string else returned capitalized.
+    if not result:
+        return original_str
+    else:
+        return result
+
 engine = create_engine("mysql+pymysql://{user}:{pw}@{address}/{db}".format(user="root",
             address = '35.239.80.227:3306',
             pw="Henry12.BORIS99",
@@ -105,22 +115,7 @@ def update_my_businesses(ids_list:list):
 business, checkin, review, sentiment, influencer_score = update_my_businesses(bus_ids)
 
 ############################################ HOME TAB ##################################################
-def capitalize_each_word(original_str):
-    result = ""
-    # Split the string and get all words in a list
-    list_of_words = original_str.split()
-    # Iterate over all elements in list
-    for elem in list_of_words:
-        # capitalize first letter of each word and add to a string
-        if len(result) > 0:
-            result = result + " " + elem.strip().capitalize()
-        else:
-            result = elem.capitalize()
-    # If result is still empty then return original string else returned capitalized.
-    if not result:
-        return original_str
-    else:
-        return result
+
 
 def metricas(): 
     review_stars = business['stars'].mean()
@@ -311,8 +306,6 @@ def select_business():
 
 
 ##################################### MODEL TAB ##################################################
-
-
 
 
 
@@ -598,7 +591,7 @@ def eval_model(model, train, val):
 
     fig1 = px.line(train.pd_dataframe())
     fig1.update_layout(title='Actual')
-    fig1.update_traces(line_color='purple', name='Actual')
+    fig1.update_traces(line_color='purple', name='Actual', x='Years', y='Total Reviews')
 
 
     fig2 = px.line(forecast.pd_dataframe())
@@ -607,6 +600,8 @@ def eval_model(model, train, val):
 
     fig = go.Figure(data = fig1.data + fig2.data)
     return fig, string
+
+
 
 ####### NO BORRAR #######
 
@@ -652,113 +647,6 @@ def eval_model(model, train, val):
 
     st.text(string)
 
-
-############################################## Add business ############################################
-
-# def addbusiness():
-#     name = st.text_input('Add your business name 👇', '')
-    
-
-
-
-
-############################################## Add business ############################################
-
-def sentiment_review():
-    st.title('Sentiment Analysis for Last Reviews')
-    engine = create_engine("mysql+pymysql://{user}:{pw}@{address}/{db}".format(user="root",
-            address = '35.239.80.227:3306',
-            pw="Henry12.BORIS99",
-            db="yelp"))
-
-    lista_business = pd.read_sql('SELECT business_id, name FROM business_clean limit 10', engine)
-
-    option_business = st.selectbox(
-        'My businesses',
-        (lista_business['name']))
-    
-    id = lista_business.loc[lista_business['name'] == option_business, 'business_id'].iloc[0]
-
-    number_to_get = st.slider('Number of reviews to get', 1, 50, 10)
-    name = st.button('Analize reviews')
-    
-    if name:
-        reviews = get_reviews(id, engine, number_to_get)
-    
-        
-        from transformers import AlbertForSequenceClassification, pipeline, AlbertTokenizer
-
-        model = AlbertForSequenceClassification.from_pretrained('./model/textclass/')
-        tokenizer = AlbertTokenizer.from_pretrained('./model/textclass/')
-        classifier = pipeline("sentiment-analysis", model=model, tokenizer=tokenizer) #, device=0) #for GPU support
-        
-
-        from keybert import KeyBERT
-        kw_model = KeyBERT()
-
-        positive = 0
-        negative = 0
-        pos_keywords = []
-        neg_keywords = []
-        reviews['sentiment'] = ''
-        reviews['keywords'] = ''
-        for index, row in reviews.iterrows():
-            if classifier(row['text'], truncation = True)[0]['label'] == 'LABEL_1':
-                positive += 1
-                keywords = kw_model.extract_keywords(row['text'], keyphrase_ngram_range=(1, 1), stop_words='english')
-                pos_keywords += keywords
-                reviews.iloc[index, reviews.columns.get_loc('sentiment')] = 'positive'
-                reviews.iloc[index, reviews.columns.get_loc('keywords')] = keywords
-            elif classifier(row['text'], truncation = True)[0]['label'] == 'LABEL_0':
-                negative += 1
-                keywords = kw_model.extract_keywords(row['text'], keyphrase_ngram_range=(1, 1), stop_words='english')
-                neg_keywords += keywords
-                print(keywords, 'keywords')
-                print(neg_keywords, 'neg_keywords')
-                reviews.iloc[index, reviews.columns.get_loc('sentiment')] = 'negative'
-                reviews.iloc[index, reviews.columns.get_loc('keywords')] = keywords
-        
-        try:
-            neg_key, neg_score = zip(*neg_keywords)
-        except:
-            neg_key = []
-            neg_score = []
-        try:
-            pos_key, pos_score = zip(*pos_keywords)
-        except:
-            pos_key = []
-            pos_score = []
-
-        df_neg = pd.DataFrame({'key':neg_key, 'score':neg_score}).groupby('key').mean().sort_values('score', ascending=False)
-        df_pos = pd.DataFrame({'key':pos_key, 'score':pos_score}).groupby('key').mean().sort_values('score', ascending=False)
-            
-        st.markdown("### Reviews Summary")
-        metrics = st.columns(2)
-
-        metrics[0].markdown("### Positive Reviews")
-        metrics[0].metric('Total Positive', positive, delta=None, delta_color="normal")
-        metrics[0].text("Top 5 Keywords")
-        metrics[0].text(df_pos.head(5).index.tolist())
-
-        metrics[1].markdown("### Negative Reviews")
-        metrics[1].metric('Total Negative', negative, delta=None, delta_color="normal")
-        metrics[1].text("Top 5 Keywords")
-        metrics[1].text(df_neg.head(5).index.tolist())
-
-
-        REVIEW_TEMPLATE_MD = """{} - {}
-                                    > {}"""
-
-        with st.expander("💬 Show Reviews"):
-
-        # Show comments
-
-            st.write("**Reviews:**")
-
-            for index, entry in enumerate(reviews.itertuples()):
-                st.markdown(REVIEW_TEMPLATE_MD.format(entry.date, entry.sentiment, entry.text))
-
-
 def timeseries():
     train_df = pd.read_csv('./pages/main/data/train_ts.csv', index_col='month', parse_dates=True)
     forecast_df = pd.read_csv('./pages/main/data/forecast_ts.csv', index_col='month', parse_dates=True)
@@ -799,19 +687,20 @@ def timeseries():
             st.markdown(htmlcode, unsafe_allow_html=True)
 
 
+
+############################################## Add business ############################################
+
+
 def addbusiness():
     global business, checkin, review, sentiment, influencer_score
     st.markdown('#### Add your bussiness name')
     name = st.text_input('Add your business name 👇 and hit ENTER', '')
     if name != '':
         df = pd.read_sql('SELECT address, postal_code FROM business_clean WHERE name = "{}" ORDER BY postal_code ASC'.format(name), con=engine)
-    
-        #if len(df) > 0:
 
         st.markdown('#### Postal Code')
         zipcode = st.selectbox('Select your postal code 👇', df['postal_code'].unique().tolist())
 
-        # if refine_search:
         st.markdown('#### Address')
         address = st.selectbox('Select your address 👇', df.loc[df['postal_code'] == zipcode,'address'].unique().tolist())
 
@@ -827,15 +716,9 @@ def addbusiness():
             st.text('Your business id is: {}'.format(new_business_id))
             st.text('Business added to dashboard successfully')
             new_business, new_checkin, new_review, new_sentiment, new_influencer_score = update_my_businesses([new_business_id])
-            #print(f'BUSINESS SHAPE BEFORE CONCAT: {business.shape}')
             business = pd.concat([business, new_business], axis=0)
-            #print(f'BUSINESS SHAPE AFTER CONCAT: {business.shape}')
-            #print(f'CHECKIN SHAPE BEFORE CONCAT: {checkin.shape}')
             checkin = pd.concat([checkin, new_checkin], axis=0)
-            #print(f'CHECKIN SHAPE AFTER CONCAT: {checkin.shape}')
-            #print(f'REVIEW SHAPE BEFORE CONCAT: {review.shape}')
             review = pd.concat([review, new_review], axis=0)
-            #print(f'REVIEW SHAPE AFTER CONCAT: {review.shape}')
             sentiment = pd.concat([sentiment, new_sentiment], axis=0)
             influencer_score = pd.concat([influencer_score, new_influencer_score], axis=0)
 
