@@ -67,7 +67,7 @@ if authentication_status:
       st.image(Image.open('./image/logo_vocado (5).png'))
    
       selected2 = option_menu(None, ["Home", "My Business", "Competition", "Opportunities", "Add business",'Log out'], 
-      icons=['house', 'building', 'globe', 'star', 'plus','Log out'], 
+      icons=['house', 'building', 'globe', 'star', 'plus','logout'], 
       menu_icon="cast", default_index=0, orientation="vertical",
       styles={
            "container": {"padding": "0!important", 
@@ -125,30 +125,32 @@ if authentication_status:
          st.title("Do you want to log out?")
          authenticator.logout('Logout', 'main')
    else:
+      if 'button' not in st.session_state:
+         st.session_state.button= False 
+      def funButton():
+         st.session_state.button=True
       if selected2 == "Home":
          st.title('Welcome to Vocado Admin Center')
          tf.metricas()
          #authenticator.logout('Logout', 'main')
       if selected2 == "My Business":
          st.title("Try our free premium for 1 month to get to know all of Vocado's functionalities")
-         if st.button("Try premium!"):
+         if st.button("Try premium!",on_click=funButton) or st.session_state.button:
             tf.select_business()
       if selected2 == "Competition":
          st.title("Try our free premium for 1 month to get to know all of Vocado's functionalities")
-         if st.button("Try premium!"):
+         if st.button("Try premium!",on_click=funButton) or st.session_state.button:
             tf.timeseries()
       if selected2 == "Opportunities":
          st.title("Try our free premium for 1 month to get to know all of Vocado's functionalities")
-         if st.button("Try premium!"):
+         if st.button("Try premium!",on_click=funButton) or st.session_state.button:
             tf.machine_learning()
       if selected2 == "Add business":
          st.title("Try our free premium for 1 month to get to know all of Vocado's functionalities")
-         if st.button("Try premium!"):
+         if st.button("Try premium!",on_click=funButton) or st.session_state.button:
             tf.addbusiness()
       if selected2 == 'Log out':
          st.title("Do you want to log out?")
          authenticator.logout('Logout', 'main')
 
          
-   
-   
