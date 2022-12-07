@@ -695,7 +695,7 @@ def addbusiness():
     global business, checkin, review, sentiment, influencer_score
     st.markdown('#### Add your bussiness name')
     name = st.text_input('Add your business name 👇 and hit ENTER', '')
-    if name != '':
+    if name != None:
         df = pd.read_sql('SELECT address, postal_code FROM business_clean WHERE name = "{}" ORDER BY postal_code ASC'.format(name), con=engine)
 
         st.markdown('#### Postal Code')
