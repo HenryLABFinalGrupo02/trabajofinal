@@ -16,6 +16,9 @@ credentials:
       premium: false
 preauthorized:
   emails:
-  - bernalmaico@gmail.com
   - lilaavesonline@gmail.com
   - acidminded95@gmail.com
+<<<<<<< HEAD
+=======
+  - bernalmaico@gmail.com
+>>>>>>> 1c83f6caccce4f3c1a9266a616e3b0a23976273b
