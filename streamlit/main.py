@@ -1,3 +1,4 @@
+#We import libraries to use them in this file
 import streamlit as st
 import pandas as pd 
 from streamlit_option_menu import option_menu
@@ -7,7 +8,7 @@ from PIL import Image
 import authenticator_edit as stauth
 import yaml
 
-with open(r'config.yaml') as file:
+with open(r'config.yaml') as file: #Open the config.yaml file and then use it in user authentication
    users = yaml.load(file, Loader=yaml.FullLoader)
 
 
@@ -23,7 +24,16 @@ st.set_page_config(
 with open('style.css') as f:
     st.markdown(f'<style>{f.read()}</style>', unsafe_allow_html=True)
 
-def register():
+
+authenticator = stauth.Authenticate( #We instantiate the class and then use its methods in login and register
+   users['credentials'],
+   users['cookie']['name'],
+   users['cookie']['key'],
+   users['cookie']['expiry_days'],
+   users['preauthorized']
+)
+
+def register(): #Create a function for user registration and save the config.yaml file changes
    try:
       if authenticator.register_user('Register user', preauthorization=True):
          st.success('User registered successfully')
@@ -33,22 +43,15 @@ def register():
    with open('config.yaml', 'w') as file:
       yaml.dump(users, file, default_flow_style=False)
 
-authenticator = stauth.Authenticate(
-   users['credentials'],
-   users['cookie']['name'],
-   users['cookie']['key'],
-   users['cookie']['expiry_days'],
-   users['preauthorized']
-)
 
-name, authentication_status, username,premium = authenticator.login('Login', 'main')
-if authentication_status == False:
+name, authentication_status, username,premium = authenticator.login('Login', 'main') #We use the login method so that the user can log in
+if authentication_status == False: # If the user places incorrect data or if it does not exist we will notify him so that he can register or enter the data well
    st.error('Username/password is incorrect')
    st.button('Register', on_click=register)
-if authentication_status == None:
+if authentication_status == None: #If the user does not enter data we will notify him to enter his data
    st.markdown('#### Please enter your username and password')
    st.button('Register', on_click=register)
-if authentication_status:
+if authentication_status:# If the user entered their data well you can see all the functionalities we did depending on whether it is premium or not
 
 
 
