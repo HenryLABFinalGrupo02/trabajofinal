@@ -499,7 +499,7 @@ def load_sentiment_business():
 
 # Below is the Airflow DAG that orchestrates the automated data ETL
 
-with DAG(dag_id='Test387',start_date=datetime.datetime(2022,8,25),schedule_interval='@once') as dag:
+with DAG(dag_id='UploadAstraDB',start_date=datetime.datetime(2022,8,25),schedule_interval='@once') as dag:
 
     t_load_tips = PythonOperator(task_id='load_tips',python_callable=load_tips)
 

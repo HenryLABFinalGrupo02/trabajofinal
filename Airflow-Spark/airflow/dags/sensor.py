@@ -1,5 +1,5 @@
+### Importing libraries, some libraries imported within the function for Airflow DAG optimization
 from datetime import datetime, timedelta
-#from sys import get_asyncgen_hooks
 from airflow import DAG
 from airflow.operators.python import PythonOperator
 from airflow.operators.empty import EmptyOperator
@@ -8,7 +8,6 @@ from tempfile import NamedTemporaryFile
 import os
 import sqlalchemy
 
-
 #Check version of Airflow and Pip Amazon installed 
 #Sensor to check if the file is loaded in the bucket
 from airflow.providers.amazon.aws.sensors.s3 import S3KeySensor
@@ -16,10 +15,8 @@ from airflow.providers.amazon.aws.sensors.s3 import S3KeySensor
 #Hook to connect to S3
 from airflow.providers.amazon.aws.hooks.s3 import S3Hook
 
-
-#Set path for new files
+#Set path for new files downloaded from Bucket 
 dest_file_path = '/opt/data/minio/'
-dest_file_path_clean = '/opt/data/minio/cleaned/'
 
 # Default arguments
 default_args = {
@@ -29,35 +26,78 @@ default_args = {
 }
 
 def lower_col_names(cols):
+    '''
+    Function to lower case all column names
+    
+    Parameters
+    ----------
+    cols: list
+        List of column names
+    
+    Returns
+    -------
+    new_names: dict
+        Dictionary with the new column names
+    '''
     new_names = {}
     for x in cols:
         new_names[x] = x.lower()
     return new_names    
 
 def DownloadAndRenameFile(bucket_name:str, path:str):
-    hook = S3Hook('minio_conn')
-    files = hook.list_keys(bucket_name=bucket_name)
+    '''
+    Function to download the last file in the bucket and rename it to the original name
+
+    Parameters
+    ----------
+    bucket_name: str
+        Name of the bucket where the file is located
+    path: str
+        Path where the file will be downloaded
+
+    Returns
+    -------
+    file_name: str
+        Path where the file was downloaded
+    '''
+    hook = S3Hook('minio_conn') ## Hook to connect to S3, see Airflow Connections
+    files = hook.list_keys(bucket_name=bucket_name) ## 
     key = files[-1]
     file_name = hook.download_file(key=key, bucket_name=bucket_name, local_path=path)
     RenameFile(file_name, key)
     return file_name
 
 def RenameFile(file_name:str, new_name:str) -> None:
+    '''
+    Function to rename a file
+
+    Parameters
+    ----------
+    file_name: str
+        Path where the file is located
+    new_name: str
+        New name of the file
+
+    Returns
+    -------
+    None
+    '''
+
     downloaded_file_path = '/'.join(file_name.split('/')[:-1])
     os.rename(src=file_name, dst=f'{downloaded_file_path}/{new_name}')
     print('Renamed successfully')
 
 def LoadNewReviewsOrTips():
-    # import casspark
-    # from cassandra.cluster import Cluster
-    # cass_ip = 'cassandra'
-    # import pyspark as ps
+    '''
+    Function to load new reviews or tips to the database
+    
+    '''
+
+    ### Importing libraries and custom functions for ETL
     from transform_funcs import transform_dates, drop_bad_str, lower_col_names
     import pandas as pd
-    # print('ESTABLISHING CONNECTION TO CASSANDRA')
-    # cluster = Cluster(contact_points=[cass_ip],port=9042)
-    # session = cluster.connect()
-
+    import glob
+    
     print('ESTABLISHING CONNECTION TO MYSQL')
     engine = sqlalchemy.create_engine("mysql+pymysql://{user}:{pw}@{address}/{db}"
             .format(user="root",
@@ -65,9 +105,8 @@ def LoadNewReviewsOrTips():
                     pw="Henry12.BORIS99",
                     db="yelp"))
 
-    import glob
+    ### Get all files in the folder
     path = dest_file_path
-        #Get all files in the folder
     try:
         all_json = glob.glob(path + "/*.json")
 
@@ -77,33 +116,26 @@ def LoadNewReviewsOrTips():
         print('Error with path or files GLOB ERROR')
 
     #Get all JSON in the folder
+    # If there are files, read them and upload to MySQL
     if len(all_json) > 0:
         for filename in all_json:
 
+            # If the file is a review, read it and upload to MySQL
             if 'review' in filename.split('/')[-1].split('.')[0]:
 
                 print(f'READING REVIEW FILE {filename}')
-                review = pd.read_json(filename, lines=True)
-                #print('DROPPING DUPLICATED ROWS')
-                #review = review.drop_duplicates()
-                #print('NORMALIZING DATES')
+                review = pd.read_json(filename)
+
+                print('NORMALIZING DATES')
                 review['date'] = review['date'].astype(str)
+
+                print('CLEANING COLUMNS')
                 review.rename(columns=lower_col_names(review.columns), inplace=True)
+
                 print('UPLOADING DATAFRAME TO MYSQL')
                 review.to_sql('review', con=engine, if_exists='append', index=False)
 
-                # print('CREATING KEYSPACE')
-                # session.execute("""
-                # CREATE KEYSPACE IF NOT EXISTS henry WITH REPLICATION = { 'class' : 'SimpleStrategy', 'replication_factor' : 3 };
-                # """)
-                # print('CREATING TABLE')
-                # session.execute("""
-                # CREATE TABLE IF NOT EXISTS henry.review(review_id text, user_id text, business_id text, stars float, date text, text text, useful int, funny int, cool int,PRIMARY KEY(review_id))
-                # """)
-                # print('UPLOADING DATAFRAME TO CASSANDRA')
-                # casspark.spark_pandas_insert(review,'henry','review',session,debug=True)
-                # print('DONE')
-
+            # If the file is a tip, read it and upload to MySQL
             elif 'tip' in filename.split('/')[-1].split('.')[0]:
                 
                 #### READS FILE AND MAKES TRANSFORMATION
@@ -113,16 +145,16 @@ def LoadNewReviewsOrTips():
                 #### TRANSFORMATIONS
                 print('DROPPING DUPLICATED ROWS')
                 tip = tip.drop_duplicates()
+
+                #### TRANSFORMATIONS
                 print('CLEANING STRINGS')
                 tip['text'] = tip['text'].apply(lambda x: drop_bad_str(x))
 
                 print('NORMALIZING DATES')
                 tip['date'] = tip['date'].apply(lambda x: transform_dates(x)).dt.strftime('%Y-%m-%d')
-
                 tip.rename(columns=lower_col_names(tip.columns), inplace=True)
 
                 print('CONNECTING TO DATABASE and UPLOADING')
-                
                 engine = sqlalchemy.create_engine("mysql+pymysql://{user}:{pw}@{address}/{db}"
                             .format(user="root",
                                     address = '35.239.80.227:3306',
@@ -138,6 +170,9 @@ def LoadNewReviewsOrTips():
         print('No JSON files found')
     
 def MakeQuery():
+    '''
+    Function to make a query to the database
+    '''
     import pandas as pd
     engine = sqlalchemy.create_engine("mysql+pymysql://{user}:{pw}@{address}/{db}"
             .format(user="root",
@@ -168,8 +203,8 @@ with DAG(
         wildcard_match = True, #Set to true if we want to use wildcards
         aws_conn_id='minio_conn', #Name of the connection
         mode='poke', #Poke or reschedule
-        poke_interval=5,
-        timeout=120
+        poke_interval=5, #How often to check for new files
+        timeout=120 #How long to wait for new files
     )
 
     #Download the file from S3/Minio
@@ -198,6 +233,7 @@ with DAG(
         python_callable=MakeQuery,
         )
 
+    #Finish the pipeline
     FinishPipeline = EmptyOperator(
     task_id = 'FinishPipeline',
     dag = dag
@@ -206,3 +242,31 @@ with DAG(
 
 CheckS3 >> DownloadFileFromS3 >> FinishDownload
 FinishDownload >> UploadReviews >> CheckNewPricesQuery >> FinishPipeline
+
+
+
+
+
+'''
+CODE TO IMPLEMENT FOR CASSANDRA
+# import casspark
+# from cassandra.cluster import Cluster
+# cass_ip = 'cassandra'
+# import pyspark as ps
+# print('ESTABLISHING CONNECTION TO CASSANDRA')
+# cluster = Cluster(contact_points=[cass_ip],port=9042)
+# session = cluster.connect()
+
+# print('CREATING KEYSPACE')
+# session.execute("""
+# CREATE KEYSPACE IF NOT EXISTS henry WITH REPLICATION = { 'class' : 'SimpleStrategy', 'replication_factor' : 3 };
+# """)
+# print('CREATING TABLE')
+# session.execute("""
+# CREATE TABLE IF NOT EXISTS henry.review(review_id text, user_id text, business_id text, stars float, date text, text text, useful int, funny int, cool int,PRIMARY KEY(review_id))
+# """)
+# print('UPLOADING DATAFRAME TO CASSANDRA')
+# casspark.spark_pandas_insert(review,'henry','review',session,debug=True)
+# print('DONE')
+'''
+
