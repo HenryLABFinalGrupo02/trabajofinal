@@ -42,13 +42,15 @@ def connect_to_cassandra():
     print('ESTABLISHING CONNECTION TO CASSANDRA')
     cluster = Cluster(contact_points=[cass_ip],port=9042)
     session = cluster.connect()
-    return session
+    return session   
 
-def lower_col_names(cols):
-    new_names = {}
-    for x in cols:
-        new_names[x] = x.lower()
-    return new_names    
+###############################
+###############################
+###############################
+
+# Now we define the functions that will extract, transform and load the data in the database
+
+###############################
 
 def load_top_tips(df):
     ##### UPLOADS SMALL DATASET TOP TIPS TO CASSANDRA
@@ -59,7 +61,7 @@ def load_top_tips(df):
     top_tips['business_id'] = top_tips.index
     top_tips.reset_index(drop=True, inplace=True)
 
-    top_tips.rename(columns=lower_col_names(top_tips.columns), inplace=True)
+    top_tips.rename(columns=transform_funcs.lower_col_names(top_tips.columns), inplace=True)
 
     top_tips2 = ps.from_pandas(top_tips)
 
@@ -135,7 +137,7 @@ def load_user_metrics():
     'Influencer', 'Influencer_Score', 'Influencer_2', 'Influencer_Score_2']]
     print('TRANSFORMATIONS FOR USER METRICS DONE')
 
-    user_df.rename(columns=lower_col_names(user_df.columns), inplace=True)
+    user_df.rename(columns=transform_funcs.lower_col_names(user_df.columns), inplace=True)
 
     print('STABLISHING CONNECTION TO ASTRA')
     session = connect_to_cassandra()
@@ -189,7 +191,7 @@ def load_tips():
     print('UPLOADING SMALL DATABASE WITH TIP COUNT BY BUSINESS')
     load_top_tips(tip)
 
-    tip.rename(columns=lower_col_names(tip.columns), inplace=True)
+    tip.rename(columns=transform_funcs.lower_col_names(tip.columns), inplace=True)
 
     #### CONNECT TO CASSANDRA
 
@@ -234,7 +236,7 @@ def load_checkin():
     print('NORMALIZING DATES')
     checkin['date'] = checkin['date'].apply(transform_funcs.get_date_as_list)
 
-    checkin.rename(columns=lower_col_names(checkin.columns), inplace=True)
+    checkin.rename(columns=transform_funcs.lower_col_names(checkin.columns), inplace=True)
 
     session = connect_to_cassandra()
 
@@ -290,7 +292,7 @@ def load_business():
     full_data['mean_close_hour'] = full_data.mean_close_hour.astype(str)
     full_data['RestaurantsPriceRange2'] = full_data.RestaurantsPriceRange2.astype(str)
 
-    full_data.rename(columns=lower_col_names(full_data.columns), inplace=True)
+    full_data.rename(columns=transform_funcs.lower_col_names(full_data.columns), inplace=True)
 
     print('CONVERTING TO PYSPAK PANDAS')
     full_data2 = ps.from_pandas(full_data)
@@ -373,7 +375,7 @@ def load_review():
     print('NORMALIZING DATES')
     review['date'] = review['date'].apply(transform_funcs.transform_dates).dt.strftime('%Y-%m-%d')
 
-    review.rename(columns=lower_col_names(review.columns), inplace=True)
+    review.rename(columns=transform_funcs.lower_col_names(review.columns), inplace=True)
 
     session = connect_to_cassandra()
 
@@ -424,7 +426,7 @@ def load_user():
     print('USER COLS')
     print(user.columns)
 
-    user.rename(columns=lower_col_names(user.columns), inplace=True)
+    user.rename(columns=transform_funcs.lower_col_names(user.columns), inplace=True)
 
     session = connect_to_cassandra()
 
@@ -471,7 +473,7 @@ def load_user():
 def load_sentiment_business():
     sentiment = pd.read_csv(r'./data/initial_load/sentiment_ok_unique.csv')
 
-    sentiment.rename(columns=lower_col_names(sentiment.columns), inplace=True)
+    sentiment.rename(columns=transform_funcs.lower_col_names(sentiment.columns), inplace=True)
 
     sentiment2 = ps.from_pandas(sentiment)
 

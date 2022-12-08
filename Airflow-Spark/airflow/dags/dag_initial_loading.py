@@ -26,6 +26,13 @@ from cassandra.cluster import Cluster
 
 cass_ip = 'cassandra'
 
+###############################
+###############################
+###############################
+
+# Below we define the functions that will extract, transform and load the data in the database
+
+###############################
 
 def load_tips():
     print('READING TIPS FILE')
@@ -51,7 +58,7 @@ CREATE TABLE IF NOT EXISTS henry.tip(business_id text, compliment_count int, dat
     casspark.spark_pandas_insert(tip,'henry','tip',session,debug=True)
     print('DONE')
 
-
+###############################
 
 def load_checkin():
     print('READING TIPS FILE')
@@ -79,7 +86,7 @@ CREATE TABLE IF NOT EXISTS henry.checkin(business_id text, date list<text>,PRIMA
     casspark.spark_pandas_insert(checkin,'henry','checkin',session,debug=True)
     print('DONE')
 
-
+###############################
 
 def load_bussiness():
     print('READING BUSINESS FILE')
@@ -110,6 +117,7 @@ CREATE TABLE IF NOT EXISTS henry.business(address text, attributes list<frozen <
     casspark.spark_pandas_insert(business,'henry','business',session,debug=True)
     print('DONE')
 
+###############################
 
 def load_review():
     print('READING REVIEW FILE')
@@ -135,7 +143,7 @@ CREATE TABLE IF NOT EXISTS henry.review(review_id text, user_id text, business_i
     casspark.spark_pandas_insert(review,'henry','review',session,debug=True)
     print('DONE')
 
-
+###############################
 
 def load_user():
     print('READING USER FILE')
@@ -177,8 +185,10 @@ CREATE TABLE IF NOT EXISTS henry.user(user_id text, name text, review_count int,
     print('DONE')
 
 
+###############################
 
-#DAG de Airflow
+# Below is the Airflow DAG that orchestrates the automated data ETL
+
 with DAG(dag_id='Initial_Load',start_date=datetime.datetime(2022,8,25),schedule_interval='@once') as dag:
 
     t_load_tips = PythonOperator(task_id='load_tips',python_callable=load_tips)

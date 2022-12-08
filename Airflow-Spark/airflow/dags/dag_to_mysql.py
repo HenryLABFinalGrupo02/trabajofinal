@@ -23,30 +23,30 @@ ps.set_option('compute.ops_on_diff_frames', True)
 import pandas as pd
 import datetime
 import json
+import sqlalchemy
 #import dateutil
 #import pathlib
 from airflow import DAG
 from airflow.operators.python import PythonOperator
-from cassandra.cluster import Cluster
-from cassandra.auth import PlainTextAuthProvider
 from time import sleep
 from functools import reduce
 from tiny_functions import *
 
-cloud_config= {'secure_connect_bundle': r'/opt/data/cassandra/secure-connect-henry.zip'}
-auth_provider = PlainTextAuthProvider(json.load(open(r'/opt/data/cassandra/log_in.json'))['log_user'], json.load(open(r'/opt/data/cassandra/log_in.json'))['log_password'])
+# Here we create the engine that will make the connection to MySQL database
+engine = sqlalchemy.create_engine("mysql+pymysql://{user}:{pw}@{address}/{db}"
+                .format(user="root",
+                        address = '35.239.80.227:3306',
+                        pw="Henry12.BORIS99",
+                        db="yelp"))
 
-def connect_to_astra():
-    print('ESTABLISHING CONNECTION TO CASSANDRA')
-    cluster = Cluster(cloud=cloud_config, auth_provider=auth_provider)
-    session = cluster.connect()
-    return session
 
-def lower_col_names(cols):
-    new_names = {}
-    for x in cols:
-        new_names[x] = x.lower()
-    return new_names    
+###############################
+###############################
+###############################
+
+# Now we define the functions that will extract, transform and load the data in the database
+
+###############################
 
 def load_top_tips(df):
     ##### UPLOADS SMALL DATASET TOP TIPS TO CASSANDRA
@@ -57,32 +57,16 @@ def load_top_tips(df):
     top_tips['business_id'] = top_tips.index
     top_tips.reset_index(drop=True, inplace=True)
 
-    top_tips.rename(columns=lower_col_names(top_tips.columns), inplace=True)
+    top_tips.rename(columns=transform_funcs.lower_col_names(top_tips.columns), inplace=True)
 
-    top_tips2 = ps.from_pandas(top_tips)
-
-    #### CONNECT TO CASSANDRA
-    print('ESTABLISHING CONNECTION TO CASSANDRA FOR TOP TIPS')
-    session = connect_to_astra()
-
-    print('DROPPING TABLE IF EXISTS')
-    session.execute("DROP TABLE IF EXISTS yelp.top_tips_full;")
-
-    print('CREATING TABLE FOR TOP TIPS')
-    session.execute("""
-    CREATE TABLE IF NOT EXISTS yelp.top_tips_full(business_id text, number_tips int, PRIMARY KEY((business_id)))
-    """)
-    sleep(5)
-    #### UPLOAD DATAFRAME TO CASSANDRA
-    print('UPLOADING DATAFRAME TO CASSANDRA FOR TOP TIPS')
-    top_tips2.to_spark().write\
-    .format("org.apache.spark.sql.cassandra")\
-    .mode('append')\
-    .options(table="top_tips_full", keyspace="yelp")\
-    .save()
+    #### CONNECT TO MySQL
+    print('UPLOADING DATAFRAME TO MySQL')
+    top_tips.to_sql('tip', con=engine, if_exists='replace', index=False)
+    print(pd.read_sql("SELECT COUNT(*) FROM tip;", con=engine).head())
     print('DONE')
     print('DONE FOR TOP TIPS')
 
+###############################
 
 def load_user_metrics(): 
     """
@@ -127,40 +111,13 @@ def load_user_metrics():
     'Influencer', 'Influencer_Score', 'Influencer_2', 'Influencer_Score_2']]
     print('TRANSFORMATIONS FOR USER METRICS DONE')
 
-    user_df.rename(columns=lower_col_names(user_df.columns), inplace=True)
+    user_df.rename(columns=transform_funcs.lower_col_names(user_df.columns), inplace=True)
 
-    print('UPLOADING CONNECTION TO ASTRA')
-    session = connect_to_astra()
-    
-    print('DROPPING TABLE IF EXISTS')
-    session.execute("DROP TABLE IF EXISTS yelp.user_metrics_full;")
-    
-    print('CREATING TABLE FOR USER METRICS')
-    session.execute("""
-    CREATE TABLE IF NOT EXISTS yelp.user_metrics_full(
-        user_id text, 
-        n_ints_rec int,
-        n_interactions_send int,
-        fans int,
-        friends_number int,
-        Influencer float,
-        Influencer_Score float,
-        Influencer_2 float,
-        Influencer_Score_2 float,
-        PRIMARY KEY(user_id));
-""") #friends list <text>,
-    
-    sleep(5)
-
-    print('UPLOADING DATAFRAME TO CASSANDRA FOR USER METRICS')
-    user_df.to_spark().write\
-    .format("org.apache.spark.sql.cassandra")\
-    .mode('append')\
-    .options(table="user_metrics_full", keyspace="yelp")\
-    .save()
+    #### CONNECT TO MySQL
+    print('UPLOADING DATAFRAME TO MySQL')
+    user_df.to_pandas().to_sql('user_metrics', con=engine, if_exists='append', index=False)
+    print(pd.read_sql("SELECT COUNT(*) FROM user_metrics;", con=engine).head())
     print('DONE')
-
-
 
 ###############################
 
@@ -177,36 +134,18 @@ def load_tips():
     print('NORMALIZING DATES')
     tip['date'] = tip['date'].apply(transform_funcs.transform_dates).dt.strftime('%Y-%m-%d')
 
-    #### UPLOAD A SMALL SUBSET TO CASSANDRA TOP TIPS
+    #### UPLOAD A SMALL SUBSET TO MySQL TOP TIPS
     print('UPLOADING SMALL DATABASE WITH TIP COUNT BY BUSINESS')
     load_top_tips(tip)
 
-    tip.rename(columns=lower_col_names(tip.columns), inplace=True)
+    tip.rename(columns=transform_funcs.lower_col_names(tip.columns), inplace=True)
 
-    #### CONNECT TO CASSANDRA
-
-
-    session = connect_to_astra()
-
-    print('DROPPING TABLE IF EXISTS')
-    session.execute("DROP TABLE IF EXISTS yelp.tip_full;")
-
-    #### CREATE KEYSPACE AND TABLE
-    print('CREATING TABLE')
-    session.execute("""
-    CREATE TABLE IF NOT EXISTS yelp.tip_full(business_id text, date text, user_id text, compliment_count int, text text,PRIMARY KEY((business_id,date,user_id)))
-    """)
-
-    sleep(5)
-    #### UPLOAD DATAFRAME TO CASSANDRA
-    print('UPLOADING DATAFRAME TO CASSANDRA')
-    tip.to_spark().write\
-    .format("org.apache.spark.sql.cassandra")\
-    .mode('append')\
-    .options(table="tip_full", keyspace="yelp")\
-    .save()
+    #### CONNECT TO MySQL
+    print('UPLOADING DATAFRAME TO MySQL')
+    tip.to_sql('tip', con=engine, if_exists='replace', index=False)
     print('DONE')
 
+###############################
 
 def load_checkin():
     #### READS FILE AND MAKES TRANSFORMATION
@@ -220,31 +159,20 @@ def load_checkin():
     print("CALCULATING TOTAL CHECKINS")
     checkin['total'] = checkin['date'].apply(lambda x: get_len(x))
 
+    print("GETTING AVERAGE HOUR")
+    checkin['avg_hour'] = checkin.date.apply(transform_funcs.get_avg_checkins)
+
     print('NORMALIZING DATES')
     checkin['date'] = checkin['date'].apply(transform_funcs.get_date_as_list)
 
-    checkin.rename(columns=lower_col_names(checkin.columns), inplace=True)
+    checkin.rename(columns=transform_funcs.lower_col_names(checkin.columns), inplace=True)
 
-    session = connect_to_astra()
-
-    print('DROPPING TABLE IF EXISTS')
-    session.execute("DROP TABLE IF EXISTS yelp.checkin_full;")
-
-    print('CREATING TABLE')
-    session.execute("""
-    CREATE TABLE IF NOT EXISTS yelp.checkin_full(business_id text, date list<text>, total int,PRIMARY KEY(business_id))
-    """)
-
-    sleep(5)
-    #### UPLOAD DATAFRAME TO CASSANDRA
-    print('UPLOADING DATAFRAME TO CASSANDRA')
-    checkin.to_spark().write\
-    .format("org.apache.spark.sql.cassandra")\
-    .mode('append')\
-    .options(table="checkin_full", keyspace="yelp")\
-    .save()
+    #### CONNECT TO MySQL
+    print('UPLOADING DATAFRAME TO MySQL')
+    checkin.to_sql('checkin', con=engine, if_exists='replace', index=False)
     print('DONE')
 
+###############################
 
 def load_business():
     print('READING BUSINESS FILE')
@@ -279,80 +207,14 @@ def load_business():
     full_data['mean_close_hour'] = full_data.mean_close_hour.astype(str)
     full_data['RestaurantsPriceRange2'] = full_data.RestaurantsPriceRange2.astype(str)
 
-    full_data.rename(columns=lower_col_names(full_data.columns), inplace=True)
+    full_data.rename(columns=transform_funcs.lower_col_names(full_data.columns), inplace=True)
 
-    print('CONVERTING TO PYSPAK PANDAS')
-    full_data2 = ps.from_pandas(full_data)
-
-    session = connect_to_astra()
-
-    print('DROPPING TABLE IF EXISTS')
-    session.execute("DROP TABLE IF EXISTS yelp.business_full;")
-
-    print(f'FULL DATA COLUMNS:\n{full_data.columns.to_list()}')
-
-    print('CREATING TABLE')
-    session.execute("""
-    CREATE TABLE IF NOT EXISTS yelp.business_full(
-        business_id text,
-        name text,
-        address text,
-        postal_code text,
-        latitude_x float,
-        longitude_x float,
-        stars float,
-        review_count int,
-        is_open int,
-        good_ambience int,
-        garage int,
-        BusinessAcceptsCreditCards int,
-        RestaurantsPriceRange2 text,
-        BikeParking int,
-        WiFi int,
-        delivery int,
-        GoodForKids int,
-        OutdoorSeating int,
-        RestaurantsReservations int,
-        HasTV int,
-        RestaurantsGoodForGroups int,
-        Alcohol int,
-        ByAppointmentOnly int,
-        Caters int,
-        RestaurantsAttire int,
-        NoiseLevel int,
-        WheelchairAccessible int,
-        RestaurantsTableService int,
-        meal_diversity int,
-        Restaurants int,
-        Food int,
-        Shopping int,
-        HomeServices int,
-        BeautyAndSpas int,
-        Nightlife int,
-        HealthAndMedical int,
-        LocalServices int,
-        Bars int,
-        Automotive int,
-        total_categories int,
-        SevenDays int,
-        weekends int,
-        n_open_days int,
-        mean_total_hours_open float,
-        mean_open_hour text,
-        mean_close_hour text,
-        areas int,
-        PRIMARY KEY(business_id))
-    """)
-
-    sleep(5)
-    print('UPLOADING DATAFRAME TO CASSANDRA')
-    full_data2.to_spark().write\
-    .format("org.apache.spark.sql.cassandra")\
-    .mode('append')\
-    .options(table="business_full", keyspace="yelp")\
-    .save()
+    #### CONNECT TO MySQL
+    print('UPLOADING DATAFRAME TO MySQL')
+    full_data.to_sql('business', con=engine, if_exists='replace', index=False)
     print('DONE')
 
+###############################
 
 def load_review():
     print('READING REVIEW FILE')
@@ -362,38 +224,14 @@ def load_review():
     print('NORMALIZING DATES')
     review['date'] = review['date'].apply(transform_funcs.transform_dates).dt.strftime('%Y-%m-%d')
 
-    review.rename(columns=lower_col_names(review.columns), inplace=True)
+    review.rename(columns=transform_funcs.lower_col_names(review.columns), inplace=True)
 
-    session = connect_to_astra()
-
-    print('DROPPING TABLE IF EXISTS')
-    session.execute("DROP TABLE IF EXISTS yelp.review_full;")
-
-    print('CREATING TABLE')
-    session.execute("""
-    CREATE TABLE IF NOT EXISTS yelp.review_full(
-        review_id text,
-        user_id text,
-        business_id text,
-        stars float,
-        date text,
-        text text,
-        useful int,
-        funny int,
-        cool int,
-        PRIMARY KEY(review_id))
-    """)
-
-    sleep(5)
-    print('UPLOADING DATAFRAME TO CASSANDRA')
-    review.to_spark().write\
-    .format("org.apache.spark.sql.cassandra")\
-    .mode('append')\
-    .options(table="review_full", keyspace="yelp")\
-    .save()
+    #### CONNECT TO MySQL
+    print('UPLOADING DATAFRAME TO MySQL')
+    review.to_sql('review', con=engine, if_exists='replace', index=False)
     print('DONE')
 
-
+###############################
 
 def load_user():
     print('READING USER FILE')
@@ -410,86 +248,29 @@ def load_user():
     print('DROPPING ELITE & FRIENDS')
     user = user.drop(['friends', 'elite'], axis=1)
 
-    print('USER COLS')
-    print(user.columns)
+    user.rename(columns=transform_funcs.lower_col_names(user.columns), inplace=True)
 
-    user.rename(columns=lower_col_names(user.columns), inplace=True)
-
-    session = connect_to_astra()
-
-    print('DROPPING TABLE IF EXISTS')
-    session.execute("DROP TABLE IF EXISTS yelp.user_full;")
-
-    print('CREATING TABLE')
-    session.execute("""
-    CREATE TABLE IF NOT EXISTS yelp.user_full(
-        user_id text,
-        name text,
-        review_count int,
-        yelping_since text,
-        useful int,
-        funny int,
-        cool int,
-        fans int,
-        average_stars float,
-        compliment_hot float,
-        compliment_more int,
-        compliment_profile int,
-        compliment_cute int,
-        compliment_list int,
-        compliment_note int,
-        compliment_plain int ,
-        compliment_cool int,
-        compliment_funny int,
-        compliment_writer int,
-        compliment_photos int,
-    PRIMARY KEY(user_id))
-""")
-
-    sleep(5)
-    print('UPLOADING DATAFRAME TO CASSANDRA')
-    user.to_spark().write\
-    .format("org.apache.spark.sql.cassandra")\
-    .mode('append')\
-    .options(table="user_full", keyspace="yelp")\
-    .save()
+    #### CONNECT TO MySQL
+    print('UPLOADING DATAFRAME TO MySQL')
+    user.to_sql('user', con=engine, if_exists='replace', index=False)
     print('DONE')
 
-
+###############################
 
 def load_sentiment_business():
     sentiment = pd.read_csv(r'./data/sentiment_ok_unique.csv')
 
-    sentiment.rename(columns=lower_col_names(sentiment.columns), inplace=True)
+    sentiment.rename(columns=transform_funcs.lower_col_names(sentiment.columns), inplace=True)
 
-    sentiment2 = ps.from_pandas(sentiment)
-
-    session = connect_to_astra()
-    
-    print('DROPPING TABLE IF EXISTS')
-    session.execute("DROP TABLE IF EXISTS yelp.sentiment_business_full;")
-
-    print('CREATING TABLE')
-    session.execute("""
-    CREATE TABLE IF NOT EXISTS yelp.sentiment_business_full(
-        business_id text,
-        neg_reviews int, 
-        pos_reviews int,
-        PRIMARY KEY(business_id))
-""")
-    sleep(5)
-    print('UPLOADING DATAFRAME TO CASSANDRA')
-    sentiment2.to_spark().write\
-    .format("org.apache.spark.sql.cassandra")\
-    .mode('append')\
-    .options(table="sentiment_business_full", keyspace="yelp")\
-    .save()
+    #### CONNECT TO MySQL
+    print('UPLOADING DATAFRAME TO MySQL')
+    sentiment.to_sql('user', con=engine, if_exists='replace', index=False)
     print('DONE')
 
+###############################
 
+# Below is the Airflow DAG that orchestrates the automated data ETL
 
-
-#DAG de Airflow
 with DAG(dag_id='Test387',start_date=datetime.datetime(2022,8,25),schedule_interval='@once') as dag:
 
     t_load_tips = PythonOperator(task_id='load_tips',python_callable=load_tips)
