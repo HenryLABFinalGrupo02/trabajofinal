@@ -66,8 +66,8 @@ if authentication_status:
    with st.sidebar:
       st.image(Image.open('./image/logo_vocado (5).png'))
    
-      selected2 = option_menu(None, ["Home", "My Business", "Competition", "Opportunities", "Add business",'Log out'], 
-      icons=['house', 'building', 'globe', 'star', 'plus','logout'], 
+      selected2 = option_menu(None, ["Home", "My Business", "Competition", "Opportunities", "Add business",'Log out','mapa'], 
+      icons=['house', 'building', 'globe', 'star', 'plus','logout','mapa'], 
       menu_icon="cast", default_index=0, orientation="vertical",
       styles={
            "container": {"padding": "0!important", 
@@ -124,6 +124,8 @@ if authentication_status:
       if selected2 == 'Log out':
          st.title("Do you want to log out?")
          authenticator.logout('Logout', 'main')
+      if selected2 == 'mapa':
+         tf.mapa3dGrafico()
    else:
       if 'button' not in st.session_state:
          st.session_state.button= False 
