@@ -18,8 +18,9 @@ from sqlalchemy import create_engine
 # from darts.metrics import mape
 from transformers import AlbertForSequenceClassification, pipeline, AlbertTokenizer
 from keybert import KeyBERT
-#from Functions.Herramientas import ht 
-import pydeck as pdk
+from Functions.Herramientas import ht 
+#import pydeck as pdk
+import numpy as np
 
 
 ###########################
@@ -84,27 +85,27 @@ def update_my_businesses(ids_list:list):
         influencer_score = pd.read_sql("""SELECT * FROM business_target WHERE business_id = '{}'""".format(tup[0]), engine)
     return business, checkin, review, sentiment, influencer_score
 
-def update_cass_businesses(ids_list:list):
-    tup = tuple(ids_list)
-    import os
-    os.environ["JAVA_HOME"] = "/opt/java"
-    os.environ["SPARK_HOME"] = "/opt/spark"
-    import findspark
-    findspark.init()
-    from pyspark.sql import SparkSession
-    spark = SparkSession.builder.master("local[*]").getOrCreate()
-    import casspark
-    from cassandra.cluster import Cluster
-    cass_ip = '34.102.43.26'
-    cluster = Cluster(contact_points=[cass_ip],port=9042)
-    session = cluster.connect()
-
-    business = cql_to_pandas("""select * from yelp.business WHERE business_id in {} ALLOW FILTERING;""".format(bus_ids),session)
-    checkin = cql_to_pandas("""select * from yelp.checkin where business_id in {} ALLOW FILTERING;""".format(bus_ids),session)
-    review = cql_to_pandas("""select * from yelp.review where business_id in {} ALLOW FILTERING;""".format(bus_ids),session)
-    sentiment = cql_to_pandas("""SELECT * FROM yelp.sentiment_by_business WHERE business_id = '{}' ALLOW FILTERING""".format(bus_ids), engine)
-    influencer_score = cql_to_pandas("""SELECT * FROM yelp.business_target WHERE business_id = '{}' ALLOW FILTERING""".format(tup[0]), engine)
-    return business, checkin, review, sentiment, influencer_score
+#def update_cass_businesses(ids_list:list):
+#    tup = tuple(ids_list)
+#    import os
+#    os.environ["JAVA_HOME"] = "/opt/java"
+#    os.environ["SPARK_HOME"] = "/opt/spark"
+#    import findspark
+#    findspark.init()
+#    from pyspark.sql import SparkSession
+#    spark = SparkSession.builder.master("local[*]").getOrCreate()
+#    import casspark
+#    from cassandra.cluster import Cluster
+#    cass_ip = '34.102.43.26'
+#    cluster = Cluster(contact_points=[cass_ip],port=9042)
+#    session = cluster.connect()
+#
+#    business = cql_to_pandas("""select * from yelp.business WHERE business_id in {} ALLOW FILTERING;""".format(bus_ids),session)
+#    checkin = cql_to_pandas("""select * from yelp.checkin where business_id in {} ALLOW FILTERING;""".format(bus_ids),session)
+#    review = cql_to_pandas("""select * from yelp.review where business_id in {} ALLOW FILTERING;""".format(bus_ids),session)
+#    sentiment = cql_to_pandas("""SELECT * FROM yelp.sentiment_by_business WHERE business_id = '{}' ALLOW FILTERING""".format(bus_ids), engine)
+#    influencer_score = cql_to_pandas("""SELECT * FROM yelp.business_target WHERE business_id = '{}' ALLOW FILTERING""".format(tup[0]), engine)
+#    return business, checkin, review, sentiment, influencer_score
 
 
 #users_business = ["Burger King", "Starbucks", "Subway", "Taco Bell", "CVS Pharmacy", "Acme Oyster House", "Michaelangelos Pizza", "Nana Rosa Italian"]
@@ -125,12 +126,18 @@ bus_ids = ['vCJZ0WpB9r_tOhJZpESqCQ',
 
 using_cassandra = False
 
-try:
-    business, checkin, review, sentiment, influencer_score = update_cass_businesses(bus_ids)
-    using_cassandra = True
-except:
-    business, checkin, review, sentiment, influencer_score = update_my_businesses(bus_ids)
-    using_cassandra = False
+#try:
+#business, checkin, review, sentiment, influencer_score = update_cass_businesses(bus_ids)
+using_cassandra = True
+# except:
+business, checkin, review, sentiment, influencer_score = update_my_businesses(bus_ids)
+#     using_cassandra = False
+#try:
+#    business, checkin, review, sentiment, influencer_score = update_cass_businesses(bus_ids)
+#    using_cassandra = True
+#except:
+#    business, checkin, review, sentiment, influencer_score = update_my_businesses(bus_ids)
+#    using_cassandra = False
 
 ############################################ HOME TAB ##################################################
 
@@ -742,6 +749,19 @@ def addbusiness():
     else:
         st.text('Business not found, check the name and try again')
 
+def dataframe():
+    df = pd.read_sql("""SELECT bc.name,bc.address,bc.longitude_x,bc.latitude_x,bt.success_score FROM business_clean  bc join business_target bt on bc.business_id=bt.business_id limit 1000""", engine)
+    return df
+    #'address','latitude_x','longitude_x','success_score'
 
-#def mapa3dGrafico():
-    #df = pd.read_sql("""SELECT * FROM business_clean  bc join business_target bt on bc.business_id=bt.business_id WHERE business_id in {}""".format(tup), engine)
+data1 = dataframe()
+
+
+
+def mapa3dGrafico():
+    #dicc = {'latitude_x':[37.742699],'longitude_x':[-122.392366],'name':['pepito'],'address':['EE.UU']}
+    #df =pd.DataFrame(dicc)
+    #df = pd.DataFrame(np.random.randn(1000, 2) / [50, 50] + [37.76, -122.4],columns=['latitude_x','longitude_x'])
+    data2 = data1.sort_values(by='success_score',ascending=False)
+    ht.mapa3d(data2)
+    
