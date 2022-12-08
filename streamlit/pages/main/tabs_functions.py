@@ -125,12 +125,12 @@ bus_ids = ['vCJZ0WpB9r_tOhJZpESqCQ',
 
 using_cassandra = False
 
-#try:
-business, checkin, review, sentiment, influencer_score = update_cass_businesses(bus_ids)
-using_cassandra = True
-# except:
-#     business, checkin, review, sentiment, influencer_score = update_my_businesses(bus_ids)
-#     using_cassandra = False
+try:
+    business, checkin, review, sentiment, influencer_score = update_cass_businesses(bus_ids)
+    using_cassandra = True
+except:
+    business, checkin, review, sentiment, influencer_score = update_my_businesses(bus_ids)
+    using_cassandra = False
 
 ############################################ HOME TAB ##################################################
 
@@ -729,10 +729,10 @@ def addbusiness():
             #print(users_business)
             st.text('Your business id is: {}'.format(new_business_id))
             st.text('Business added to dashboard successfully')
-            #if using_cassandra:
-            new_business, new_checkin, new_review, new_sentiment, new_influencer_score = update_cass_businesses([new_business_id])
-            # else:
-            #     new_business, new_checkin, new_review, new_sentiment, new_influencer_score = update_my_businesses([new_business_id])
+            if using_cassandra:
+                new_business, new_checkin, new_review, new_sentiment, new_influencer_score = update_cass_businesses([new_business_id])
+            else:
+                new_business, new_checkin, new_review, new_sentiment, new_influencer_score = update_my_businesses([new_business_id])
             business = pd.concat([business, new_business], axis=0)
             checkin = pd.concat([checkin, new_checkin], axis=0)
             review = pd.concat([review, new_review], axis=0)

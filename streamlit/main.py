@@ -23,6 +23,16 @@ st.set_page_config(
 with open('style.css') as f:
     st.markdown(f'<style>{f.read()}</style>', unsafe_allow_html=True)
 
+def register():
+   try:
+      if authenticator.register_user('Register user', preauthorization=True):
+         st.success('User registered successfully')
+   except Exception as e:
+      st.error(e)
+
+   with open('config.yaml', 'w') as file:
+      yaml.dump(users, file, default_flow_style=False)
+
 authenticator = stauth.Authenticate(
    users['credentials'],
    users['cookie']['name'],
@@ -31,32 +41,15 @@ authenticator = stauth.Authenticate(
    users['preauthorized']
 )
 
-#selected = option_menu(None, ["login", "register"], 
-#      icons=['house', 'building'], 
-#      menu_icon="cast", default_index=0, orientation="vertical",
-#      styles={
-#           "container": {"padding": "0!important", 
-#                        "background-color": "#E4FFED"},
-#           "icon": {"color": "#F4C01E",
-#                     "font-size": "25px"}, 
-#           "nav-link": {"font-size": "25px", 
-#                        "margin":"0px", 
-#                        "--hover-color": "#109138", 
-#                        "font-family":"Sans-serif", 
-#                        "background-color": "#E4FFED"},
-#           "nav-link-selected": {"background-color": "#109138", 
-#                                 "font-style":"Sans-serif", 
-#                                 "font-weight": "bold",
-#                                 "color":"#FFFFFF"},
-#       })
-
-#if selected == 'login':
 name, authentication_status, username,premium = authenticator.login('Login', 'main')
 if authentication_status == False:
    st.error('Username/password is incorrect')
+   st.button('Register', on_click=register, disabled=True)
 if authentication_status == None:
-   st.warning('Please enter your username and password')
+   st.markdown('#### Please enter your username and password')
+   st.button('Register', on_click=register)
 if authentication_status:
+
 
 
  ################
