@@ -87,8 +87,7 @@ def LoadNewReviewsOrTips():
                 #print('DROPPING DUPLICATED ROWS')
                 #review = review.drop_duplicates()
                 #print('NORMALIZING DATES')
-                #review['date'] = review['date'].apply(transform_dates).dt.strftime('%Y-%m-%d')
-
+                review['date'] = review['date'].astype(str)
                 review.rename(columns=lower_col_names(review.columns), inplace=True)
                 print('UPLOADING DATAFRAME TO MYSQL')
                 review.to_sql('review', con=engine, if_exists='append', index=False)
