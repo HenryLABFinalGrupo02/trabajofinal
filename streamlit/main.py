@@ -44,7 +44,7 @@ authenticator = stauth.Authenticate(
 name, authentication_status, username,premium = authenticator.login('Login', 'main')
 if authentication_status == False:
    st.error('Username/password is incorrect')
-   st.button('Register', on_click=register, disabled=True)
+   st.button('Register', on_click=register)
 if authentication_status == None:
    st.markdown('#### Please enter your username and password')
    st.button('Register', on_click=register)
@@ -60,7 +60,7 @@ if authentication_status:
       st.image(Image.open('./image/logo_vocado (5).png'))
    
       selected2 = option_menu(None, ["Home", "My Business", "Competition", "Opportunities", "Add business",'Log out'], 
-      icons=['house', 'building', 'globe', 'star', 'plus','logout'], 
+      icons=['house', 'building', 'globe', 'star', 'plus','lightbulb-off-fill'], 
       menu_icon="cast", default_index=0, orientation="vertical",
       styles={
            "container": {"padding": "0!important", 
