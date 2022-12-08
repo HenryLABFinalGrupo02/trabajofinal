@@ -257,6 +257,10 @@ def get_len(value):
     return len(ls)
 
 def lower_col_names(cols):
+    """
+    This function recieves a list of strings and lowers their case in order to avoid problems when interacting with the database.
+    It returns a dictionary mapping the old strings to the new strings.
+    """
     new_names = {}
     for x in cols:
         new_names[x] = x.lower()
