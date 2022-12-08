@@ -1,8 +1,8 @@
 casspark.py
-functions.py 
+#functions.py 
 Spark.py
-sensor.py
-transform_funcs.py
+#sensor.py
+#transform_funcs.py
 dag_to_mysql.py
 dag_initial_loading.py
 dag_initial_loading_ASTRA.py
