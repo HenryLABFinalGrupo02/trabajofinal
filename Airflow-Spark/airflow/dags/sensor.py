@@ -157,8 +157,8 @@ with DAG(
         #https://airflow.apache.org/docs/apache-airflow-providers-amazon/stable/_api/airflow/providers/amazon/aws/sensors/s3/index.html
         task_id='S3BucketSensorNewFiles', #Name of task
         bucket_name='data', #Support relative or full path
-        #bucket_key='review*', #Only if we didn't specify the full path, or we want to use UNIx style wildcards
-        #wildcard_match = True, #Set to true if we want to use wildcards
+        bucket_key='(review*|tip*)', #Only if we didn't specify the full path, or we want to use UNIx style wildcards
+        wildcard_match = True, #Set to true if we want to use wildcards
         aws_conn_id='minio_conn', #Name of the connection
         mode='poke', #Poke or reschedule
         poke_interval=5,
