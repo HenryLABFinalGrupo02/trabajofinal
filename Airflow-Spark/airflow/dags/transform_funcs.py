@@ -72,7 +72,15 @@ def drop_bad_ids(Table, id_column):
     return Table[ps.Series((~Table.index.isin(id_list)).to_list())].reset_index(drop=True)
 
 # NUMERIC VALUES
-
+def lower_col_names(cols):
+    """
+    This function recieves a list of strings and lowers their case in order to avoid problems when interacting with the database.
+    It returns a dictionary mapping the old strings to the new strings.
+    """
+    new_names = {}
+    for x in cols:
+        new_names[x] = x.lower()
+    return new_names 
 def impute_num(Table, col_list, absolute=False):
     """
     This function replaces missing values in numeric columns with 0.

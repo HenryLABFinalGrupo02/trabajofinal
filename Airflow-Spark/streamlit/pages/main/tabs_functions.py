@@ -1,113 +1,196 @@
 import streamlit as st
-import pandas as pd 
-import numpy as np
+import pandas as pd
+from datetime import datetime
 from multiprocessing import Value
-from os import write
 from typing import List
 from numpy.core.fromnumeric import size
-from PIL import Image
 # xtAuthProvider
-import json
-from pathlib import Path
 #import joblib
 import pickle
 import xgboost
 #import darts 
-import plotly as py
 import plotly.express as px
-from plotly.offline import download_plotlyjs, init_notebook_mode, plot, iplot
 import plotly.graph_objects as go
 pd.options.plotting.backend = 'plotly'
 from sqlalchemy import create_engine
+# from darts import TimeSeries
+# from darts.models import ExponentialSmoothing
+# from darts.metrics import mape
+from transformers import AlbertForSequenceClassification, pipeline, AlbertTokenizer
+from keybert import KeyBERT
 #from Functions.Herramientas import ht 
+import pydeck as pdk
+import os
+os.environ["JAVA_HOME"] = "/opt/java"
+os.environ["SPARK_HOME"] = "/opt/spark"
+import findspark
+findspark.init()
+from pyspark.sql import SparkSession
+spark = SparkSession.builder.master("local[*]").getOrCreate()
 
+
+###########################
+## SOME USEFUL FUNCTIONS ###
+###########################
+
+def cql_to_pandas(cql_query,cassandra_session):
+   """
+   It takes a CQL query and a Cassandra session as input, and returns a Pandas dataframe
+   
+   :param cql_query: The CQL query you want to run
+   :param cassandra_session: The Cassandra session object
+   :return: A pandas dataframe
+   """
+   def pandaspark_factory(colnames, rows):\
+       return pd.DataFrame(rows, columns=colnames)
+   cassandra_session.row_factory = pandaspark_factory
+   cassandra_session.default_fetch_size = None
+   result = cassandra_session.execute(cql_query, timeout=None)
+   return result._current_rows
+
+
+def capitalize_each_word(original_str):
+    result = ""
+    # Split the string and get all words in a list
+    list_of_words = original_str.split()
+    # Iterate over all elements in list
+    for elem in list_of_words:
+        # capitalize first letter of each word and add to a string
+        if len(result) > 0:
+            result = result + " " + elem.strip().capitalize()
+        else:
+            result = elem.capitalize()
+    # If result is still empty then return original string else returned capitalized.
+    if not result:
+        return original_str
+    else:
+        return result
+
+engine = create_engine("mysql+pymysql://{user}:{pw}@{address}/{db}".format(user="root",
+            address = '35.239.80.227:3306',
+            pw="Henry12.BORIS99",
+            db="yelp"))
+
+def update_my_businesses(ids_list:list):
+    tup = tuple(ids_list)
+    if len(tup) > 1:
+        business = spark.sql("""SELECT * FROM henry.yelp.business WHERE business_id in {}""".format(tup)).pandas_api().to_pandas()
+        bus_names = business.name.to_list()
+        for x in bus_names:
+            users_business.add(x)
+        checkin = spark.sql("""SELECT * FROM henry.yelp.checkin_hour WHERE business_id in {}""".format(tup)).pandas_api().to_pandas()
+        review = spark.sql("""SELECT * FROM henry.yelp.review WHERE business_id in {}""".format(tup)).pandas_api().to_pandas()
+        sentiment = spark.sql("""SELECT * FROM henry.yelp.sentiment_by_business WHERE business_id in {}""".format(tup)).pandas_api().to_pandas()
+        influencer_score = spark.sql("""SELECT * FROM henry.yelp.business_target WHERE business_id in {}""".format(tup)).pandas_api().to_pandas()
+    else:
+        business = spark.sql("""SELECT * FROM henry.yelp.business WHERE business_id = '{}'""".format(tup[0])).pandas_api().to_pandas()
+        users_business.add(business.name[0])
+        checkin = spark.sql("""SELECT * FROM henry.yelp.checkin_hour WHERE business_id = '{}'""".format(tup[0])).pandas_api().to_pandas()
+        review = spark.sql("""SELECT * FROM henry.yelp.review WHERE business_id = '{}'""".format(tup[0])).pandas_api().to_pandas()
+        sentiment = spark.sql("""SELECT * FROM henry.yelp.sentiment_by_business WHERE business_id = '{}'""".format(tup[0])).pandas_api().to_pandas()
+        influencer_score = spark.sql("""SELECT * FROM henry.yelp.business_target WHERE business_id = '{}'""".format(tup[0])).pandas_api().to_pusers_businessandas()
+    return business, checkin, review, sentiment, influencer_score
+
+def update_cass_businesses(ids_list:list):
+    tup = tuple(ids_list)
+    import os
+    os.environ["JAVA_HOME"] = "/opt/java"
+    os.environ["SPARK_HOME"] = "/opt/spark"
+    import findspark
+    findspark.init()
+    from pyspark.sql import SparkSession
+    spark = SparkSession.builder.master("local[*]").getOrCreate()
+    import casspark
+    from cassandra.cluster import Cluster
+    cass_ip = '34.102.43.26'
+    cluster = Cluster(contact_points=[cass_ip],port=9042)
+    session = cluster.connect()
+
+    business = cql_to_pandas("""select * from yelp.business WHERE business_id in {} ALLOW FILTERING;""".format(bus_ids),session)
+    checkin = cql_to_pandas("""select * from yelp.checkin where business_id in {} ALLOW FILTERING;""".format(bus_ids),session)
+    review = cql_to_pandas("""select * from yelp.review where business_id in {} ALLOW FILTERING;""".format(bus_ids),session)
+    sentiment = cql_to_pandas("""SELECT * FROM yelp.sentiment_by_business WHERE business_id = '{}' ALLOW FILTERING""".format(bus_ids), engine)
+    influencer_score = cql_to_pandas("""SELECT * FROM yelp.business_target WHERE business_id = '{}' ALLOW FILTERING""".format(tup[0]), engine)
+    return business, checkin, review, sentiment, influencer_score
+
+
+#users_business = ["Burger King", "Starbucks", "Subway", "Taco Bell", "CVS Pharmacy", "Acme Oyster House", "Michaelangelos Pizza", "Nana Rosa Italian"]
+users_business = set()
+bus_ids = spark.sql("SELECT business_id from henry.yelp.business;").pandas_api()['business_id'].to_list()
 
 ##################
 ## IMPORT DATA ###
 ##################
 
+using_cassandra = False
 
-business = pd.read_json(r'pages/main/data/my_business.json', lines=True)
-checkin = pd.read_json(r'pages/main/data/my_checkins.json', lines=True)
-review = pd.read_json(r'pages/main/data/my_reviews.json', lines=True)
-sentiment = pd.read_json(r'pages/main/data/my_sent.json', lines=True)
-influencer_score = pd.read_csv(r'pages/main/data/target_3_influencer_modified.csv')
-
-#business = cql_to_pandas("""select * from yelp.business ALLOW FILTERING;""",session)
-
-import gzip
-import shutil
-with gzip.open(r'pages/main/data/my_user.json.gz', 'rb') as f_in:
-    with open(r'pages/main/data/my_user.json', 'wb') as f_out:
-        shutil.copyfileobj(f_in, f_out)
-
-users = pd.read_json(r'pages/main/data/my_user.json', lines=True)
-
-# im = Image.open(r'image/logo_vocado.png')
-#business = cql_to_pandas("""select * from yelp.business ALLOW FILTERING;""",session)
-#checkin = cql_to_pandas("""select * from yelp.checkin ALLOW FILTERING;""",session)
-#review = cql_to_pandas("""select * from yelp.review ALLOW FILTERING;""",session)
-# review = pd.read_csv(r'pages/main/data/review_1000.csv')
-# checkin = pd.read_csv(r'pages/main/data/checkin_1000.csv')
-
-
-#cloud_config= {'secure_connect_bundle': r'secure-connect-henry.zip'}
-#auth_provider = PlainTextAuthProvider(json.load(open(r'log_in.json'))['log_user'], json.load(open(r'log_in.json'))['log_password'])
-#cluster = Cluster(cloud=cloud_config, auth_provider=auth_provider)
-#session = cluster.connect()
-
-#def cql_to_pandas(cql_query,cassandra_session):
-#    """
-#    It takes a CQL query and a Cassandra session as input, and returns a Pandas dataframe
-#    
-#    :param cql_query: The CQL query you want to run
-#    :param cassandra_session: The Cassandra session object
-#    :return: A pandas dataframe
-#    """
-#    def pandaspark_factory(colnames, rows):\
-#        return pd.DataFrame(rows, columns=colnames)
-#    cassandra_session.row_factory = pandaspark_factory
-#    cassandra_session.default_fetch_size = None
-#    result = cassandra_session.execute(cql_query, timeout=None)
-#    return result._current_rows
-
-users_business = ["Burger King", "Starbucks", "Subway", "Taco Bell", "CVS Pharmacy", "Acme Oyster House", "Michaelangelos Pizza", "Nana Rosa Italian"]
-
-# business = cql_to_pandas("""select * from yelp.business_full where name in {} ALLOW FILTERING;""".format(tuple(users_business)),session)
-# bus_ids = business.business_id.to_list()
-# checkin = cql_to_pandas("""select * from yelp.checkin_full where business_id in {} ALLOW FILTERING;""".format(tuple(bus_ids)),session)
-# reviews = cql_to_pandas("""select * from yelp.review_full where business_id in {} ALLOW FILTERING;""".format(tuple(bus_ids)),session)
+try:
+    business, checkin, review, sentiment, influencer_score = update_cass_businesses(bus_ids)
+    using_cassandra = True
+except:
+    business, checkin, review, sentiment, influencer_score = update_my_businesses(bus_ids)
+    using_cassandra = False
 
 ############################################ HOME TAB ##################################################
 
 
 def metricas(): 
-   review_stars = business['stars'].mean()
-   sentiment['positive_score'] = sentiment['pos_reviews'] / ( sentiment['neg_reviews'] + sentiment['pos_reviews'])
-   Positive_sentiment = sentiment['positive_score'].mean()
-   #review_total = sentiment.shape[0]
-   review_total = review.shape[0]
-   number_visits = checkin['total'].sum()
-   influencer_score['Influencer_score'] = 1 - (1 / (1 + influencer_score['avg(Influencer_2)']))
-   inf_score = influencer_score['Influencer_score'].mean()
+    review_stars = round(business['stars'].mean(),2)
+    sentiment['positive_score'] = sentiment['pos_reviews'] / ( sentiment['neg_reviews'] + sentiment['pos_reviews'])
+    Positive_sentiment = sentiment['positive_score'].mean()
+    #review_total = sentiment.shape[0]
+    review_total = review.shape[0]
+    number_visits = checkin['total'].sum()
+    influencer_score['Influencer_score'] = 1 - (1 / (1 + influencer_score['avg_influencer_2']))
+    inf_score = influencer_score['Influencer_score'].mean()
 
-   st.markdown("### Oportunities")
-   oportunity = st.columns(3)
-   oportunity[0].metric('Business Line', '98,7%', delta=None, delta_color="normal")
-   oportunity[1].metric('Location', '93,5%', delta=None, delta_color="normal")
-   oportunity[2].metric('Services', '90,7%', delta=None, delta_color="normal")
+    ## Oportunities
+    ## Gives you the top categories and locations of business according to probability predictions
+    ## Of the XGBoost model 
 
-   st.markdown("### Account Summary")
-   metrics = st.columns(6)
-   metrics[0].metric('Review Total', review_total, delta=None, delta_color="normal")
-   # metrics[1].image(im,width=50)
-   metrics[1].metric('Review stars', round(review_stars, 2), delta=None, delta_color="normal")
-   metrics[2].metric('Positive sentiment', f'{round(Positive_sentiment, 2)*100}%', delta=None, delta_color="normal")
-   metrics[3].metric('Influencer Score', f'{round(inf_score, 2)*100}%', delta=None, delta_color="normal")
-   metrics[4].metric('Top Hour', '18:00', delta=None, delta_color="normal")
-   metrics[5].metric('Number_visits', number_visits)
-   
-   
+    df = pd.read_csv('./pages/main/data/business_proba.csv').head(50)
+    sucessfull_business = tuple(df['business_id'].unique().tolist())
+    sucess_query = '''SELECT DISTINCT(postal_code), areas,
+    restaurants, food, shopping, homeservices, beautyandspas, 
+    nightlife, healthandmedical, localservices, bars, automotive 
+    FROM yelp.business_clean where business_id IN {};'''
+    df_sucess_zip = pd.read_sql(sucess_query.format(sucessfull_business), engine)
+    df_sucess_zip['areas_name'] = df_sucess_zip['areas'].map({
+        0: 'Philadelphia',
+        1: 'Reno',
+        2: 'Indianapolis',
+        3: 'Tucson',
+        4: 'New Orleans',
+        5: 'St. Louis',
+        6: 'Tampa',
+        7: 'Boise',
+        9: 'Nashville',
+        10: 'Santa Barbara'
+    })
+
+    areas = df_sucess_zip['areas_name'].value_counts().head(3).index.tolist()
+    areas = ', '.join(areas)
+
+    subset = df_sucess_zip[['restaurants', 'food', 'shopping', 'homeservices', 'beautyandspas', 'nightlife', 'healthandmedical', 'localservices', 'bars', 'automotive']]
+    business_lines = pd.get_dummies(subset).idxmax(1).value_counts().head(3).index.tolist()
+    business_lines = ', '.join(business_lines)
+    business_lines = capitalize_each_word(business_lines)
+    
+    st.markdown("### Oportunities")
+    oportunity = st.columns(2)
+    oportunity[0].metric('Hot Business Lines', business_lines, delta=None, delta_color="normal")
+    oportunity[1].metric('Hot Locations', areas, delta=None, delta_color="normal")
+
+    ## Account Summary
+    st.markdown("### Account Summary")
+    metrics = st.columns(6)
+    metrics[0].metric('Review Total', review_total, delta=None, delta_color="normal")
+    # metrics[1].image(im,width=50)
+    metrics[1].metric('Review stars', round(review_stars, 1), delta=None, delta_color="normal")
+    metrics[2].metric('Positive sentiment', f'{round(Positive_sentiment, 1)*100}%', delta=None, delta_color="normal")
+    metrics[3].metric('Influencer Score', f'{round(inf_score, 1)*100}%', delta=None, delta_color="normal")
+    metrics[4].metric('Top Hour', '18:00', delta=None, delta_color="normal")
+    metrics[5].metric('Number_visits', number_visits)
 
 
 
@@ -117,58 +200,134 @@ def metricas():
 
 
 def query_info(filtro):
-   ids = filtro['business_id'].to_list()
-   
-   review1 = review.loc[review['business_id'].isin(ids)]
-   review_stars = filtro['stars'].mean()
-   #review = cql_to_pandas("""select * from yelp.sentiment_business_full where business_id in '{}' ALLOW FILTERING;""".format(ids),session)
-   sentiment1 = sentiment.loc[sentiment['business_id'].isin(ids)]
-   #checkin = cql_to_pandas("""select * from yelp.checkin_full where business_id in '{}' ALLOW FILTERING;""".format(ids),session)
-   checkin1 = checkin.loc[checkin['business_id'].isin(ids)]
-   influencer_score['Influencer_score'] = 1 - (1 / (1 + influencer_score['avg(Influencer_2)']))
-   inf_score_1 = influencer_score.loc[influencer_score['business_id'].isin(ids)]
+    ids = filtro['business_id'].to_list()
 
-   sentiment1['positive_score'] = sentiment1['pos_reviews'] / ( sentiment1['neg_reviews'] + sentiment1['pos_reviews'])
-   Positive_sentiment = sentiment1['positive_score'].mean()
-   #review_total = sentiment1.shape[0]
-   review_total = review1.shape[0]
-   number_visits = checkin1['total'].sum()   
-   inf_score_1 = inf_score_1['Influencer_score'].mean()
+    review1 = review.loc[review['business_id'].isin(ids)]
+    review_stars = filtro['stars'].mean()
+    sentiment1 = sentiment.loc[sentiment['business_id'].isin(ids)]
+    checkin1 = checkin.loc[checkin['business_id'].isin(ids)]
+    influencer_score['Influencer_score'] = 1 - (1 / (1 + influencer_score['avg_influencer_2']))
+    inf_score_1 = influencer_score.loc[influencer_score['business_id'].isin(ids)]
+    sentiment1['positive_score'] = sentiment1['pos_reviews'] / ( sentiment1['neg_reviews'] + sentiment1['pos_reviews'])
+    Positive_sentiment = sentiment1['positive_score'].mean()
+    review_total = review1.shape[0]
+    number_visits = checkin1['total'].sum()   
+    inf_score_1 = inf_score_1['Influencer_score'].mean()
 
-   st.markdown("### Account Summary")
-   
-   metrics = st.columns(6)
-   
-   metrics[0].metric('Review Total',review_total, delta=None, delta_color="normal")
-   metrics[1].metric('Review stars', round(review_stars, 2), delta=None, delta_color="normal")
-   metrics[2].metric('Positive sentiment', f'{round(Positive_sentiment, 2)*100}%', delta=None, delta_color="normal")
-   metrics[4].metric('Top Hour', f'{round(checkin1.avg_hour.mean())}:00', delta=None, delta_color="normal")
-   metrics[3].metric('Influencer Score', f'{round(inf_score_1, 2)*100}%', delta=None, delta_color="normal")
-   metrics[5].metric('Number_visits', number_visits)
-   #location = filtro[['latitude_x','longitude_x']]
-   #ht.mapa3d(location)
-    
+    st.markdown("### Account Summary")
+
+    metrics = st.columns(6)
+
+    metrics[0].metric('Review Total',review_total, delta=None, delta_color="normal")
+    metrics[1].metric('Review stars', round(review_stars, 2), delta=None, delta_color="normal")
+    metrics[2].metric('Positive sentiment', f'{round(Positive_sentiment, 2)*100}%', delta=None, delta_color="normal")
+    if len(checkin1) > 1:
+        metrics[4].metric('Top Hour', f'{round(checkin1.avg_hour.mean())}:00', delta=None, delta_color="normal")
+    elif len(checkin1) == 1:
+        metrics[4].metric('Top Hour', f'{round(checkin1.avg_hour.iloc[0])}:00', delta=None, delta_color="normal")
+    metrics[3].metric('Influencer Score', f'{round(inf_score_1, 2)*100}%', delta=None, delta_color="normal")
+    metrics[5].metric('Number_visits', number_visits)
+    #location = filtro[['latitude_x','longitude_x']]
+    #ht.mapa3d(location)
+    st.title('Sentiment Analysis for Last Reviews')
+    number_to_get = st.slider('Number of reviews to get', 1, 50, 10)
+    name = st.button('Analize reviews')
+    if name:
+        #reviews = get_reviews(id, engine, number_to_get)
+        reviews = review1[['text', 'date']].sort_values(by='date', ascending=False).head(number_to_get)
+        
+
+        model = AlbertForSequenceClassification.from_pretrained('./model/textclass/')
+        tokenizer = AlbertTokenizer.from_pretrained('./model/textclass/')
+        classifier = pipeline("sentiment-analysis", model=model, tokenizer=tokenizer) #, device=0) #for GPU support
+        
+        kw_model = KeyBERT()
+
+        positive = 0
+        negative = 0
+        pos_keywords = []
+        neg_keywords = []
+        reviews['sentiment'] = ''
+        reviews['keywords'] = ''
+        for index, row in reviews.iterrows():
+            if classifier(row['text'], truncation = True)[0]['label'] == 'LABEL_1':
+                positive += 1
+                keywords = kw_model.extract_keywords(row['text'], keyphrase_ngram_range=(1, 1), stop_words='english')
+                pos_keywords += keywords
+                reviews.sentiment[index] = 'positive'
+                reviews.keywords[index] = keywords
+            elif classifier(row['text'], truncation = True)[0]['label'] == 'LABEL_0':
+                negative += 1
+                keywords = kw_model.extract_keywords(row['text'], keyphrase_ngram_range=(1, 1), stop_words='english')
+                neg_keywords += keywords
+                reviews.sentiment[index] = 'negative'
+                reviews.keywords[index] = keywords
+        
+        try:
+            neg_key, neg_score = zip(*neg_keywords)
+        except:
+            neg_key = []
+            neg_score = []
+        try:
+            pos_key, pos_score = zip(*pos_keywords)
+        except:
+            pos_key = []
+            pos_score = []
+
+        df_neg = pd.DataFrame({'key':neg_key, 'score':neg_score}).groupby('key').mean().sort_values('score', ascending=False)
+        df_pos = pd.DataFrame({'key':pos_key, 'score':pos_score}).groupby('key').mean().sort_values('score', ascending=False)
+            
+        st.markdown("### Reviews Summary")
+        metrics = st.columns(2)
+
+        metrics[0].markdown("### Positive Reviews")
+        metrics[0].metric('Total Positive', positive, delta=None, delta_color="normal")
+        metrics[0].text("Top 5 Keywords")
+        metrics[0].text(df_pos.head(5).index.tolist())
+
+        metrics[1].markdown("### Negative Reviews")
+        metrics[1].metric('Total Negative', negative, delta=None, delta_color="normal")
+        metrics[1].text("Top 5 Keywords")
+        metrics[1].text(df_neg.head(5).index.tolist())
 
 
-def select_business(): 
-    option = st.selectbox(
-        'My businesses',
-        (users_business))
+        REVIEW_TEMPLATE_MD = """{} - {}
+                                    > {}"""
 
-    #business = cql_to_pandas("""select * from yelp.business_full where business_id = '{}' ALLOW FILTERING;""".format(option),session)
+        with st.expander("💬 Show Reviews"):
 
-    # st.write('You selected:', option)
-    if option in option:
-        filtro = business[business['name'] == option]
-        query_info(filtro)
+        # Show comments
 
+            st.write("**Reviews:**")
+
+            for index, entry in enumerate(reviews.itertuples()):
+                st.markdown(REVIEW_TEMPLATE_MD.format(entry.date, entry.sentiment, entry.text))
+update_select_bussiness = False
+def load_buss_list(username):
+    global buss_list
+    buss_list = spark.sql("""SELECT name FROM henry.yelp.owner where owner = '{}'""".format(username)).pandas_api()['name'].to_list()
+
+def select_business(username):
+    global buss_list, update_select_bussiness
+    if update_select_bussiness:
+        buss_list = spark.sql("""SELECT name FROM henry.yelp.owner where owner = '{}'""".format(username)).pandas_api()['name'].to_list()
+        update_select_bussiness = False
+
+    if buss_list == []:
+        st.error("You don't have any business associated to your account")
+    else:
+        option = st.selectbox(
+            'My businesses',
+            buss_list)
+        
+        if option in option:
+            filtro = business[business['name'] == option]
+            query_info(filtro)
 
 
 
 
 ##################################### MODEL TAB ##################################################
-
-
 
 
 
@@ -306,7 +465,7 @@ def machine_learning():
         'St. Louis', 
         'Nashville', 
         'New Orleans', 
-        'Orlando',
+        'Tampa',
         'Tucson', 
         'Santa Barbara', 
         'Reno', 
@@ -384,24 +543,26 @@ def machine_learning():
 
         if area == 'Philadelphia':
             df_4['areas_0'] = 1.0
-        elif area == 'Indianapolis':
+        elif area == 'Reno':
             df_4['areas_1'] = 1.0
-        elif area == 'St. Louis':    
+        elif area == 'Indianapolis':
             df_4['areas_2'] = 1.0
-        elif area == 'Nashville':
+        elif area == 'Tucson':
             df_4['areas_3'] = 1.0
         elif area == 'New Orleans':
             df_4['areas_4'] = 1.0
-        elif area == 'Orlando':
+        elif area == 'St. Louis':    
             df_4['areas_5'] = 1.0
-        elif area == 'Tucson':
+        elif area == 'Tampa':
             df_4['areas_6'] = 1.0
-        elif area == 'Santa Barbara':
-            df_4['areas_8'] = 1.0
-        elif area == 'Reno':
-            df_4['areas_9'] = 1.0
         elif area == 'Boise':
+            df_4['areas_7'] = 1.0
+        elif area == 'Nashville':
+            df_4['areas_9'] = 1.0
+        elif area == 'Santa Barbara':
             df_4['areas_10'] = 1.0
+        
+        
 
         df_5 = pd.DataFrame({   'price_ranges_0': [0.0],
                                             'price_ranges_1': [0.0],
@@ -425,7 +586,7 @@ def machine_learning():
 
         df_predictions_final.columns = clf.get_booster().feature_names
 
-        print(df_predictions_final)
+        #print(df_predictions_final)
         
         prediction = clf.get_booster().predict(xgboost.DMatrix(df_predictions_final))
         
@@ -452,7 +613,7 @@ def eval_model(model, train, val):
 
     fig1 = px.line(train.pd_dataframe())
     fig1.update_layout(title='Actual')
-    fig1.update_traces(line_color='purple', name='Actual')
+    fig1.update_traces(line_color='purple', name='Actual', x='Years', y='Total Reviews')
 
 
     fig2 = px.line(forecast.pd_dataframe())
@@ -462,152 +623,130 @@ def eval_model(model, train, val):
     fig = go.Figure(data = fig1.data + fig2.data)
     return fig, string
 
+
+
+####### NO BORRAR #######
+
+# def timeseries():
+#     df = pd.read_csv('pages/main/data/forecasting.csv', parse_dates=['month'], index_col='month')
+#     df = df['2010':]
+
+#     # st.title('Time Series Visualization')
+#     st.markdown('Reviews/Tips/Checkins by Month for the Top Brands in USA'
+#     )
+
+#     # Create a list of unique brands
+#     st.text("Select you favourite brand")
+#     top_brand_selected = st.multiselect('Select brand', df.columns.tolist(), df.columns.tolist()[0:3])
+
+#     st.plotly_chart(df[top_brand_selected].plot(title = 'Total Review/Tips/Checkins Counts on Yelp for Top Brands'))
+
+
+#     series = TimeSeries.from_dataframe(df, fill_missing_dates=True, freq='MS', fillna_value=0)
+
+#     st.title('Forecasting Time Series')
+#     st.markdown('Reviews/Tips/Checkins by Month for the Top Brands in USA'
+#     )
+
+#     # Create a list of unique brands
+#     st.text("Select you favourite brand")
+#     top_brand_selected_f = st.selectbox('Select brand for forecast', df.columns.tolist())
+
+#     train, val = series[top_brand_selected_f].split_after(pd.Timestamp('2021-01-01'))
+    
+#     for m in range(2, 25):
+#         is_seasonal, mseas = check_seasonality(train, m=m, alpha=0.05)
+#         if is_seasonal:
+#             break
+    
+    
+    model = ExponentialSmoothing()
+
+    fig, string = eval_model(model, train, val)
+
+    fig.update_layout(title=top_brand_selected_f)
+    st.plotly_chart(fig)
+
+    st.text(string)
+
 def timeseries():
-    df = pd.read_csv('pages/main/data/forecasting.csv', parse_dates=['month'], index_col='month')
-    df = df['2010':]
+    train_df = pd.read_csv('./pages/main/data/train_ts.csv', index_col='month', parse_dates=True)
+    forecast_df = pd.read_csv('./pages/main/data/forecast_ts.csv', index_col='month', parse_dates=True)
+    type_model = pd.read_csv('./pages/main/data/model_for_each_ts.csv', index_col=0)
+    #print(type_model)
 
-    # st.title('Time Series Visualization')
-    st.markdown('Reviews/Tips/Checkins by Month for the Top Brands in USA'
-    )
+    st.title('Time Series Visualization')
+    st.markdown('Reviews/Tips/Checkins by Month for the Top Brands in USA')
 
-    # Create a list of unique brands
     st.text("Select you favourite brand")
-    top_brand_selected = st.multiselect('Select brand', df.columns.tolist(), df.columns.tolist()[0:3])
+    top_brand_selected = st.multiselect('Select brand', train_df.columns.tolist(), train_df.columns.tolist()[0:3])
 
-    st.plotly_chart(df[top_brand_selected].plot(title = 'Total Review/Tips/Checkins Counts on Yelp for Top Brands'))
+    st.plotly_chart(train_df[top_brand_selected].plot(title = 'Total Review/Tips/Checkins Counts on Yelp for Top Brands'))
 
+    st.title('Forecasting Time Series')
+    st.markdown('Reviews/Tips/Checkins by Month for the Top Brands in USA')
 
-    # from darts import TimeSeries
-    # from darts.models import ExponentialSmoothing
-    # from darts.metrics import mape
-    # series = TimeSeries.from_dataframe(df, fill_missing_dates=True, freq='MS', fillna_value=0)
+    st.text("Select you favourite brand")
+    top_brand_selected_f = st.multiselect('Select brand for forecast', train_df.columns.tolist(), train_df.columns.tolist()[0:2])
 
-    # st.title('Forecasting Time Series')
-    # st.markdown('Reviews/Tips/Checkins by Month for the Top Brands in USA'
-    # )
+    make_forecast = st.button('Make Forecasts')
 
-    # # Create a list of unique brands
-    # st.text("Select you favourite brand")
-    # top_brand_selected_f = st.selectbox('Select brand for forecast', df.columns.tolist())
+    if make_forecast:
+        for i in top_brand_selected:
+            fig1 = px.line(train_df[i])
+            fig1.update_layout(title='Actual')
+            fig1.update_traces(line_color='purple', name='Actual')
 
-    # train, val = series[top_brand_selected_f].split_after(pd.Timestamp('2021-01-01'))
-    
-    # model = ExponentialSmoothing()
+            fig2 = px.line(forecast_df[i])
+            fig2.update_layout(title='Forecast')
+            fig2.update_traces(line_color='seagreen', name='Forecast')
 
-    # fig, string = eval_model(model, train, val)
+            fig = go.Figure(data = fig1.data + fig2.data)
+            fig.update_layout(title=i)
+            st.plotly_chart(fig)
+            texto = 'Type of model used for {}: {}'.format(i, type_model.loc[i, 'Best Model'])
+            htmlcode = "<p style='text-align: center; color: red;'>{}</p>".format(texto)
+            st.markdown(htmlcode, unsafe_allow_html=True)
 
-    # fig.update_layout(title=top_brand_selected_f)
-    # st.plotly_chart(fig)
-
-    # st.text(string)
 
 
 ############################################## Add business ############################################
 
-def addbusiness():
-    name = st.text_input('Add your business name 👇', '')
-    
+
+def addbusiness(username):
+    global business, checkin, review, sentiment, influencer_score, using_cassandra, update_select_bussiness
+    st.markdown('#### Add your bussiness name')
+    name = st.text_input('Add your business name 👇 and hit ENTER', '')
+    if name != None:
+        df = spark.sql('SELECT address, postal_code FROM henry.yelp.business WHERE name = "{}" ORDER BY postal_code ASC'.format(name)).pandas_api().to_pandas()
+
+        st.markdown('#### Postal Code')
+        zipcode = st.selectbox('Select your postal code 👇', df['postal_code'].unique().tolist())
+
+        st.markdown('#### Address')
+        address = st.selectbox('Select your address 👇', df.loc[df['postal_code'] == zipcode,'address'].unique().tolist())
+
+        add_my_bussiness = st.button('Add my business')
+
+        if add_my_bussiness:
+            new_business_id = spark.sql('SELECT business_id FROM henry.yelp.business WHERE name = "{}" AND postal_code = "{}" AND address = "{}"'.format(name, zipcode, address)).pandas_api()['business_id'].values[0]
+            owner_df = spark.sql("""SELECT * FROM henry.yelp.owner where business_id == '{}'""".format(new_business_id)).pandas_api()
+            if owner_df['owner'].values[0] != 'None':
+                st.error('That Business is already registered by another User, if you think this is an error contact the support team.')
+            else:
+                owner_df.loc[0,'owner'] = username
+                owner_df.to_spark().write\
+                .format("org.apache.spark.sql.cassandra")\
+                .mode('append')\
+                .options(table="owner", keyspace="yelp")\
+                .save()
+                st.success('Succesfully added your Business! , if you cant see it in your business section try loggin out and re loggin.')
+                update_select_bussiness = True
 
 
+    else:
+        st.text('Business not found, check the name and try again')
 
 
-def get_reviews(id, engine, n_get):
-    df = pd.read_sql_query("SELECT text, date FROM review WHERE business_id = '{}' order by date desc limit {}".format(id, n_get), engine)
-    return df
-
-
-############################################## Add business ############################################
-
-def sentiment_review():
-    st.title('Sentiment Analysis for Last Reviews')
-    engine = create_engine("mysql+pymysql://{user}:{pw}@{address}/{db}".format(user="root",
-            address = '35.239.80.227:3306',
-            pw="Henry12.BORIS99",
-            db="yelp"))
-
-    lista_business = pd.read_sql('SELECT business_id, name FROM business_clean limit 10', engine)
-
-    option_business = st.selectbox(
-        'My businesses',
-        (lista_business['name']))
-    
-    id = lista_business.loc[lista_business['name'] == option_business, 'business_id'].iloc[0]
-
-    number_to_get = st.slider('Number of reviews to get', 1, 50, 10)
-    name = st.button('Analize reviews')
-    
-    if name:
-        reviews = get_reviews(id, engine, number_to_get)
-    
-        
-        from transformers import AlbertForSequenceClassification, pipeline, AlbertTokenizer
-
-        model = AlbertForSequenceClassification.from_pretrained('./model/textclass/')
-        tokenizer = AlbertTokenizer.from_pretrained('./model/textclass/')
-        classifier = pipeline("sentiment-analysis", model=model, tokenizer=tokenizer) #, device=0) #for GPU support
-        
-
-        from keybert import KeyBERT
-        kw_model = KeyBERT()
-
-        positive = 0
-        negative = 0
-        pos_keywords = []
-        neg_keywords = []
-        reviews['sentiment'] = ''
-        reviews['keywords'] = ''
-        for index, row in reviews.iterrows():
-            if classifier(row['text'], truncation = True)[0]['label'] == 'LABEL_1':
-                positive += 1
-                keywords = kw_model.extract_keywords(row['text'], keyphrase_ngram_range=(1, 1), stop_words='english')
-                pos_keywords += keywords
-                reviews.iloc[index, reviews.columns.get_loc('sentiment')] = 'positive'
-                reviews.iloc[index, reviews.columns.get_loc('keywords')] = keywords
-            elif classifier(row['text'], truncation = True)[0]['label'] == 'LABEL_0':
-                negative += 1
-                keywords = kw_model.extract_keywords(row['text'], keyphrase_ngram_range=(1, 1), stop_words='english')
-                neg_keywords += keywords
-                print(keywords, 'keywords')
-                print(neg_keywords, 'neg_keywords')
-                reviews.iloc[index, reviews.columns.get_loc('sentiment')] = 'negative'
-                reviews.iloc[index, reviews.columns.get_loc('keywords')] = keywords
-        
-        try:
-            neg_key, neg_score = zip(*neg_keywords)
-        except:
-            neg_key = []
-            neg_score = []
-        try:
-            pos_key, pos_score = zip(*pos_keywords)
-        except:
-            pos_key = []
-            pos_score = []
-
-        df_neg = pd.DataFrame({'key':neg_key, 'score':neg_score}).groupby('key').mean().sort_values('score', ascending=False)
-        df_pos = pd.DataFrame({'key':pos_key, 'score':pos_score}).groupby('key').mean().sort_values('score', ascending=False)
-            
-        st.markdown("### Reviews Summary")
-        metrics = st.columns(2)
-
-        metrics[0].markdown("### Positive Reviews")
-        metrics[0].metric('Total Positive', positive, delta=None, delta_color="normal")
-        metrics[0].text("Top 5 Keywords")
-        metrics[0].text(df_pos.head(5).index.tolist())
-
-        metrics[1].markdown("### Negative Reviews")
-        metrics[1].metric('Total Negative', negative, delta=None, delta_color="normal")
-        metrics[1].text("Top 5 Keywords")
-        metrics[1].text(df_neg.head(5).index.tolist())
-
-
-        REVIEW_TEMPLATE_MD = """{} - {}
-                                    > {}"""
-
-        with st.expander("💬 Show Reviews"):
-
-        # Show comments
-
-            st.write("**Reviews:**")
-
-            for index, entry in enumerate(reviews.itertuples()):
-                st.markdown(REVIEW_TEMPLATE_MD.format(entry.date, entry.sentiment, entry.text))
+#def mapa3dGrafico():
+    #df = pd.read_sql("""SELECT * FROM business_clean  bc join business_target bt on bc.business_id=bt.business_id WHERE business_id in {}""".format(tup), engine)

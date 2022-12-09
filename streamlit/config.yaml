@@ -1,0 +1,25 @@
+cookie:
+  expiry_days: 30
+  key: some_signature_key
+  name: some_cookie_name
+credentials:
+  usernames:
+    dav:
+      email: acidminded95@gmail.com
+      name: dav
+      password: $2b$12$xP6q0HHcPTDprTNXYvBB3ezPiQoZiywhY13ijP/MC3VLsUhSeAsbG
+      premium: true
+    julieta77:
+      email: julietaciare77@gmail.com
+      name: julieta
+      password: $2b$12$dM1xE832f0/fjZAgFqU/9erTNWfqley4n98qd3qkn0kGjuxLSBKhi
+      premium: true
+    lila1235:
+      email: lilaavesonline@gmail.com
+      name: lila
+      password: $2b$12$tttwND8NETlEbAthS2PlUusDMa9XjUd7Cgy5YTqVZQ3wuFfGakro6
+      premium: false
+preauthorized:
+  emails:
+  - lilaavesonline@gmail.com
+  - bernalmaico@gmail.com

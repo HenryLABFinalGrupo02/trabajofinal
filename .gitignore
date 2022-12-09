@@ -9,6 +9,7 @@ Airflow-Spark/airflow/logs
 Airflow-Spark/airflow/dags/__pycache__
 Airflow-Spark/airflow/dags/__pycache__
 Airflow-Spark/airflow/dags/__pycache__/Spark.cpython-37.pyc
+Airflow-Spark/streamlit/pages/main/data
 *.pyc
 nlp/old
 OLD
