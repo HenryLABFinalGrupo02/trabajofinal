@@ -59,11 +59,11 @@ You can see specific documentation [here]("https://github.com/HenryLABFinalGrupo
 
 ### **Third Week**
 Data analysis and machine learning.
-You can see specific process documentation for Data Analysis [here]()
-You can see specific process documentation for Machine Learning [here]()
+You can see the full technical documentation [here](https://drive.google.com/file/d/1nJIAz3v5zExSsW-5DvSSKEEokM1GndQl/view?usp=sharing)
+You can see the online dashboard [here](http://34.102.67.22:8501/)
 
 ### **Last Week**
-Fine tuning of bugs and deployment. You can see the full deploy [here]()
+Fine tuning of bugs and deployment. You can see the full technical documentation [here](https://drive.google.com/file/d/1nJIAz3v5zExSsW-5DvSSKEEokM1GndQl/view?usp=sharing)
 
 
 ## ** Video 
