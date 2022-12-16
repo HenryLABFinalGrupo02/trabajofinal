@@ -6,10 +6,7 @@
 
 # <h1 align="center">**`YELP REVIEWS AND RECOMMENDATIONS`**</h1>
 
-<p align="center">
-<img src="https://github.com/HenryLABFinalGrupo02/trabajofinal/blob/main/MEDIA/henry_logo.png"  height="100">
-</p>
-
+[![VOCADO](https://github.com/HenryLABFinalGrupo02/trabajofinal/blob/main/MEDIA/Learning%20Machines%20Final%20(1).jpg "VOCADO" )](https://www.youtube.com/watch?v=rMNKFNwfPkQ "VOCADO")
 
 ## **Context**
 
