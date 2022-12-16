@@ -62,6 +62,8 @@ You can see the online dashboard [here](http://34.102.67.22:8501/)
 ### **Last Week**
 Fine tuning of bugs and deployment. You can see the full technical documentation [here](https://drive.google.com/file/d/1nJIAz3v5zExSsW-5DvSSKEEokM1GndQl/view?usp=sharing)
 
-
 ## ** Video 
 You can see the full demo from the project [here](https://www.youtube.com/watch?v=rMNKFNwfPkQ)
+
+## ** Documentation 
+You can see the full documentation from the project [here](https://drive.google.com/file/d/1nJIAz3v5zExSsW-5DvSSKEEokM1GndQl/view)
